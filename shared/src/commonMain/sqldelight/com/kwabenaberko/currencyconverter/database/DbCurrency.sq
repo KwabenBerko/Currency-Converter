@@ -1,0 +1,16 @@
+CREATE TABLE DbCurrency (
+    code TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    symbol TEXT NOT NULL
+);
+
+insert:
+INSERT INTO DbCurrency(code, name, symbol)
+VALUES (?, ?, ?);
+
+selectCurrencyByCode:
+SELECT * FROM DbCurrency
+WHERE code = ?;
+
+selectAllCurrencies:
+SELECT * FROM DbCurrency;

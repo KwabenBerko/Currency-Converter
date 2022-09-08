@@ -1,0 +1,18 @@
+CREATE TABLE DbExchangeRate (
+    baseCode TEXT NOT NULL,
+    targetCode TEXT NOT NULL,
+    rate REAL NOT NULL,
+    FOREIGN KEY(baseCode) REFERENCES DbCurrency(code) ON DELETE CASCADE ,
+    FOREIGN KEY(targetCode) REFERENCES DbCurrency(code) ON DELETE CASCADE
+);
+
+CREATE INDEX baseCodeIndex ON DbExchangeRate(baseCode);
+CREATE INDEX targetCodeIndex ON DbExchangeRate(targetCode);
+
+insert:
+INSERT INTO DbExchangeRate(baseCode, targetCode, rate)
+VALUES (?, ?, ?);
+
+selectRateForCurrencies:
+SELECT * FROM DbExchangeRate
+WHERE baseCode = ? AND targetCode = ?;
