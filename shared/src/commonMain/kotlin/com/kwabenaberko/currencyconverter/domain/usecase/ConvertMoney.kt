@@ -15,7 +15,7 @@ suspend fun convertMoney(
     val targetCode = targetCurrency.code
 
     val rate = getRate(baseCode, targetCode)
-    val convertedAmount = rate.times(amount).round()
+    val convertedAmount = rate.times(amount).round(places = 2)
     setDefaultCurrencies(baseCode, targetCode)
     return Money(targetCurrency, convertedAmount)
 }

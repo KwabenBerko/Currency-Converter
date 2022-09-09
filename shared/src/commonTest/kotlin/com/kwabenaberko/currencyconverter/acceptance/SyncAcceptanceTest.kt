@@ -61,15 +61,19 @@ class SyncAcceptanceTest {
         forAll(
             table(
                 headers("baseCode", "targetCode", "rate"),
-                row(USD.code, GHS.code, 9.08),
-                row(GHS.code, USD.code, 0.11),
-                row(USD.code, NGN.code, 419.22),
-                row(NGN.code, USD.code, 0.0024),
-                row(GHS.code, NGN.code, 46.11),
-                row(NGN.code, GHS.code, 0.022),
+                row(USD.code, GHS.code, 10.015024),
+                row(GHS.code, USD.code, 0.09985),
+                row(USD.code, NGN.code, 422.990183),
+                row(NGN.code, USD.code, 0.002364),
+                row(GHS.code, NGN.code, 42.235564),
+                row(NGN.code, GHS.code, 0.023677),
             )
         ) { baseCode, targetCode, rate ->
-            assertEquals(rate, getRate(baseCode, targetCode))
+            assertEquals(
+                expected = rate,
+                actual = getRate(baseCode, targetCode),
+                absoluteTolerance = 0.01
+            )
         }
 
         assertTrue(hasCompletedInitialSync())
@@ -140,8 +144,8 @@ class SyncAcceptanceTest {
             {
                 "base": "${USD.code}",
                 "rates": {
-                  "${GHS.code}": 9.08, 
-                  "${NGN.code}": 419.22
+                  "${GHS.code}": 10.015024, 
+                  "${NGN.code}": 422.990183
                 }
             }
         """.trimIndent()

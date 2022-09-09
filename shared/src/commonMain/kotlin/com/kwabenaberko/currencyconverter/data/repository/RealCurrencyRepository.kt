@@ -167,12 +167,17 @@ class RealCurrencyRepository(
         val exchangeRates = mutableMapOf(baseCode to baseCodeRates)
 
         baseCodeRates.forEach { (code, rate) ->
-            val currentCodeRates = mutableMapOf(baseCode to 1.0.div(rate).round())
+            val currentCodeRates = mutableMapOf(
+                baseCode to 1.0.div(rate).round(places = DECIMAL_PLACES)
+            )
             exchangeRates[code] = currentCodeRates
             baseCodeRates
                 .filterKeys { key -> key != code }
                 .forEach { entry ->
-                    currentCodeRates[entry.key] = 1.0.div(rate).round().times(entry.value).round()
+                    currentCodeRates[entry.key] = 1.0.div(rate)
+                        .round(places = DECIMAL_PLACES)
+                        .times(entry.value)
+                        .round(places = DECIMAL_PLACES)
                 }
         }
 
@@ -185,5 +190,9 @@ class RealCurrencyRepository(
 
     private fun mapDbCurrencyToDomain(dbCurrency: DbCurrency): Currency {
         return Currency(dbCurrency.code, dbCurrency.name, dbCurrency.symbol)
+    }
+
+    private companion object {
+        const val DECIMAL_PLACES = 6
     }
 }

@@ -28,10 +28,10 @@ class ConvertMoneyAcceptanceTest {
     @BeforeTest
     fun setup() {
         with(container.database.dbExchangeRateQueries){
-            insert(USD.code, GHS.code, 7.775)
-            insert(GHS.code, NGN.code, 53.347445)
-            insert(NGN.code, GBP.code, 0.0019289)
-            insert(EUR.code, USD.code, 1.07823)
+            insert(USD.code, GHS.code, 10.015024)
+            insert(GHS.code, NGN.code, 42.235564)
+            insert(NGN.code, GBP.code, 0.002041)
+            insert(EUR.code, USD.code, 1.007097)
         }
     }
 
@@ -45,10 +45,10 @@ class ConvertMoneyAcceptanceTest {
         forAll(
             table(
                 headers("baseCode", "targetCode", "amount", "expectedAmount"),
-                row(USD.code, GHS.code, 50.0, 388.75),
-                row(GHS.code, NGN.code, 2000.0, 106694.89),
-                row(NGN.code, GBP.code, 100000.0, 192.89),
-                row(EUR.code, USD.code, 900.0, 970.41),
+                row(USD.code, GHS.code, 50.0, 500.75),
+                row(GHS.code, NGN.code, 2000.0, 84471.13),
+                row(NGN.code, GBP.code, 100000.0, 204.1),
+                row(EUR.code, USD.code, 900.0, 906.39),
             )
         ) { baseCode: String, targetCode: String, amount: Double, expectedAmount: Double ->
             val expectedMoney = Money(

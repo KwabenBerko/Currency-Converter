@@ -5,8 +5,8 @@ import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeDollarCurr
 import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeNairaCurrency
 import com.kwabenaberko.currencyconverter.domain.model.Money
 import com.kwabenaberko.currencyconverter.domain.usecase.convertMoney
-import com.kwabenaberko.currencyconverter.testdouble.GetRateStub
-import com.kwabenaberko.currencyconverter.testdouble.SetDefaultCurrenciesSpy
+import com.kwabenaberko.currencyconverter.testdouble.TestGetRate
+import com.kwabenaberko.currencyconverter.testdouble.TestSetDefaultCurrencies
 import io.kotest.data.forAll
 import io.kotest.data.headers
 import io.kotest.data.row
@@ -24,13 +24,13 @@ class ConvertMoneyTest {
         forAll(
             table(
                 headers("baseCurrency", "targetCurrency", "rate", "amount", "expectedAmount"),
-                row(USD, GHS, 7.775, 50.0, 388.75),
-                row(GHS, NGN, 53.347445, 2000.0, 106694.89),
+                row(USD, GHS, 10.015024, 50.0, 500.75),
+                row(GHS, NGN, 42.235564, 2000.0, 84471.13),
             )
         ) { baseCurrency, targetCurrency, rate, amount, expectedAmount ->
 
-            val setDefaultCurrencies = SetDefaultCurrenciesSpy()
-            val getRate = GetRateStub().apply {
+            val setDefaultCurrencies = TestSetDefaultCurrencies()
+            val getRate = TestGetRate().apply {
                 this.result = rate
             }
             val expectedMoney = Money(
@@ -50,8 +50,8 @@ class ConvertMoneyTest {
 
     @Test
     fun `should set default currencies when an amount is converted`() = runTest {
-        val setDefaultCurrencies = SetDefaultCurrenciesSpy()
-        val getRate = GetRateStub().apply {
+        val setDefaultCurrencies = TestSetDefaultCurrencies()
+        val getRate = TestGetRate().apply {
             result = 1.0
         }
 

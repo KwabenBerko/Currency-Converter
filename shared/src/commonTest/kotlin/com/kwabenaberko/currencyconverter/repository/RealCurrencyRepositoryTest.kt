@@ -95,16 +95,16 @@ class RealCurrencyRepositoryTest {
     @Test
     fun `should return rate for base and target codes`() = runTest {
         with(database.dbExchangeRateQueries) {
-            insert(baseCode = USD.code, targetCode = GHS.code, rate = 7.775)
-            insert(baseCode = GHS.code, targetCode = NGN.code, rate = 53.347)
+            insert(baseCode = USD.code, targetCode = GHS.code, rate = 10.015024)
+            insert(baseCode = GHS.code, targetCode = NGN.code, rate = 42.235564)
         }
         val sut = createCurrencyRepository()
 
         forAll(
             table(
                 headers("baseCode", "targetCode", "expectedRate"),
-                row(USD.code, GHS.code, 7.775),
-                row(GHS.code, NGN.code, 53.347)
+                row(USD.code, GHS.code, 10.015024),
+                row(GHS.code, NGN.code, 42.235564)
             ),
         ) { baseCode, targetCode, expectedRate ->
             val rate = sut.getRate(baseCode, targetCode)
@@ -295,9 +295,21 @@ class RealCurrencyRepositoryTest {
             sut.currencies().test {
                 assertTrue(awaitItem().containsAll(listOf(USD, GHS)))
             }
-            assertEquals(7.85, sut.getRate(USD.code, GHS.code))
-            assertEquals(0.13, sut.getRate(GHS.code, USD.code))
-            assertEquals(54.06, sut.getRate(GHS.code, NGN.code))
+            assertEquals(
+                expected = 10.015024,
+                actual = sut.getRate(USD.code, GHS.code),
+                absoluteTolerance = 0.01
+            )
+            assertEquals(
+                expected = 0.09985,
+                actual = sut.getRate(GHS.code, USD.code),
+                absoluteTolerance = 0.01
+            )
+            assertEquals(
+                expected = 42.235564,
+                actual = sut.getRate(GHS.code, NGN.code),
+                absoluteTolerance = 0.01
+            )
         }
 
     @Test
@@ -381,10 +393,10 @@ class RealCurrencyRepositoryTest {
         //language=JSON
         val EXCHANGE_RATES_JSON = """
             {
-              "base": "USD",
+              "base": "${USD.code}",
               "rates": {
-                "GHS": 7.85,
-                "NGN": 415.87
+                "${GHS.code}": 10.015024,
+                "${NGN.code}": 422.990183
               }
             }
         """.trimIndent()
