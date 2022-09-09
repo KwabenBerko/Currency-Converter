@@ -16,10 +16,10 @@ Given the following currencies
 
 And the following currency rates
 
-| baseCurrency | targetCurrency | rate   |
-|--------------|----------------|--------|
-| USD          | GHS            | 9.08   |
-| USD          | NGN            | 419.22 |
+| baseCurrency | targetCurrency | rate       |
+|--------------|----------------|------------|
+| USD          | GHS            | 10.015024  |
+| USD          | NGN            | 422.990183 |
 
 When a user syncs currencies  
 Then the sync should be successful  
@@ -27,9 +27,15 @@ And the user should see all currencies
 And the user should see `<rate>` as the rate for `<baseCurrency>` to `<targetCurrency>`
 
 Examples:
-| baseCurrency | targetCurrency | rate | |--------------|----------------|--------| | USD | GHS |
-9.08 | | GHS | USD | 0.11 | | USD | NGN | 419.22 | | NGN | USD | 0.0024 | | GHS | NGN | 46.11 | |
-NGN | GHS | 0.022 |
+
+| baseCurrency | targetCurrency | rate       |
+|--------------|----------------|------------|
+| USD          | GHS            | 10.015024  | 
+| GHS          | USD            | 0.09985    |
+| USD          | NGN            | 422.990183 |
+| NGN          | USD            | 0.002364   | 
+| GHS          | NGN            | 42.235564  | 
+| NGN          | GHS            | 0.023677   |
 
 #### Scenario: Convert amounts from base to target currencies
 
@@ -37,10 +43,10 @@ Given the following currency rates
 
 | baseCurrency | targetCurrency | rate      |
 |--------------|----------------|-----------|
-| USD          | GHS            | 7.775     |
-| GHS          | NGN            | 53.347445 |
-| NGN          | GBP            | 0.0019289 |
-| EUR          | USD            | 1.07823   |
+| USD          | GHS            | 10.015024 |
+| GHS          | NGN            | 42.235564 |
+| NGN          | GBP            | 0.002041  |
+| EUR          | USD            | 1.007097  |
 
 When a user converts from `<baseCurrency>` to `<targetCurrency>` with an amount of `<amount>`  
 Then the user should have a converted amount of  `<convertedAmount>`
@@ -49,10 +55,10 @@ Then the user should have a converted amount of  `<convertedAmount>`
 
 | baseCurrency | targetCurrency | amount | convertedAmount |
 |--------------|----------------|--------|-----------------|
-| USD          | GHS            | 50     | 388.75          |
-| GHS          | NGN            | 2000   | 106694.89       |
-| NGN          | GBP            | 100000 | 192.89          |
-| EUR          | USD            | 900    | 970.41          |
+| USD          | GHS            | 50     | 500.75          |
+| GHS          | NGN            | 2000   | 84471.13        |
+| NGN          | GBP            | 100000 | 204.1           |
+| EUR          | USD            | 900    | 906.39          |
 
 #### Scenario: Get currencies available to the user in a sorted order
 
@@ -91,15 +97,6 @@ Given the following currencies
 | NGN        |
 | GBP        |
 | EUR        |
-
-And the following currency rates
-
-| baseCurrency | targetCurrency | rate      |
-|--------------|----------------|-----------|
-| USD          | GHS            | 7.775     |
-| GHS          | NGN            | 53.347445 |
-| NGN          | GBP            | 0.0019289 |
-| EUR          | USD            | 1.07823   |
 
 And a user has converted an amount from `<baseCurrency>` to `<targetCurrency>`  
 When the user get default currencies  

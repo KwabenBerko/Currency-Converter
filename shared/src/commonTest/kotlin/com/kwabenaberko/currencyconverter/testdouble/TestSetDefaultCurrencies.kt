@@ -2,7 +2,7 @@ package com.kwabenaberko.currencyconverter.testdouble
 
 import com.kwabenaberko.currencyconverter.domain.usecase.SetDefaultCurrencies
 
-class SetDefaultCurrenciesSpy : SetDefaultCurrencies {
+class TestSetDefaultCurrencies : SetDefaultCurrencies {
     var invocations: MutableList<Pair<String, String>> = mutableListOf()
         private set
 
