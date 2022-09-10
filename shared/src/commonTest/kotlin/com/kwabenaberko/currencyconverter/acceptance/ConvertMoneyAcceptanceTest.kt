@@ -1,13 +1,13 @@
 package com.kwabenaberko.currencyconverter.acceptance
 
 import com.kwabenaberko.currencyconverter.TestContainer
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeCediCurrency
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeCurrency
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeDollarCurrency
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeEuroCurrency
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeNairaCurrency
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makePoundsCurrency
 import com.kwabenaberko.currencyconverter.domain.model.Money
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeCediCurrency
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeCurrency
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeDollarCurrency
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeEuroCurrency
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeNairaCurrency
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makePoundsCurrency
 import io.kotest.data.forAll
 import io.kotest.data.headers
 import io.kotest.data.row
@@ -27,7 +27,7 @@ class ConvertMoneyAcceptanceTest {
 
     @BeforeTest
     fun setup() {
-        with(container.database.dbExchangeRateQueries){
+        with(container.database.dbExchangeRateQueries) {
             insert(USD.code, GHS.code, 10.015024)
             insert(GHS.code, NGN.code, 42.235564)
             insert(NGN.code, GBP.code, 0.002041)

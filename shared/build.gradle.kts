@@ -46,6 +46,7 @@ kotlin {
         }
         val commonTest by getting {
             dependencies {
+                implementation(projects.sharedTest)
                 implementation(kotlin("test"))
                 implementation(libs.coroutines.test)
                 implementation(libs.turbine)
@@ -91,11 +92,11 @@ kotlin {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 33
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = 22
-        targetSdk = 32
+        targetSdk = 33
     }
     namespace = "com.kwabenaberko.currencyconverter"
 }

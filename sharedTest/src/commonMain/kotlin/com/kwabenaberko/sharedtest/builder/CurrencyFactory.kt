@@ -1,4 +1,4 @@
-package com.kwabenaberko.currencyconverter.builder
+package com.kwabenaberko.sharedtest.builder
 
 import com.kwabenaberko.currencyconverter.domain.model.Currency
 

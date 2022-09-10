@@ -2,11 +2,11 @@ package com.kwabenaberko.currencyconverter.acceptance
 
 import app.cash.turbine.testIn
 import com.kwabenaberko.currencyconverter.TestContainer
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeCediCurrency
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeDollarCurrency
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeNairaCurrency
 import com.kwabenaberko.currencyconverter.data.Api
 import com.kwabenaberko.currencyconverter.domain.model.SyncStatus
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeCediCurrency
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeDollarCurrency
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeNairaCurrency
 import io.kotest.data.forAll
 import io.kotest.data.headers
 import io.kotest.data.row

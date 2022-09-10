@@ -1,7 +1,8 @@
 [versions]
 androidGradlePlugin = "7.3.0-rc01"
-catalogUpdate = "0.6.1"
+lifeCycleVersion = "2.6.0-alpha02"
 coroutines = "1.6.4"
+junit = "4.13.2"
 kotest = "5.4.2"
 kotlin = "1.7.10"
 ktlint = "11.0.0"
@@ -10,11 +11,15 @@ multiplatformSettings = "1.0.0-alpha01"
 sqldelight = "2.0.0-alpha03"
 turbine = "0.9.0"
 kotlinxDateTime = "0.4.0"
+catalogUpdate = "0.6.1"
 versions = "0.42.0"
 
 [libraries]
+lifecycle-viewModel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifeCycleVersion" }
+lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "lifeCycleVersion" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+junit = { module = "junit:junit", version.ref = "junit" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotlin-test-annotations = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlin" }
 kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlin" }
@@ -34,9 +39,10 @@ sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", ver
 sqldelight-driver-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
 sqldelight-driver-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
-kotlinxDateTime = {module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime"}
+kotlinxDateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
 
 [bundles]
+lifecycle = ["lifecycle-viewModel-ktx", "lifecycle-common-java8"]
 ktor-client = [
     "ktor-client-contentNegotiation",
     "ktor-client-core",
