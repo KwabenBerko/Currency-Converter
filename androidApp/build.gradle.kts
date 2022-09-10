@@ -35,6 +35,8 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.5.1")
     implementation(libs.bundles.lifecycle)
     implementation(libs.coroutines.core)
+    testImplementation(projects.sharedTest)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.junit)
+    testImplementation(libs.turbine)
 }
