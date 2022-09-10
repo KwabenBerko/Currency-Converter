@@ -12,3 +12,4 @@ pluginManagement {
 rootProject.name = "Currency_Converter"
 include(":androidApp")
 include(":shared")
+include(":sharedTest")

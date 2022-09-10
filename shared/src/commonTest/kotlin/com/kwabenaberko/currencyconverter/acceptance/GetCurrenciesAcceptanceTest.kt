@@ -2,9 +2,9 @@ package com.kwabenaberko.currencyconverter.acceptance
 
 import app.cash.turbine.test
 import com.kwabenaberko.currencyconverter.TestContainer
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeCediCurrency
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeDollarCurrency
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeNairaCurrency
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeCediCurrency
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeDollarCurrency
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeNairaCurrency
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.AfterTest
@@ -24,7 +24,7 @@ class GetCurrenciesAcceptanceTest {
 
     @Test
     fun `should return all currencies available to the user in a sorted order`() = runTest {
-        with(container.database.dbCurrencyQueries){
+        with(container.database.dbCurrencyQueries) {
             insert(USD.code, USD.name, USD.symbol)
             insert(GHS.code, GHS.name, GHS.symbol)
             insert(NGN.code, NGN.name, NGN.symbol)

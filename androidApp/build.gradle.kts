@@ -13,11 +13,11 @@ ktlint {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 33
     defaultConfig {
         applicationId = "com.kwabenaberko.currencyconverter.android"
         minSdk = 22
-        targetSdk = 32
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
     }
@@ -32,5 +32,9 @@ android {
 dependencies {
     implementation(projects.shared)
     implementation("com.google.android.material:material:1.6.1")
-    implementation("androidx.appcompat:appcompat:1.5.0")
+    implementation("androidx.appcompat:appcompat:1.5.1")
+    implementation(libs.bundles.lifecycle)
+    implementation(libs.coroutines.core)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.junit)
 }

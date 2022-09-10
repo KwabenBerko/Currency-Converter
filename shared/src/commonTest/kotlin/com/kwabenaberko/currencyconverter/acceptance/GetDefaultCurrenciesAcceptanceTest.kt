@@ -2,15 +2,14 @@ package com.kwabenaberko.currencyconverter.acceptance
 
 import app.cash.turbine.test
 import com.kwabenaberko.currencyconverter.TestContainer
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeCediCurrency
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeDollarCurrency
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeEuroCurrency
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makeNairaCurrency
-import com.kwabenaberko.currencyconverter.builder.CurrencyFactory.makePoundsCurrency
-import com.kwabenaberko.currencyconverter.data.Settings
 import com.kwabenaberko.currencyconverter.domain.model.Currency
 import com.kwabenaberko.currencyconverter.domain.model.DefaultCurrencies
 import com.kwabenaberko.currencyconverter.domain.model.Money
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeCediCurrency
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeDollarCurrency
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeEuroCurrency
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeNairaCurrency
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makePoundsCurrency
 import io.kotest.data.forAll
 import io.kotest.data.headers
 import io.kotest.data.row
@@ -31,12 +30,12 @@ class GetDefaultCurrenciesAcceptanceTest {
 
     @BeforeTest
     fun setup() {
-        with(container.database.dbCurrencyQueries){
+        with(container.database.dbCurrencyQueries) {
             CURRENCIES.forEach { currency ->
                 insert(code = currency.code, name = currency.name, symbol = currency.symbol)
             }
         }
-        with(container.database.dbExchangeRateQueries){
+        with(container.database.dbExchangeRateQueries) {
             insert(baseCode = USD.code, targetCode = GHS.code, rate = 0.0)
             insert(baseCode = GHS.code, targetCode = NGN.code, rate = 0.0)
             insert(baseCode = NGN.code, targetCode = GBP.code, rate = 0.0)
