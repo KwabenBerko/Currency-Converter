@@ -14,9 +14,9 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class CurrencyViewModelTest {
 
+    private val sync = FakeSync()
     private val hasCompletedInitialSync = FakeHasCompletedInitialSync()
     private val getSyncStatus = FakeGetSyncStatus()
-    private val sync = FakeSync()
 
     @Test
     fun `should not initiate sync if initial sync has already been completed`() = runTest {
@@ -35,8 +35,7 @@ class CurrencyViewModelTest {
     }
 
     @Test
-    fun `should track sync status changes and update state accordingly`() = runTest {
-        hasCompletedInitialSync.result = false
+    fun `should track sync status changes and update state`() = runTest {
         val sut = createCurrencyViewModel()
 
         sut.state.test {
