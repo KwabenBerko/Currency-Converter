@@ -20,6 +20,7 @@ kotlin {
         val commonMain by getting{
             dependencies {
                 implementation(projects.shared)
+                implementation(libs.coroutines.core)
             }
         }
         val commonTest by getting
