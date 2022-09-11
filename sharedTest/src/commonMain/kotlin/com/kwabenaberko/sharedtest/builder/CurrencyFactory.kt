@@ -38,7 +38,7 @@ object CurrencyFactory {
     fun makePoundsCurrency(): Currency {
         return makeCurrency(
             code = "GBP",
-            name = "British Pounds",
+            name = "British Pound",
             symbol = "£"
         )
     }
