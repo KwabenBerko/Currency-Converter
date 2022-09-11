@@ -73,7 +73,29 @@ Given the following currencies
 When a user retrieves all currencies  
 Then the user should see all currencies in a sorted order
 
-#### Scenario: Get Ghanaian Cedi and United States Dollar as default base and target currencies respectively
+#### Scenario: Search currencies
+
+Given the following currencies
+
+| Currencies           |
+|----------------------|
+| United States Dollar |
+| Ghanaian Cedi        |
+| Nigerian Naira       |
+
+When a user retrieves currencies with a name filter of `<filter>`   
+Then the user should see `<filteredCurrencies>` in a sorted order
+
+Examples:
+
+| filter | filteredCurrencies                                  |
+|--------|-----------------------------------------------------|
+| e      | Ghanaian Cedi, Nigerian Naira, United States Dollar |
+| g      | Ghanaian Cedi, Nigerian Naira                       |
+| Ghana  | Ghanaian Cedi                                       |
+| naira  | Nigerian Naira                                      |
+
+#### Scenario: Get GHS and USD as default base and target currencies respectively
 
 Given the following currencies
 
