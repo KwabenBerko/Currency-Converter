@@ -8,18 +8,18 @@ An Offline-First Currency Converter Built With Kotlin Multiplatform Mobile
 
 Given the following currencies
 
-| Currencies |
-|------------|
-| USD        |
-| GHS        |
-| NGN        |
+| Currencies           |
+|----------------------|
+| United States Dollar |
+| Ghanaian Cedi        |
+| Nigerian Naira       |
 
 And the following currency rates
 
-| baseCurrency | targetCurrency | rate       |
-|--------------|----------------|------------|
-| USD          | GHS            | 10.015024  |
-| USD          | NGN            | 422.990183 |
+| baseCurrency         | targetCurrency | rate       |
+|----------------------|----------------|------------|
+| United States Dollar | Ghanaian Cedi  | 10.015024  |
+| United States Dollar | Nigerian Naira | 422.990183 |
 
 When a user syncs currencies  
 Then the sync should be successful  
@@ -28,75 +28,76 @@ And the user should see `<rate>` as the rate for `<baseCurrency>` to `<targetCur
 
 Examples:
 
-| baseCurrency | targetCurrency | rate       |
-|--------------|----------------|------------|
-| USD          | GHS            | 10.015024  | 
-| GHS          | USD            | 0.09985    |
-| USD          | NGN            | 422.990183 |
-| NGN          | USD            | 0.002364   | 
-| GHS          | NGN            | 42.235564  | 
-| NGN          | GHS            | 0.023677   |
+| baseCurrency         | targetCurrency       | rate       |
+|----------------------|----------------------|------------|
+| United States Dollar | Ghanaian Cedi        | 10.015024  | 
+| Ghanaian Cedi        | United States Dollar | 0.09985    |
+| United States Dollar | Nigerian Naira       | 422.990183 |
+| Nigerian Naira       | United States Dollar | 0.002364   | 
+| Ghanaian Cedi        | Nigerian Naira       | 42.235564  | 
+| Nigerian Naira       | Ghanaian Cedi        | 0.023677   |
 
 #### Scenario: Convert amounts from base to target currencies
 
 Given the following currency rates
 
-| baseCurrency | targetCurrency | rate      |
-|--------------|----------------|-----------|
-| USD          | GHS            | 10.015024 |
-| GHS          | NGN            | 42.235564 |
-| NGN          | GBP            | 0.002041  |
-| EUR          | USD            | 1.007097  |
+| baseCurrency         | targetCurrency       | rate      |
+|----------------------|----------------------|-----------|
+| United States Dollar | Ghanaian Cedi        | 10.015024 |
+| Ghanaian Cedi        | Nigerian Naira       | 42.235564 |
+| Nigerian Naira       | British Pound        | 0.002041  |
+| Euro                 | United States Dollar | 1.007097  |
 
 When a user converts from `<baseCurrency>` to `<targetCurrency>` with an amount of `<amount>`  
 Then the user should have a converted amount of  `<convertedAmount>`
 
 ##### Examples:
 
-| baseCurrency | targetCurrency | amount | convertedAmount |
-|--------------|----------------|--------|-----------------|
-| USD          | GHS            | 50     | 500.75          |
-| GHS          | NGN            | 2000   | 84471.13        |
-| NGN          | GBP            | 100000 | 204.1           |
-| EUR          | USD            | 900    | 906.39          |
+| baseCurrency         | targetCurrency       | amount | convertedAmount |
+|----------------------|----------------------|--------|-----------------|
+| United States Dollar | Ghanaian Cedi        | 50     | 500.75          |
+| Ghanaian Cedi        | Nigerian Naira       | 2000   | 84471.13        |
+| Nigerian Naira       | British Pound        | 100000 | 204.1           |
+| Euro                 | United States Dollar | 900    | 906.39          |
 
 #### Scenario: Get currencies available to the user in a sorted order
 
 Given the following currencies
 
-| Currencies |
-|------------|
-| USD        |
-| GHS        |
-| NGN        |
+| Currencies           |
+|----------------------|
+| United States Dollar |
+| Ghanaian Cedi        |
+| Nigerian Naira       |
 
 When a user retrieves all currencies  
 Then the user should see all currencies in a sorted order
 
-#### Scenario: Get GHS and USD as default base and target currencies respectively
+#### Scenario: Get Ghanaian Cedi and United States Dollar as default base and target currencies respectively
 
 Given the following currencies
 
-| Currencies |
-|------------|
-| USD        |
-| GHS        |
-| NGN        |
+| Currencies           |
+|----------------------|
+| United States Dollar |
+| Ghanaian Cedi        |
+| Nigerian Naira       |
 
 When a user gets default currencies  
-Then the user should have a default base currency of USD and a default target currency of GHS
+Then the user should have a default base currency of United States Dollar and a default target
+currency of Ghanaian Cedi
 
 #### Scenario: Keep track of default base and target currencies during conversions
 
 Given the following currencies
 
-| Currencies |
-|------------|
-| USD        |
-| GHS        |
-| NGN        |
-| GBP        |
-| EUR        |
+| Currencies           |
+|----------------------|
+| United States Dollar |
+| Ghanaian Cedi        |
+| Nigerian Naira       |
+| British Pound        |
+| Euro                 |
 
 And a user has converted an amount from `<baseCurrency>` to `<targetCurrency>`  
 When the user get default currencies  
@@ -105,9 +106,9 @@ of `<targetCurrency>`
 
 Examples:
 
-| baseCurrency | targetCurrency |
-|--------------|----------------|
-| USD          | GHS            |
-| GHS          | NGN            |
-| NGN          | GBP            |
-| EUR          | USD            |
+| baseCurrency         | targetCurrency       |
+|----------------------|----------------------|
+| United States Dollar | Ghanaian Cedi        |
+| Ghanaian Cedi        | Nigerian Naira       |
+| Nigerian Naira       | British Pound        |
+| Euro                 | United States Dollar |
