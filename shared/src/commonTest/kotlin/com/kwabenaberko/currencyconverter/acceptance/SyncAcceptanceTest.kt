@@ -42,7 +42,7 @@ class SyncAcceptanceTest {
     @Test
     fun `should successfully sync currencies`() = runTest {
         val statusObserver = getSyncStatus().testIn(this)
-        val currenciesObserver = getCurrencies().testIn(this)
+        val currenciesObserver = getCurrencies(null).testIn(this)
 
         sut.invoke()
 

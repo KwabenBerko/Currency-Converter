@@ -11,6 +11,7 @@ import com.kwabenaberko.currencyconverter.database.DbCurrency
 import com.kwabenaberko.currencyconverter.database.DbCurrencyQueries
 import com.kwabenaberko.currencyconverter.database.DbExchangeRateQueries
 import com.kwabenaberko.currencyconverter.domain.model.Currency
+import com.kwabenaberko.currencyconverter.domain.model.CurrencyFilter
 import com.kwabenaberko.currencyconverter.domain.model.DefaultCurrencies
 import com.kwabenaberko.currencyconverter.domain.model.SyncStatus
 import com.kwabenaberko.currencyconverter.domain.repository.CurrencyRepository
@@ -47,9 +48,9 @@ class RealCurrencyRepository(
 
     private val syncStatus = MutableSharedFlow<SyncStatus>()
 
-    override fun currencies(): Flow<List<Currency>> {
+    override fun currencies(filter: CurrencyFilter?): Flow<List<Currency>> {
         return currencyQueries
-            .selectAllCurrencies()
+            .selectAllCurrencies(name = filter?.name ?: "")
             .asFlow()
             .flowOn(backgroundDispatcher)
             .mapToList(backgroundDispatcher)
@@ -57,6 +58,7 @@ class RealCurrencyRepository(
                 mapDbCurrenciesToDomain(dbCurrencies)
                     .sortedBy { currency -> currency.name }
             }
+
     }
 
     override fun defaultCurrencies(): Flow<DefaultCurrencies> {

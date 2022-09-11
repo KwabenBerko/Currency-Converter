@@ -13,4 +13,5 @@ SELECT * FROM DbCurrency
 WHERE code = ?;
 
 selectAllCurrencies:
-SELECT * FROM DbCurrency;
+SELECT * FROM DbCurrency
+WHERE name LIKE ( "%" || :name || "%");

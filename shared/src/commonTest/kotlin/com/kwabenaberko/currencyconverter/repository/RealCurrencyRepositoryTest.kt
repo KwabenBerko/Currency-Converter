@@ -7,6 +7,7 @@ import com.kwabenaberko.currencyconverter.data.Api
 import com.kwabenaberko.currencyconverter.data.Settings
 import com.kwabenaberko.currencyconverter.data.network.HttpClientFactory
 import com.kwabenaberko.currencyconverter.data.repository.RealCurrencyRepository
+import com.kwabenaberko.currencyconverter.domain.model.CurrencyFilter
 import com.kwabenaberko.currencyconverter.domain.model.DefaultCurrencies
 import com.kwabenaberko.currencyconverter.domain.model.SyncStatus
 import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeCediCurrency
@@ -50,14 +51,42 @@ class RealCurrencyRepositoryTest {
     }
 
     @Test
-    fun `should return currencies in ascending order`() = runTest {
+    fun `should return currencies in sorted order`() = runTest {
         with(database.dbCurrencyQueries) {
             insert(USD.code, USD.name, USD.symbol)
             insert(GHS.code, GHS.name, GHS.symbol)
         }
         val sut = createCurrencyRepository()
 
-        sut.currencies().test {
+        sut.currencies(filter = null).test {
+            assertEquals(listOf(GHS, USD), awaitItem())
+        }
+    }
+
+    @Test
+    fun `should return an empty list if no match is found for filter`() = runTest {
+        with(database.dbCurrencyQueries) {
+            insert(USD.code, USD.name, USD.symbol)
+            insert(GHS.code, GHS.name, GHS.symbol)
+        }
+
+        val sut = createCurrencyRepository()
+
+        sut.currencies(CurrencyFilter(name = "abcde")).test {
+            assertEquals(emptyList(), awaitItem())
+        }
+    }
+
+    @Test
+    fun `should return currencies in a sorted order if a match is found for filter`() = runTest {
+        with(database.dbCurrencyQueries) {
+            insert(USD.code, USD.name, USD.symbol)
+            insert(GHS.code, GHS.name, GHS.symbol)
+        }
+
+        val sut = createCurrencyRepository()
+
+        sut.currencies(CurrencyFilter(name = "e")).test {
             assertEquals(listOf(GHS, USD), awaitItem())
         }
     }
@@ -292,7 +321,7 @@ class RealCurrencyRepositoryTest {
 
             sut.sync()
 
-            sut.currencies().test {
+            sut.currencies(filter = null).test {
                 assertTrue(awaitItem().containsAll(listOf(USD, GHS)))
             }
             assertEquals(
