@@ -72,7 +72,6 @@ class CurrencyViewModel constructor(
         searchQueryFlow
             .debounce(timeoutMillis = 500)
             .flatMapLatest { query ->
-                println(query)
                 getCurrencies(makeFilter(query))
             }
             .onEach { currencies ->
