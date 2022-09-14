@@ -17,7 +17,7 @@ class CompactNumberFormatterTest {
                 headers("rawNumber", "formattedNumber"),
                 row(0, "0"),
                 row(20, "20"),
-                row(500.0, "500.0"),
+                row(500.0, "500"),
                 row(999.9, "999.9"),
             )
         ) { rawNumber, formattedNumber ->
