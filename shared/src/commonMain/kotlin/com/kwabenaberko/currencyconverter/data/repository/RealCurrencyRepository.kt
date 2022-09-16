@@ -18,7 +18,6 @@ import com.kwabenaberko.currencyconverter.domain.repository.CurrencyRepository
 import com.kwabenaberko.currencyconverter.round
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.ObservableSettings
-import com.russhwolf.settings.coroutines.getStringFlow
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -33,11 +32,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 
-@OptIn(ExperimentalSettingsApi::class)
 class RealCurrencyRepository(
     private val httpClient: HttpClient,
     private val currencyQueries: DbCurrencyQueries,
@@ -61,11 +58,11 @@ class RealCurrencyRepository(
 
     }
 
-    override fun defaultCurrencies(): Flow<DefaultCurrencies> {
-        val baseCodeFlow = settings.getStringFlow(Settings.BASE_CODE, "USD")
-        val targetCodeFlow = settings.getStringFlow(Settings.TARGET_CODE, "GHS")
+    override suspend fun getDefaultCurrencies(): DefaultCurrencies {
+        return withContext(backgroundDispatcher) {
+            val baseCode = settings.getString(Settings.BASE_CODE, "USD")
+            val targetCode = settings.getString(Settings.TARGET_CODE, "GHS")
 
-        return baseCodeFlow.zip(targetCodeFlow) { baseCode, targetCode ->
             val baseCurrency = currencyQueries
                 .selectCurrencyByCode(baseCode)
                 .executeAsOne()
@@ -78,7 +75,7 @@ class RealCurrencyRepository(
                 base = mapDbCurrencyToDomain(baseCurrency),
                 target = mapDbCurrencyToDomain(targetCurrency)
             )
-        }.flowOn(backgroundDispatcher)
+        }
     }
 
     override suspend fun setDefaultCurrencies(baseCode: String, targetCode: String) {

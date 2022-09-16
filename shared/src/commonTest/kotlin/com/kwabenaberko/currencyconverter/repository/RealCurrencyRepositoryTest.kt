@@ -101,10 +101,9 @@ class RealCurrencyRepositoryTest {
         val sut = createCurrencyRepository()
 
         sut.setDefaultCurrencies(GHS.code, NGN.code)
+        val result = sut.getDefaultCurrencies()
 
-        sut.defaultCurrencies().test {
-            assertEquals(DefaultCurrencies(GHS, NGN), awaitItem())
-        }
+        assertEquals(DefaultCurrencies(GHS, NGN), result)
     }
 
     @Test
@@ -116,9 +115,9 @@ class RealCurrencyRepositoryTest {
             }
             val sut = createCurrencyRepository()
 
-            sut.defaultCurrencies().test {
-                assertEquals(DefaultCurrencies(USD, GHS), awaitItem())
-            }
+            val result = sut.getDefaultCurrencies()
+
+            assertEquals(DefaultCurrencies(USD, GHS), result)
         }
 
     @Test
