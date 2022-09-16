@@ -70,7 +70,7 @@ open class Container internal constructor(
     }
 
     val getDefaultCurrencies: GetDefaultCurrencies by lazy {
-        return@lazy currencyRepository::defaultCurrencies
+        return@lazy currencyRepository::getDefaultCurrencies
     }
 
     val getRate: GetRate by lazy {

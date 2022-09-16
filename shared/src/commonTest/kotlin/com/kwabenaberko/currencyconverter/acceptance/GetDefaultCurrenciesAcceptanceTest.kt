@@ -51,10 +51,7 @@ class GetDefaultCurrenciesAcceptanceTest {
     @Test
     fun `should return USD and GHS as the base and target currency respectively if no default currencies exist`() =
         runTest {
-            sut().test {
-                assertEquals(DefaultCurrencies(USD, GHS), awaitItem())
-                cancelAndIgnoreRemainingEvents()
-            }
+            assertEquals(DefaultCurrencies(USD, GHS), sut())
         }
 
     @Test
@@ -74,9 +71,7 @@ class GetDefaultCurrenciesAcceptanceTest {
                 targetCurrency
             )
 
-            sut().test {
-                assertEquals(DefaultCurrencies(baseCurrency, targetCurrency), awaitItem())
-            }
+            assertEquals(DefaultCurrencies(baseCurrency, targetCurrency), sut())
         }
     }
 

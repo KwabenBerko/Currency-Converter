@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CurrencyRepository : SyncableRepository {
     fun currencies(filter: CurrencyFilter?): Flow<List<Currency>>
-    fun defaultCurrencies(): Flow<DefaultCurrencies>
+    suspend fun getDefaultCurrencies(): DefaultCurrencies
     suspend fun setDefaultCurrencies(baseCode: String, targetCode: String)
     suspend fun getRate(baseCode: String, targetCode: String): Double
 }
