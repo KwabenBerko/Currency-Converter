@@ -18,6 +18,8 @@ import com.kwabenaberko.currencyconverter.domain.repository.CurrencyRepository
 import com.kwabenaberko.currencyconverter.round
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.ObservableSettings
+import com.russhwolf.settings.coroutines.getStringFlow
+import com.russhwolf.settings.coroutines.toSuspendSettings
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -25,16 +27,24 @@ import io.ktor.client.request.parameter
 import io.ktor.http.isSuccess
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.set
 
+@OptIn(ExperimentalSettingsApi::class)
 class RealCurrencyRepository(
     private val httpClient: HttpClient,
     private val currencyQueries: DbCurrencyQueries,
@@ -42,8 +52,6 @@ class RealCurrencyRepository(
     private val settings: ObservableSettings,
     private val backgroundDispatcher: CoroutineDispatcher
 ) : CurrencyRepository {
-
-    private val syncStatus = MutableSharedFlow<SyncStatus>()
 
     override fun currencies(filter: CurrencyFilter?): Flow<List<Currency>> {
         return currencyQueries
@@ -87,14 +95,6 @@ class RealCurrencyRepository(
         }
     }
 
-    override fun syncStatus(): Flow<SyncStatus> {
-        return syncStatus.asSharedFlow()
-    }
-
-    override suspend fun hasCompletedInitialSync(): Boolean {
-        return settings.hasKey(Settings.CURRENCIES_LAST_SYNC_DATE)
-    }
-
     override suspend fun getRate(baseCode: String, targetCode: String): Double {
         return withContext(backgroundDispatcher) {
             exchangeRateQueries
@@ -104,10 +104,28 @@ class RealCurrencyRepository(
         }
     }
 
-    override suspend fun sync() {
-        try {
-            syncStatus.emit(SyncStatus.InProgress)
+    override fun syncStatus(): Flow<SyncStatus> {
+        return settings.getStringFlow(
+            key = Settings.CURRENCIES_SYNC_STATUS,
+            defaultValue = IDLE
+        ).flowOn(backgroundDispatcher).map { encodedStatus ->
+            when (encodedStatus) {
+                ERROR -> SyncStatus.Error
+                IN_PROGRESS -> SyncStatus.InProgress
+                else -> SyncStatus.Idle
+            }
+        }.distinctUntilChanged()
+    }
 
+    override suspend fun hasCompletedInitialSync(): Boolean {
+        return withContext(backgroundDispatcher) {
+            settings.hasKey(Settings.CURRENCIES_LAST_SYNC_DATE)
+        }
+    }
+
+    override suspend fun sync() {
+        settings.putString(Settings.CURRENCIES_SYNC_STATUS, IN_PROGRESS)
+        try {
             withContext(backgroundDispatcher) {
                 val responses = awaitAll(
                     async { httpClient.get(Api.CURRENCIES) },
@@ -119,7 +137,7 @@ class RealCurrencyRepository(
                     }
                 )
                 if (responses.any { response -> !response.status.isSuccess() }) {
-                    syncStatus.emit(SyncStatus.Error)
+                    settings.putString(Settings.CURRENCIES_SYNC_STATUS, ERROR)
                     return@withContext
                 }
 
@@ -152,10 +170,10 @@ class RealCurrencyRepository(
                     key = Settings.CURRENCIES_LAST_SYNC_DATE,
                     value = Clock.System.now().toEpochMilliseconds()
                 )
-                syncStatus.emit(SyncStatus.Success)
+                settings.putString(Settings.CURRENCIES_SYNC_STATUS, IDLE)
             }
         } catch (exception: IOException) {
-            syncStatus.emit(SyncStatus.Error)
+            settings.putString(Settings.CURRENCIES_SYNC_STATUS, ERROR)
         }
     }
 
@@ -193,5 +211,8 @@ class RealCurrencyRepository(
 
     private companion object {
         const val DECIMAL_PLACES = 6
+        const val IDLE = "idle"
+        const val IN_PROGRESS = "in_progress"
+        const val ERROR = "error"
     }
 }

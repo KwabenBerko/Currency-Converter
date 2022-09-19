@@ -148,6 +148,7 @@ class RealCurrencyRepositoryTest {
         val sut = createCurrencyRepository(mockEngine)
 
         sut.syncStatus().test {
+            assertEquals(SyncStatus.Idle, awaitItem())
 
             sut.sync()
 
@@ -162,9 +163,10 @@ class RealCurrencyRepositoryTest {
             val mockEngine = MockEngine.create {
                 addHandler { throw IOException("") }
             }
-            val sut = createCurrencyRepository(mockEngine)
+            val sut = createCurrencyRepository(mockEngine = mockEngine)
 
             sut.syncStatus().test {
+                assertEquals(SyncStatus.Idle, awaitItem())
 
                 sut.sync()
 
@@ -188,6 +190,7 @@ class RealCurrencyRepositoryTest {
         val sut = createCurrencyRepository(mockEngine)
 
         sut.syncStatus().test {
+            assertEquals(SyncStatus.Idle, awaitItem())
 
             sut.sync()
 
@@ -212,6 +215,7 @@ class RealCurrencyRepositoryTest {
             val sut = createCurrencyRepository(mockEngine)
 
             sut.syncStatus().test {
+                assertEquals(SyncStatus.Idle, awaitItem())
 
                 sut.sync()
 
@@ -238,6 +242,7 @@ class RealCurrencyRepositoryTest {
         val sut = createCurrencyRepository(mockEngine)
 
         sut.syncStatus().test {
+            assertEquals(SyncStatus.Idle, awaitItem())
 
             sut.sync()
 
@@ -265,6 +270,7 @@ class RealCurrencyRepositoryTest {
             val sut = createCurrencyRepository(mockEngine)
 
             sut.syncStatus().test {
+                assertEquals(SyncStatus.Idle, awaitItem())
 
                 sut.sync()
 
@@ -292,11 +298,12 @@ class RealCurrencyRepositoryTest {
             val sut = createCurrencyRepository(mockEngine)
 
             sut.syncStatus().test {
+                assertEquals(SyncStatus.Idle, awaitItem())
 
                 sut.sync()
 
                 assertEquals(SyncStatus.InProgress, awaitItem())
-                assertEquals(SyncStatus.Success, awaitItem())
+                assertEquals(SyncStatus.Idle, awaitItem())
             }
         }
 

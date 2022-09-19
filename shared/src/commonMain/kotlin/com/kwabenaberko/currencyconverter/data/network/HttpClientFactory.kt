@@ -4,6 +4,7 @@ import com.kwabenaberko.currencyconverter.data.Api
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
@@ -27,6 +28,10 @@ object HttpClientFactory {
                         ContentType.Application.Json.toString()
                     )
                 }
+            }
+
+            install(HttpRequestRetry) {
+                retryOnServerErrors(maxRetries = 2)
             }
 
             install(ContentNegotiation) {

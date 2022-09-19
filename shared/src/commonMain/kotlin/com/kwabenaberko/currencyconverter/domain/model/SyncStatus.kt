@@ -1,7 +1,7 @@
 package com.kwabenaberko.currencyconverter.domain.model
 
-sealed class SyncStatus {
-    object InProgress : SyncStatus()
-    object Error : SyncStatus()
-    object Success : SyncStatus()
+sealed interface SyncStatus {
+    object Idle : SyncStatus
+    object InProgress : SyncStatus
+    object Error : SyncStatus
 }

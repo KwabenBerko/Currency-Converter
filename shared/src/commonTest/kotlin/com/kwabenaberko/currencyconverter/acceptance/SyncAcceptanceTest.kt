@@ -44,16 +44,18 @@ class SyncAcceptanceTest {
         val statusObserver = getSyncStatus().testIn(this)
         val currenciesObserver = getCurrencies(null).testIn(this)
 
+        assertEquals(SyncStatus.Idle, statusObserver.awaitItem())
+        assertEquals(emptyList(), currenciesObserver.awaitItem())
+
         sut.invoke()
 
         with(statusObserver) {
             assertEquals(SyncStatus.InProgress, awaitItem())
-            assertEquals(SyncStatus.Success, awaitItem())
+            assertEquals(SyncStatus.Idle, awaitItem())
             cancelAndIgnoreRemainingEvents()
         }
 
         with(currenciesObserver) {
-            assertEquals(emptyList(), awaitItem())
             assertTrue(awaitItem().containsAll(listOf(GHS, USD, NGN)))
             cancelAndIgnoreRemainingEvents()
         }
