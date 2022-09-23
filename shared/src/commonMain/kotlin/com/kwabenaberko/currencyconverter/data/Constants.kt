@@ -8,7 +8,7 @@ object Settings {
     const val NAME = "currency_converter_settings"
     const val BASE_CODE = "base_code"
     const val TARGET_CODE = "target_code"
-    const val CURRENCIES_SYNC_STATUS = "currencies_last_sync_date"
+    const val CURRENCIES_SYNC_STATUS = "currencies_sync_status"
     const val CURRENCIES_LAST_SYNC_DATE = "currencies_last_sync_date"
 }
 

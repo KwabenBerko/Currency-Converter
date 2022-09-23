@@ -29,8 +29,11 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.utils.io.errors.IOException
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -56,7 +59,9 @@ class RealCurrencyRepositoryTest {
             insert(USD.code, USD.name, USD.symbol)
             insert(GHS.code, GHS.name, GHS.symbol)
         }
-        val sut = createCurrencyRepository()
+        val sut = createCurrencyRepository(
+            backgroundDispatcher = createTestDispatcher(testScheduler)
+        )
 
         sut.currencies(filter = null).test {
             assertEquals(listOf(GHS, USD), awaitItem())
@@ -70,7 +75,9 @@ class RealCurrencyRepositoryTest {
             insert(GHS.code, GHS.name, GHS.symbol)
         }
 
-        val sut = createCurrencyRepository()
+        val sut = createCurrencyRepository(
+            backgroundDispatcher = createTestDispatcher(testScheduler)
+        )
 
         sut.currencies(CurrencyFilter(name = "abcde")).test {
             assertEquals(emptyList(), awaitItem())
@@ -84,7 +91,9 @@ class RealCurrencyRepositoryTest {
             insert(GHS.code, GHS.name, GHS.symbol)
         }
 
-        val sut = createCurrencyRepository()
+        val sut = createCurrencyRepository(
+            backgroundDispatcher = createTestDispatcher(testScheduler)
+        )
 
         sut.currencies(CurrencyFilter(name = "e")).test {
             assertEquals(listOf(GHS, USD), awaitItem())
@@ -98,7 +107,9 @@ class RealCurrencyRepositoryTest {
             insert(GHS.code, GHS.name, GHS.symbol)
             insert(NGN.code, NGN.name, NGN.symbol)
         }
-        val sut = createCurrencyRepository()
+        val sut = createCurrencyRepository(
+            backgroundDispatcher = createTestDispatcher(testScheduler)
+        )
 
         sut.setDefaultCurrencies(GHS.code, NGN.code)
         val result = sut.getDefaultCurrencies()
@@ -113,7 +124,9 @@ class RealCurrencyRepositoryTest {
                 insert(USD.code, USD.name, USD.symbol)
                 insert(GHS.code, GHS.name, GHS.symbol)
             }
-            val sut = createCurrencyRepository()
+            val sut = createCurrencyRepository(
+                backgroundDispatcher = createTestDispatcher(testScheduler)
+            )
 
             val result = sut.getDefaultCurrencies()
 
@@ -126,7 +139,9 @@ class RealCurrencyRepositoryTest {
             insert(baseCode = USD.code, targetCode = GHS.code, rate = 10.015024)
             insert(baseCode = GHS.code, targetCode = NGN.code, rate = 42.235564)
         }
-        val sut = createCurrencyRepository()
+        val sut = createCurrencyRepository(
+            backgroundDispatcher = createTestDispatcher(testScheduler)
+        )
 
         forAll(
             table(
@@ -145,10 +160,13 @@ class RealCurrencyRepositoryTest {
         val mockEngine = MockEngine.create {
             addHandler { respondError(status = HttpStatusCode.NotFound) }
         }
-        val sut = createCurrencyRepository(mockEngine)
+        val sut = createCurrencyRepository(
+            mockEngine = mockEngine,
+            backgroundDispatcher = createTestDispatcher(testScheduler)
+        )
 
         sut.syncStatus().test {
-            assertEquals(SyncStatus.Idle, awaitItem())
+            assertEquals(null, awaitItem())
 
             sut.sync()
 
@@ -163,10 +181,13 @@ class RealCurrencyRepositoryTest {
             val mockEngine = MockEngine.create {
                 addHandler { throw IOException("") }
             }
-            val sut = createCurrencyRepository(mockEngine = mockEngine)
+            val sut = createCurrencyRepository(
+                mockEngine = mockEngine,
+                backgroundDispatcher = createTestDispatcher(testScheduler)
+            )
 
             sut.syncStatus().test {
-                assertEquals(SyncStatus.Idle, awaitItem())
+                assertEquals(null, awaitItem())
 
                 sut.sync()
 
@@ -187,10 +208,13 @@ class RealCurrencyRepositoryTest {
                 }
             }
         }
-        val sut = createCurrencyRepository(mockEngine)
+        val sut = createCurrencyRepository(
+            mockEngine = mockEngine,
+            backgroundDispatcher = createTestDispatcher(testScheduler)
+        )
 
         sut.syncStatus().test {
-            assertEquals(SyncStatus.Idle, awaitItem())
+            assertEquals(null, awaitItem())
 
             sut.sync()
 
@@ -212,10 +236,13 @@ class RealCurrencyRepositoryTest {
                     }
                 }
             }
-            val sut = createCurrencyRepository(mockEngine)
+            val sut = createCurrencyRepository(
+                mockEngine = mockEngine,
+                backgroundDispatcher = createTestDispatcher(testScheduler)
+            )
 
             sut.syncStatus().test {
-                assertEquals(SyncStatus.Idle, awaitItem())
+                assertEquals(null, awaitItem())
 
                 sut.sync()
 
@@ -239,10 +266,13 @@ class RealCurrencyRepositoryTest {
                 }
             }
         }
-        val sut = createCurrencyRepository(mockEngine)
+        val sut = createCurrencyRepository(
+            mockEngine = mockEngine,
+            backgroundDispatcher = createTestDispatcher(testScheduler)
+        )
 
         sut.syncStatus().test {
-            assertEquals(SyncStatus.Idle, awaitItem())
+            assertEquals(null, awaitItem())
 
             sut.sync()
 
@@ -267,10 +297,13 @@ class RealCurrencyRepositoryTest {
                     }
                 }
             }
-            val sut = createCurrencyRepository(mockEngine)
+            val sut = createCurrencyRepository(
+                mockEngine = mockEngine,
+                backgroundDispatcher = createTestDispatcher(testScheduler)
+            )
 
             sut.syncStatus().test {
-                assertEquals(SyncStatus.Idle, awaitItem())
+                assertEquals(null, awaitItem())
 
                 sut.sync()
 
@@ -295,15 +328,18 @@ class RealCurrencyRepositoryTest {
                     }
                 }
             }
-            val sut = createCurrencyRepository(mockEngine)
+            val sut = createCurrencyRepository(
+                mockEngine = mockEngine,
+                backgroundDispatcher = createTestDispatcher(testScheduler)
+            )
 
             sut.syncStatus().test {
-                assertEquals(SyncStatus.Idle, awaitItem())
+                assertEquals(null, awaitItem())
 
                 sut.sync()
 
                 assertEquals(SyncStatus.InProgress, awaitItem())
-                assertEquals(SyncStatus.Idle, awaitItem())
+                assertEquals(SyncStatus.Success, awaitItem())
             }
         }
 
@@ -323,7 +359,10 @@ class RealCurrencyRepositoryTest {
                     }
                 }
             }
-            val sut = createCurrencyRepository(mockEngine)
+            val sut = createCurrencyRepository(
+                mockEngine = mockEngine,
+                backgroundDispatcher = createTestDispatcher(testScheduler)
+            )
 
             sut.sync()
 
@@ -349,7 +388,9 @@ class RealCurrencyRepositoryTest {
 
     @Test
     fun `should return false if there has not been an initial sync`() = runTest {
-        val sut = createCurrencyRepository()
+        val sut = createCurrencyRepository(
+            backgroundDispatcher = createTestDispatcher(testScheduler)
+        )
 
         val result = sut.hasCompletedInitialSync()
 
@@ -361,7 +402,10 @@ class RealCurrencyRepositoryTest {
         val settings = MapSettings().apply {
             putLong(Settings.CURRENCIES_LAST_SYNC_DATE, 1662649992000)
         }
-        val sut = createCurrencyRepository(settings = settings)
+        val sut = createCurrencyRepository(
+            settings = settings,
+            backgroundDispatcher = createTestDispatcher(testScheduler)
+        )
 
         val result = sut.hasCompletedInitialSync()
 
@@ -375,17 +419,22 @@ class RealCurrencyRepositoryTest {
     private val defaultEngine = MockEngine.create {
         addHandler { respondOk() }
     }
-    private val defaultSettings = MapSettings()
+
+    private fun createTestDispatcher(scheduler: TestCoroutineScheduler): TestDispatcher{
+        return StandardTestDispatcher(scheduler)
+    }
+    
     private fun createCurrencyRepository(
         mockEngine: HttpClientEngine = defaultEngine,
-        settings: MapSettings = defaultSettings
+        settings: MapSettings = MapSettings(),
+        backgroundDispatcher: CoroutineDispatcher
     ): RealCurrencyRepository {
         return RealCurrencyRepository(
             httpClient = HttpClientFactory.makeClient(mockEngine),
             currencyQueries = database.dbCurrencyQueries,
             exchangeRateQueries = database.dbExchangeRateQueries,
             settings = settings,
-            backgroundDispatcher = Dispatchers.Default
+            backgroundDispatcher = backgroundDispatcher
         )
     }
 
