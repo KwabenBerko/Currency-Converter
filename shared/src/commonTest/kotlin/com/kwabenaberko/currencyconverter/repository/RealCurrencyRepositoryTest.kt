@@ -156,7 +156,7 @@ class RealCurrencyRepositoryTest {
     }
 
     @Test
-    fun `should return a sync error when retrieving currencies`() = runTest {
+    fun `should fail when retrieving currencies`() = runTest {
         val mockEngine = MockEngine.create {
             addHandler { respondError(status = HttpStatusCode.NotFound) }
         }
@@ -168,15 +168,16 @@ class RealCurrencyRepositoryTest {
         sut.syncStatus().test {
             assertEquals(null, awaitItem())
 
-            sut.sync()
+            val result = sut.sync()
 
             assertEquals(SyncStatus.InProgress, awaitItem())
             assertEquals(SyncStatus.Error, awaitItem())
+            assertFalse(result)
         }
     }
 
     @Test
-    fun `should return a sync error when network connection is unavailable when retrieving currencies`() =
+    fun `should fail if network connection is unavailable when retrieving currencies`() =
         runTest {
             val mockEngine = MockEngine.create {
                 addHandler { throw IOException("") }
@@ -189,15 +190,16 @@ class RealCurrencyRepositoryTest {
             sut.syncStatus().test {
                 assertEquals(null, awaitItem())
 
-                sut.sync()
+                val result = sut.sync()
 
                 assertEquals(SyncStatus.InProgress, awaitItem())
                 assertEquals(SyncStatus.Error, awaitItem())
+                assertFalse(result)
             }
         }
 
     @Test
-    fun `should return a sync error when retrieving exchange rates`() = runTest {
+    fun `should fail when retrieving exchange rates`() = runTest {
         val mockEngine = MockEngine.create {
             addHandler { request ->
                 when {
@@ -216,15 +218,16 @@ class RealCurrencyRepositoryTest {
         sut.syncStatus().test {
             assertEquals(null, awaitItem())
 
-            sut.sync()
+            val result = sut.sync()
 
             assertEquals(SyncStatus.InProgress, awaitItem())
             assertEquals(SyncStatus.Error, awaitItem())
+            assertFalse(result)
         }
     }
 
     @Test
-    fun `should return a sync error if network connection is unavailable when retrieving exchange rates`() =
+    fun `should fail if network connection is unavailable when retrieving exchange rates`() =
         runTest {
             val mockEngine = MockEngine.create {
                 addHandler { request ->
@@ -244,15 +247,16 @@ class RealCurrencyRepositoryTest {
             sut.syncStatus().test {
                 assertEquals(null, awaitItem())
 
-                sut.sync()
+                val result = sut.sync()
 
                 assertEquals(SyncStatus.InProgress, awaitItem())
                 assertEquals(SyncStatus.Error, awaitItem())
+                assertFalse(result)
             }
         }
 
     @Test
-    fun `should return a sync error when retrieving currency symbols`() = runTest {
+    fun `should fail when retrieving currency symbols`() = runTest {
         val mockEngine = MockEngine.create {
             addHandler { request ->
                 when {
@@ -274,15 +278,16 @@ class RealCurrencyRepositoryTest {
         sut.syncStatus().test {
             assertEquals(null, awaitItem())
 
-            sut.sync()
+            val result = sut.sync()
 
             assertEquals(SyncStatus.InProgress, awaitItem())
             assertEquals(SyncStatus.Error, awaitItem())
+            assertFalse(result)
         }
     }
 
     @Test
-    fun `should return a sync error if network connection is unavailable when retrieving currency symbols`() =
+    fun `should fail if network connection is unavailable when retrieving currency symbols`() =
         runTest {
             val mockEngine = MockEngine.create {
                 addHandler { request ->
@@ -305,10 +310,11 @@ class RealCurrencyRepositoryTest {
             sut.syncStatus().test {
                 assertEquals(null, awaitItem())
 
-                sut.sync()
+                val result = sut.sync()
 
                 assertEquals(SyncStatus.InProgress, awaitItem())
                 assertEquals(SyncStatus.Error, awaitItem())
+                assertFalse(result)
             }
         }
 
@@ -336,10 +342,11 @@ class RealCurrencyRepositoryTest {
             sut.syncStatus().test {
                 assertEquals(null, awaitItem())
 
-                sut.sync()
+                val result = sut.sync()
 
                 assertEquals(SyncStatus.InProgress, awaitItem())
                 assertEquals(SyncStatus.Success, awaitItem())
+                assertTrue(result)
             }
         }
 
@@ -420,10 +427,10 @@ class RealCurrencyRepositoryTest {
         addHandler { respondOk() }
     }
 
-    private fun createTestDispatcher(scheduler: TestCoroutineScheduler): TestDispatcher{
+    private fun createTestDispatcher(scheduler: TestCoroutineScheduler): TestDispatcher {
         return StandardTestDispatcher(scheduler)
     }
-    
+
     private fun createCurrencyRepository(
         mockEngine: HttpClientEngine = defaultEngine,
         settings: MapSettings = MapSettings(),

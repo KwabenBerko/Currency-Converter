@@ -111,9 +111,9 @@ class RealCurrencyRepository(
         }
     }
 
-    override suspend fun sync() {
+    override suspend fun sync(): Boolean {
         settings.putString(Settings.CURRENCIES_SYNC_STATUS, SyncStatus.InProgress.name)
-        try {
+        return try {
             withContext(backgroundDispatcher) {
                 val responses = awaitAll(
                     async { httpClient.get(Api.CURRENCIES) },
@@ -126,7 +126,7 @@ class RealCurrencyRepository(
                 )
                 if (responses.any { response -> !response.status.isSuccess() }) {
                     settings.putString(Settings.CURRENCIES_SYNC_STATUS, SyncStatus.Error.name)
-                    return@withContext
+                    return@withContext false
                 }
 
                 val (currenciesResponse, symbolsResponse, exchangeRatesResponse) = responses
@@ -159,9 +159,11 @@ class RealCurrencyRepository(
                     value = Clock.System.now().toEpochMilliseconds()
                 )
                 settings.putString(Settings.CURRENCIES_SYNC_STATUS, SyncStatus.Success.name)
+                return@withContext true
             }
         } catch (exception: IOException) {
             settings.putString(Settings.CURRENCIES_SYNC_STATUS, SyncStatus.Error.name)
+            return false
         }
     }
 
