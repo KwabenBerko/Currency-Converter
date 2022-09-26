@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class FakeGetCurrencies : GetCurrencies {
-    val result = MutableSharedFlow<List<Currency>>()
+    lateinit var result: Flow<List<Currency>>
 
     override fun invoke(filter: CurrencyFilter?): Flow<List<Currency>> {
         return result
