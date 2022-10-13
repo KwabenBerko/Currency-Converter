@@ -27,15 +27,18 @@ tasks.register("clean", Delete::class) {
 
 tasks.register<Copy>("installGitHooks") {
     val isWindowsOS = OperatingSystem.current().isWindows
-    if (!isWindowsOS){
-        val fromDir = "${rootProject.rootDir}/.githooks"
-        val toDir = "${rootProject.rootDir}/.git/hooks"
+    val fromDir = "${rootProject.rootDir}/.githooks"
+    val toDir = "${rootProject.rootDir}/.git/hooks"
 
-        from(fromDir)
-        into(toDir)
+    from(fromDir)
+    into(toDir)
 
-        doLast {
-            Runtime.getRuntime().exec("chmod a+x $toDir")
-        }
+    onlyIf { !isWindowsOS }
+    doLast {
+        Runtime.getRuntime().exec("chmod a+x $toDir")
     }
+}
+
+afterEvaluate {
+    tasks["clean"].dependsOn("installGitHooks")
 }
