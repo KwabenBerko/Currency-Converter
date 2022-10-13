@@ -5,9 +5,9 @@ import com.kwabenaberko.currencyconverter.domain.usecase.GetSyncStatus
 import kotlinx.coroutines.flow.Flow
 
 class FakeGetSyncStatus : GetSyncStatus {
-    lateinit var result: Flow<SyncStatus>
+    lateinit var result: Flow<SyncStatus?>
 
-    override fun invoke(): Flow<SyncStatus> {
+    override fun invoke(): Flow<SyncStatus?> {
         return result
     }
 }
