@@ -7,8 +7,8 @@ plugins {
 
 ktlint {
     filter {
-        exclude("**/generated/**")
-        include("**/kotlin/**")
+        exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/generated/") }
+        exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/kotlin/") }
     }
 }
 

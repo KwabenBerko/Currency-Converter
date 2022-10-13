@@ -3,7 +3,7 @@
 echo "Running static analysis..."
 
 # Inspect code using Klint
-./gradlew shared:ktlintFormat shared:ktlintCheck --daemon
+./gradlew ktlintFormat ktlintCheck --daemon
 
 status=$?
 
