@@ -2,7 +2,6 @@ package com.kwabenaberko.currencyconverter.acceptance
 
 import app.cash.turbine.test
 import com.kwabenaberko.currencyconverter.TestContainer
-import com.kwabenaberko.currencyconverter.domain.model.CurrencyFilter
 import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeCediCurrency
 import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeDollarCurrency
 import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeNairaCurrency
@@ -58,7 +57,7 @@ class GetCurrenciesAcceptanceTest {
             )
         ) { filter, filteredCurrencies ->
 
-            sut(CurrencyFilter(name = filter)).test {
+            sut(filter).test {
                 assertEquals(filteredCurrencies, awaitItem())
             }
         }

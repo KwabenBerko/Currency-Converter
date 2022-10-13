@@ -7,7 +7,6 @@ import com.kwabenaberko.currencyconverter.data.Api
 import com.kwabenaberko.currencyconverter.data.Settings
 import com.kwabenaberko.currencyconverter.data.network.HttpClientFactory
 import com.kwabenaberko.currencyconverter.data.repository.RealCurrencyRepository
-import com.kwabenaberko.currencyconverter.domain.model.CurrencyFilter
 import com.kwabenaberko.currencyconverter.domain.model.DefaultCurrencies
 import com.kwabenaberko.currencyconverter.domain.model.SyncStatus
 import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeCediCurrency
@@ -79,7 +78,7 @@ class RealCurrencyRepositoryTest {
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
-        sut.currencies(CurrencyFilter(name = "abcde")).test {
+        sut.currencies(filter = "abcde").test {
             assertEquals(emptyList(), awaitItem())
         }
     }
@@ -95,7 +94,7 @@ class RealCurrencyRepositoryTest {
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
-        sut.currencies(CurrencyFilter(name = "e")).test {
+        sut.currencies(filter = "e").test {
             assertEquals(listOf(GHS, USD), awaitItem())
         }
     }
