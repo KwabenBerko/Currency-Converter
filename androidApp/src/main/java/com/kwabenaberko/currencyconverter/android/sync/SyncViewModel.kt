@@ -11,7 +11,7 @@ class SyncViewModel(
     private val sync: Sync
 ) : BaseViewModel<SyncViewModel.State>(State.Idle) {
 
-    fun doSync(){
+    fun doSync() {
         viewModelScope.launch {
             if (hasCompletedInitialSync()) {
                 setState(State.SyncSuccess)

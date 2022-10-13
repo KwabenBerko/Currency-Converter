@@ -46,7 +46,6 @@ class ConverterViewModel(
 
             setState(newState)
         }
-
     }
 
     fun convertSecondMoney(money: Money) = runIf<State.Content> { contentState ->

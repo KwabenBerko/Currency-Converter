@@ -3,7 +3,6 @@ package com.kwabenaberko.currencyconverter.android
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlin.reflect.KClass
 
 abstract class BaseViewModel<T>(initialState: T) : ViewModel() {
     private val _state = MutableStateFlow(initialState)
@@ -17,7 +16,7 @@ abstract class BaseViewModel<T>(initialState: T) : ViewModel() {
         return _state.value
     }
 
-    protected inline fun <reified S> runIf(block: (S) -> Unit){
+    protected inline fun <reified S> runIf(block: (S) -> Unit) {
         val currentState = getState()
         if (currentState is S) {
             block(currentState)
