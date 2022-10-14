@@ -41,7 +41,7 @@ kotlin {
                 implementation(libs.multiplatformSettings.coroutines)
                 implementation(libs.bundles.ktor.client)
                 implementation(libs.ktor.serialization)
-                implementation(libs.kotlinxDateTime)
+                implementation(libs.kotlinx.dateTime)
             }
         }
         val commonTest by getting {

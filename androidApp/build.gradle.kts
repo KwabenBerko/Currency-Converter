@@ -7,8 +7,8 @@ plugins {
 
 ktlint {
     filter {
-        exclude("**/generated/**")
-        include("**/kotlin/**")
+        exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/generated/") }
+        exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/kotlin/") }
     }
 }
 
@@ -33,8 +33,11 @@ dependencies {
     implementation(projects.shared)
     implementation("com.google.android.material:material:1.6.1")
     implementation("androidx.appcompat:appcompat:1.5.1")
-    implementation(libs.bundles.lifecycle)
     implementation(libs.coroutines.core)
+    implementation(libs.bundles.lifecycle)
+    implementation(libs.kotlinx.collections)
+    testImplementation(projects.sharedTest)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.junit)
+    testImplementation(libs.turbine)
 }
