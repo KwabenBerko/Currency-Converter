@@ -36,14 +36,13 @@ object HttpClientFactory {
             }
 
             install(ContentNegotiation) {
-                json(
-                    json = Json {
-                        ignoreUnknownKeys = true
-                        isLenient = true
-                        prettyPrint = true
-                    }
-                )
-                register(ContentType.Text.Plain, KotlinxSerializationConverter(Json))
+                val json = Json {
+                    ignoreUnknownKeys = true
+                    isLenient = true
+                    prettyPrint = true
+                }
+                json(json = json)
+                register(ContentType.Text.Plain, KotlinxSerializationConverter(json))
             }
 
             install(Logging) {
