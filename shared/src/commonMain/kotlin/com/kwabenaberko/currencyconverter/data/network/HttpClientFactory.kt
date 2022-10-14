@@ -13,6 +13,7 @@ import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.request.headers
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.appendIfNameAbsent
 import kotlinx.serialization.json.Json
@@ -42,6 +43,7 @@ object HttpClientFactory {
                         prettyPrint = true
                     }
                 )
+                register(ContentType.Text.Plain, KotlinxSerializationConverter(Json))
             }
 
             install(Logging) {
