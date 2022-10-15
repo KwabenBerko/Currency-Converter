@@ -21,7 +21,6 @@ class CurrenciesViewModelTest {
     private val getCurrencies = FakeGetCurrencies().apply {
         this.result = flowOf(listOf(GHS, NGN, USD))
     }
-    private val sut = CurrenciesViewModel(getCurrencies)
 
     @Test
     fun `should emit Content state when currencies are loaded`() = runTest {
@@ -33,8 +32,7 @@ class CurrenciesViewModelTest {
                 'U' to listOf(USD)
             )
         )
-
-        sut.loadCurrencies()
+        val sut = createViewModel()
 
         sut.state.test {
             assertEquals(State.Idle, awaitItem())
@@ -45,20 +43,34 @@ class CurrenciesViewModelTest {
     @Test
     fun `should emit Content state when currencies are filtered`() = runTest {
         val query = "G"
-        val expectedState = State.Content(
+        val initialExpectedState = State.Content(
+            query = "",
+            currencies = persistentMapOf(
+                'G' to listOf(GHS),
+                'N' to listOf(NGN),
+                'U' to listOf(USD)
+            )
+        )
+        val nextExpectedState = State.Content(
             query = query,
             currencies = persistentMapOf(
                 'G' to listOf(GHS),
             )
         )
-        getCurrencies.result = flowOf(listOf(GHS))
+        val sut = createViewModel()
 
+        getCurrencies.result = flowOf(listOf(GHS))
         sut.loadCurrencies(query)
 
         sut.state.test {
             assertEquals(State.Idle, awaitItem())
-            assertEquals(expectedState, awaitItem())
+            assertEquals(initialExpectedState, awaitItem())
+            assertEquals(nextExpectedState, awaitItem())
         }
+    }
+
+    private fun createViewModel(): CurrenciesViewModel {
+        return CurrenciesViewModel(getCurrencies)
     }
 
     companion object {

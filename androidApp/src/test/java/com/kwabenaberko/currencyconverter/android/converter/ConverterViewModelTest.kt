@@ -27,10 +27,6 @@ class ConverterViewModelTest {
     private val convertMoney = FakeConvertMoney().apply {
         this.result = Money(currency = GHS, amount = 1.0)
     }
-    private val sut = ConverterViewModel(
-        getDefaultCurrencies = getDefaultCurrencies,
-        convertMoney = convertMoney
-    )
 
     @Test
     fun `should emit Content state when converter loads`() = runTest {
@@ -41,8 +37,7 @@ class ConverterViewModelTest {
             secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1"),
             isReverse = false
         )
-
-        sut.loadConverter()
+        val sut = createViewModel()
 
         sut.state.test {
             assertEquals(State.Idle, awaitItem())
@@ -68,8 +63,7 @@ class ConverterViewModelTest {
             ),
             isReverse = false
         )
-
-        sut.loadConverter()
+        val sut = createViewModel()
 
         sut.state.test {
             assertEquals(State.Idle, awaitItem())
@@ -100,8 +94,7 @@ class ConverterViewModelTest {
             ),
             isReverse = false
         )
-
-        sut.loadConverter()
+        val sut = createViewModel()
 
         sut.state.test {
             assertEquals(State.Idle, awaitItem())
@@ -132,8 +125,7 @@ class ConverterViewModelTest {
             ),
             isReverse = true
         )
-
-        sut.loadConverter()
+        val sut = createViewModel()
 
         sut.state.test {
             assertEquals(State.Idle, awaitItem())
@@ -164,8 +156,7 @@ class ConverterViewModelTest {
             ),
             isReverse = true
         )
-
-        sut.loadConverter()
+        val sut = createViewModel()
 
         sut.state.test {
             assertEquals(State.Idle, awaitItem())
@@ -176,6 +167,13 @@ class ConverterViewModelTest {
 
             assertEquals(nextExpectedState, awaitItem())
         }
+    }
+
+    private fun createViewModel(): ConverterViewModel {
+        return ConverterViewModel(
+            getDefaultCurrencies = getDefaultCurrencies,
+            convertMoney = convertMoney
+        )
     }
 
     companion object {

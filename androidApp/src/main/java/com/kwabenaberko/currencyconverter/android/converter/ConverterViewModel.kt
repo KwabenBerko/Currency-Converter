@@ -15,7 +15,11 @@ class ConverterViewModel(
 
     private val formatter = CompactNumberFormatter()
 
-    fun loadConverter() {
+    init {
+        loadConverter()
+    }
+
+    private fun loadConverter() {
         viewModelScope.launch {
             val (base, target) = getDefaultCurrencies()
             val firstMoney = Money(currency = base, amount = 1.0)
