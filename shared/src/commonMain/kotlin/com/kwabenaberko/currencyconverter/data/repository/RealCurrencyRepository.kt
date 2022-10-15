@@ -177,14 +177,12 @@ class RealCurrencyRepository(
                 baseCode to 1.0.div(rate).round(places = DECIMAL_PLACES)
             )
             exchangeRates[code] = currentCodeRates
-            baseCodeRates
-                .filterKeys { key -> key != code }
-                .forEach { entry ->
-                    currentCodeRates[entry.key] = 1.0.div(rate)
-                        .round(places = DECIMAL_PLACES)
-                        .times(entry.value)
-                        .round(places = DECIMAL_PLACES)
-                }
+            baseCodeRates.forEach { entry ->
+                currentCodeRates[entry.key] = 1.0.div(rate)
+                    .round(places = DECIMAL_PLACES)
+                    .times(entry.value)
+                    .round(places = DECIMAL_PLACES)
+            }
         }
 
         return exchangeRates
