@@ -12,7 +12,11 @@ class CurrenciesViewModel(
     private val getCurrencies: GetCurrencies
 ) : BaseViewModel<CurrenciesViewModel.State>(State.Idle) {
 
-    fun loadCurrencies(query: String? = null) {
+    init {
+        loadCurrencies(query = null)
+    }
+
+    fun loadCurrencies(query: String?) {
         getCurrencies(query)
             .onEach { currencies ->
                 val groupedCurrencies = currencies

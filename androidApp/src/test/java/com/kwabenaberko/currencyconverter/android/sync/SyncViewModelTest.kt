@@ -22,14 +22,10 @@ class SyncViewModelTest {
     private val sync = FakeSync().apply {
         this.result = false
     }
-    private val sut = SyncViewModel(
-        hasCompletedInitialSync = hasCompletedInitialSync,
-        sync = sync
-    )
 
     @Test
     fun `should emit SyncError state when sync is not successful`() = runTest {
-        sut.doSync()
+        val sut = createViewModel()
 
         sut.state.test {
             assertEquals(State.Idle, awaitItem())
@@ -41,8 +37,7 @@ class SyncViewModelTest {
     @Test
     fun `should emit SyncSuccess state when sync is successful`() = runTest {
         sync.result = true
-
-        sut.doSync()
+        val sut = createViewModel()
 
         sut.state.test {
             assertEquals(State.Idle, awaitItem())
@@ -54,12 +49,18 @@ class SyncViewModelTest {
     @Test
     fun `should emit SyncSuccess state if has already completed initial sync`() = runTest {
         hasCompletedInitialSync.result = true
-
-        sut.doSync()
+        val sut = createViewModel()
 
         sut.state.test {
             assertEquals(State.Idle, awaitItem())
             assertEquals(State.SyncSuccess, awaitItem())
         }
+    }
+
+    private fun createViewModel(): SyncViewModel {
+        return SyncViewModel(
+            hasCompletedInitialSync = hasCompletedInitialSync,
+            sync = sync
+        )
     }
 }
