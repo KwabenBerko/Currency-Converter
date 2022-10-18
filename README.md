@@ -92,8 +92,10 @@ Examples:
 |--------|-----------------------------------------------------|
 | e      | Ghanaian Cedi, Nigerian Naira, United States Dollar |
 | g      | Ghanaian Cedi, Nigerian Naira                       |
+| GHS    | Ghanaian Cedi                                       |
 | Ghana  | Ghanaian Cedi                                       |
 | naira  | Nigerian Naira                                      |
+| $      | United States Dollar                                |
 
 #### Scenario: Get GHS and USD as default base and target currencies respectively
 
