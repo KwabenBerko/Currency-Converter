@@ -52,8 +52,10 @@ class GetCurrenciesAcceptanceTest {
                 headers("filter", "filteredCurrencies"),
                 row("e", listOf(GHS, NGN, USD)),
                 row("g", listOf(GHS, NGN)),
+                row(GHS.code, listOf(GHS)),
                 row("Ghana", listOf(GHS)),
-                row("naira", listOf(NGN))
+                row("naira", listOf(NGN)),
+                row(USD.symbol, listOf(USD))
             )
         ) { filter, filteredCurrencies ->
 

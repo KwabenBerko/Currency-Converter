@@ -14,4 +14,6 @@ WHERE code = ?;
 
 selectAllCurrencies:
 SELECT * FROM DbCurrency
-WHERE name LIKE ( "%" || :name || "%");
+WHERE name LIKE ("%" || :filter || "%")
+OR code LIKE ("%" || :filter || "%")
+OR symbol LIKE ("%" || :filter || "%");
