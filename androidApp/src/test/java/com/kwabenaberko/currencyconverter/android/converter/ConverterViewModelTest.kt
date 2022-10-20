@@ -33,8 +33,8 @@ class ConverterViewModelTest {
         val firstMoney = Money(GHS, 1.0)
         val secondMoney = Money(GHS, 1.0)
         val expectedState = State.Content(
-            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1"),
-            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1"),
+            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1.0"),
+            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1.0"),
             isReverse = false
         )
         val sut = createViewModel()
@@ -50,16 +50,16 @@ class ConverterViewModelTest {
         val firstMoney = Money(GHS, 1.0)
         val secondMoney = Money(GHS, 1.0)
         val initialExpectedState = State.Content(
-            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1"),
-            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1"),
+            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1.0"),
+            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1.0"),
             isReverse = false
         )
         val nextExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(
-                money = firstMoney.copy(currency = USD), formattedAmount = "1"
+                money = firstMoney.copy(currency = USD), formattedAmount = "1.0"
             ),
             secondMoneyItem = MoneyViewItem(
-                money = secondMoney.copy(amount = 10.0), formattedAmount = "10"
+                money = secondMoney.copy(amount = 10.0), formattedAmount = "10.0"
             ),
             isReverse = false
         )
@@ -81,8 +81,8 @@ class ConverterViewModelTest {
         val firstMoney = Money(GHS, 1.0)
         val secondMoney = Money(GHS, 1.0)
         val initialExpectedState = State.Content(
-            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1"),
-            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1"),
+            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1.0"),
+            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1.0"),
             isReverse = false
         )
         val nextExpectedState = State.Content(
@@ -112,16 +112,16 @@ class ConverterViewModelTest {
         val firstMoney = Money(GHS, 1.0)
         val secondMoney = Money(GHS, 1.0)
         val initialExpectedState = State.Content(
-            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1"),
-            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1"),
+            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1.0"),
+            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1.0"),
             isReverse = false
         )
         val nextExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(
-                money = firstMoney.copy(amount = 10.0), formattedAmount = "10"
+                money = firstMoney.copy(amount = 10.0), formattedAmount = "10.0"
             ),
             secondMoneyItem = MoneyViewItem(
-                money = secondMoney.copy(currency = USD), formattedAmount = "1"
+                money = secondMoney.copy(currency = USD), formattedAmount = "1.0"
             ),
             isReverse = true
         )
@@ -143,8 +143,8 @@ class ConverterViewModelTest {
         val firstMoney = Money(GHS, 1.0)
         val secondMoney = Money(GHS, 1.0)
         val initialExpectedState = State.Content(
-            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1"),
-            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1"),
+            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1.0"),
+            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1.0"),
             isReverse = false
         )
         val nextExpectedState = State.Content(

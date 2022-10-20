@@ -26,7 +26,7 @@ class CompactNumberFormatter {
             value >= 1_000 -> {
                 "${formatter.format(value.div(1_000))}K"
             }
-            else -> formatter.format(value)
+            else -> "$value"
         }
     }
 }
