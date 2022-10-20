@@ -12,6 +12,7 @@ sqldelight = "2.0.0-alpha03"
 turbine = "0.11.0"
 kotlinxDateTime = "0.4.0"
 kotlinxCollections = "0.3.5"
+icu4j = "71.1"
 catalogUpdate = "0.6.1"
 versions = "0.42.0"
 
@@ -42,6 +43,7 @@ sqldelight-driver-sqlite = { module = "app.cash.sqldelight:sqlite-driver", versi
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 kotlinx-dateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
 kotlinx-collections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollections" }
+icu4j = { module = "com.ibm.icu:icu4j", version.ref = "icu4j" }
 
 [bundles]
 lifecycle = ["lifecycle-viewModel-ktx", "lifecycle-common-java8"]

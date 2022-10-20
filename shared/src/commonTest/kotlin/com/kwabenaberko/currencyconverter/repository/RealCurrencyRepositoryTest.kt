@@ -377,18 +377,15 @@ class RealCurrencyRepositoryTest {
             }
             assertEquals(
                 expected = 10.015024,
-                actual = sut.getRate(USD.code, GHS.code),
-                absoluteTolerance = 0.01
+                actual = sut.getRate(USD.code, GHS.code)
             )
             assertEquals(
-                expected = 0.09985,
-                actual = sut.getRate(GHS.code, USD.code),
-                absoluteTolerance = 0.01
+                expected = 0.099850,
+                actual = sut.getRate(GHS.code, USD.code)
             )
             assertEquals(
                 expected = 42.235564,
-                actual = sut.getRate(GHS.code, NGN.code),
-                absoluteTolerance = 0.01
+                actual = sut.getRate(GHS.code, NGN.code)
             )
         }
 

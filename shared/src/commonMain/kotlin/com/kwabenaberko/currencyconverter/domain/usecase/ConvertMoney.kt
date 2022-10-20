@@ -2,7 +2,8 @@ package com.kwabenaberko.currencyconverter.domain.usecase
 
 import com.kwabenaberko.currencyconverter.domain.model.Currency
 import com.kwabenaberko.currencyconverter.domain.model.Money
-import com.kwabenaberko.currencyconverter.round
+import com.kwabenaberko.currencyconverter.toPlaces
+import com.kwabenaberko.currencyconverter.toSignificantDigits
 
 suspend fun convertMoney(
     getRate: GetRate,
@@ -15,9 +16,14 @@ suspend fun convertMoney(
     val targetCode = targetCurrency.code
 
     val rate = getRate(baseCode, targetCode)
-    val convertedAmount = rate.times(amount).round(places = 2)
+    val convertedAmount = rate.times(amount)
+    val roundedAmount = if (convertedAmount < 1) {
+        convertedAmount.toSignificantDigits(digits = 2)
+    } else {
+        convertedAmount.toPlaces(places = 2)
+    }
     setDefaultCurrencies(baseCode, targetCode)
-    return Money(targetCurrency, convertedAmount)
+    return Money(targetCurrency, roundedAmount)
 }
 
 typealias ConvertMoney = suspend (

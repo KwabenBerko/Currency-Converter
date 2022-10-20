@@ -14,7 +14,7 @@ import com.kwabenaberko.currencyconverter.domain.model.Currency
 import com.kwabenaberko.currencyconverter.domain.model.DefaultCurrencies
 import com.kwabenaberko.currencyconverter.domain.model.SyncStatus
 import com.kwabenaberko.currencyconverter.domain.repository.CurrencyRepository
-import com.kwabenaberko.currencyconverter.round
+import com.kwabenaberko.currencyconverter.toPlaces
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.coroutines.getStringOrNullFlow
@@ -173,15 +173,13 @@ class RealCurrencyRepository(
         val exchangeRates = mutableMapOf(baseCode to baseCodeRates)
 
         baseCodeRates.forEach { (code, rate) ->
-            val currentCodeRates = mutableMapOf(
-                baseCode to 1.0.div(rate).round(places = DECIMAL_PLACES)
-            )
+            val currentCodeRates = mutableMapOf(baseCode to 1.0.div(rate).toPlaces(DECIMAL_PLACES))
             exchangeRates[code] = currentCodeRates
             baseCodeRates.forEach { entry ->
-                currentCodeRates[entry.key] = 1.0.div(rate)
-                    .round(places = DECIMAL_PLACES)
+                currentCodeRates[entry.key] = 1.0
+                    .div(rate)
                     .times(entry.value)
-                    .round(places = DECIMAL_PLACES)
+                    .toPlaces(places = DECIMAL_PLACES)
             }
         }
 

@@ -47,7 +47,7 @@ class ConvertMoneyAcceptanceTest {
                 headers("baseCode", "targetCode", "amount", "expectedAmount"),
                 row(USD.code, GHS.code, 50.0, 500.75),
                 row(GHS.code, NGN.code, 2000.0, 84471.13),
-                row(NGN.code, GBP.code, 100000.0, 204.1),
+                row(NGN.code, GBP.code, 1.0, 0.0020),
                 row(EUR.code, USD.code, 900.0, 906.39),
             )
         ) { baseCode: String, targetCode: String, amount: Double, expectedAmount: Double ->
