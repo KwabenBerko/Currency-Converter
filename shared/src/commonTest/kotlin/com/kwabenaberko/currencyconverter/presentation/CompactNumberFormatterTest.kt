@@ -15,9 +15,9 @@ class CompactNumberFormatterTest {
         forAll(
             table(
                 headers("rawNumber", "formattedNumber"),
-                row(0, "0"),
-                row(20, "20"),
-                row(500.0, "500"),
+                row(0.0, "0.0"),
+                row(20.0, "20.0"),
+                row(500.0, "500.0"),
                 row(999.9, "999.9"),
             )
         ) { rawNumber, formattedNumber ->
@@ -31,8 +31,8 @@ class CompactNumberFormatterTest {
         forAll(
             table(
                 headers("rawNumber", "formattedNumber"),
-                row(1_000, "1K"),
-                row(20_000, "20K"),
+                row(1_000.0, "1K"),
+                row(20_000.0, "20K"),
                 row(500_000.0, "500K"),
                 row(999_999.9, "999.9K"),
             )
@@ -47,8 +47,8 @@ class CompactNumberFormatterTest {
         forAll(
             table(
                 headers("rawNumber", "formattedNumber"),
-                row(1_000_000, "1M"),
-                row(20_000_000, "20M"),
+                row(1_000_000.0, "1M"),
+                row(20_000_000.0, "20M"),
                 row(500_000_000.0, "500M"),
                 row(999_999_999.9, "999.9M"),
             )
@@ -63,8 +63,8 @@ class CompactNumberFormatterTest {
         forAll(
             table(
                 headers("rawNumber", "formattedNumber"),
-                row(1_000_000_000, "1B"),
-                row(20_000_000_000, "20B"),
+                row(1_000_000_000.0, "1B"),
+                row(20_000_000_000.0, "20B"),
                 row(500_000_000_000.0, "500B"),
                 row(999_999_999_999.9, "999.9B"),
             )
@@ -79,8 +79,8 @@ class CompactNumberFormatterTest {
         forAll(
             table(
                 headers("rawNumber", "formattedNumber"),
-                row(1_000_000_000_000, "1T"),
-                row(20_000_000_000_000, "20T"),
+                row(1_000_000_000_000.0, "1T"),
+                row(20_000_000_000_000.0, "20T"),
                 row(500_000_000_000_000.0, "500T"),
                 row(999_999_999_999_999.9, "999.9T"),
             )
