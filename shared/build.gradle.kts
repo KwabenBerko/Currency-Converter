@@ -59,6 +59,7 @@ kotlin {
             dependencies {
                 implementation(libs.sqldelight.driver.android)
                 implementation(libs.ktor.client.android)
+                implementation(libs.icu4j)
             }
         }
         val androidTest by getting {

@@ -64,7 +64,7 @@ class SyncAcceptanceTest {
             table(
                 headers("baseCode", "targetCode", "rate"),
                 row(USD.code, GHS.code, 10.015024),
-                row(GHS.code, USD.code, 0.09985),
+                row(GHS.code, USD.code, 0.099850),
                 row(USD.code, NGN.code, 422.990183),
                 row(NGN.code, USD.code, 0.002364),
                 row(GHS.code, NGN.code, 42.235564),
@@ -73,8 +73,7 @@ class SyncAcceptanceTest {
         ) { baseCode, targetCode, rate ->
             assertEquals(
                 expected = rate,
-                actual = getRate(baseCode, targetCode),
-                absoluteTolerance = 0.01
+                actual = getRate(baseCode, targetCode)
             )
         }
 

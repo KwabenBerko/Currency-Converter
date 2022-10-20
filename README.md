@@ -57,7 +57,7 @@ Then the user should have a converted amount of  `<convertedAmount>`
 |----------------------|----------------------|--------|-----------------|
 | United States Dollar | Ghanaian Cedi        | 50     | 500.75          |
 | Ghanaian Cedi        | Nigerian Naira       | 2000   | 84471.13        |
-| Nigerian Naira       | British Pound        | 100000 | 204.1           |
+| Nigerian Naira       | British Pound        | 1      | 0.0020          |
 | Euro                 | United States Dollar | 900    | 906.39          |
 
 #### Scenario: Get currencies available to the user in a sorted order

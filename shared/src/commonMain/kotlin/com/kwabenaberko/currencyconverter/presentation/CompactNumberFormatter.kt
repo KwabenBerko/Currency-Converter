@@ -7,13 +7,14 @@ import kotlin.math.abs
 class CompactNumberFormatter {
     private val formatter = DecimalFormatter(
         maximumFractionDigits = 1,
-        roundingMethod = RoundingMethod.FLOOR
+        roundingMethod = RoundingMethod.DOWN
     )
 
     fun format(number: Number): String {
         val value = abs(number.toDouble())
         return when {
             value >= 1_000_000_000_000 -> {
+                println(999_999.9.div(1_000))
                 "${formatter.format(value.div(1_000_000_000_000))}T"
             }
             value >= 1_000_000_000 -> {

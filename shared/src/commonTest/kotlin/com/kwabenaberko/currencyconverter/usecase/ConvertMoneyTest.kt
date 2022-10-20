@@ -5,6 +5,7 @@ import com.kwabenaberko.currencyconverter.domain.usecase.convertMoney
 import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeCediCurrency
 import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeDollarCurrency
 import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeNairaCurrency
+import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makePoundsCurrency
 import com.kwabenaberko.sharedtest.testdouble.FakeGetRate
 import com.kwabenaberko.sharedtest.testdouble.FakeSetDefaultCurrencies
 import io.kotest.data.forAll
@@ -26,6 +27,7 @@ class ConvertMoneyTest {
                 headers("baseCurrency", "targetCurrency", "rate", "amount", "expectedAmount"),
                 row(USD, GHS, 10.015024, 50.0, 500.75),
                 row(GHS, NGN, 42.235564, 2000.0, 84471.13),
+                row(NGN, GBP, 0.002041, 1.0, 0.0020)
             )
         ) { baseCurrency, targetCurrency, rate, amount, expectedAmount ->
 
@@ -70,5 +72,6 @@ class ConvertMoneyTest {
         val GHS = makeCediCurrency()
         val NGN = makeNairaCurrency()
         val USD = makeDollarCurrency()
+        val GBP = makePoundsCurrency()
     }
 }

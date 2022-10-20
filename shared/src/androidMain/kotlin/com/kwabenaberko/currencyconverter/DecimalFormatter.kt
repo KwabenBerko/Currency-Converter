@@ -1,17 +1,25 @@
 package com.kwabenaberko.currencyconverter
 
+import com.ibm.icu.text.DecimalFormat
 import java.math.RoundingMode
 
 actual class DecimalFormatter actual constructor(
-    maximumFractionDigits: Int,
-    roundingMethod: RoundingMethod
+    roundingMethod: RoundingMethod,
+    maximumFractionDigits: Int?,
+    maximumSignificantDigits: Int?
 ) {
-    private val formatter = java.text.DecimalFormat().apply {
-        this.minimumFractionDigits = 0
-        this.maximumFractionDigits = maximumFractionDigits
+    private val formatter = DecimalFormat().apply {
         this.roundingMode = when (roundingMethod) {
-            RoundingMethod.FLOOR -> RoundingMode.FLOOR
-            RoundingMethod.HALF_EVEN -> RoundingMode.HALF_EVEN
+            RoundingMethod.HALF_UP -> RoundingMode.HALF_UP.ordinal
+            RoundingMethod.DOWN -> RoundingMode.DOWN.ordinal
+        }
+        this.minimumFractionDigits = 0
+        maximumFractionDigits?.let {
+            this.maximumFractionDigits = maximumFractionDigits
+        }
+        maximumSignificantDigits?.let {
+            this.maximumSignificantDigits = maximumSignificantDigits
+            this.setSignificantDigitsUsed(true)
         }
     }
 

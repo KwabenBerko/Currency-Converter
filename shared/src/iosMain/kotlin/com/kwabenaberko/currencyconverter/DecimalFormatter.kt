@@ -2,19 +2,29 @@ package com.kwabenaberko.currencyconverter
 
 import platform.Foundation.NSNumber
 import platform.Foundation.NSNumberFormatter
+import platform.Foundation.NSNumberFormatterDecimalStyle
+import platform.Foundation.NSNumberFormatterRoundDown
+import platform.Foundation.NSNumberFormatterRoundHalfUp
 
 actual class DecimalFormatter actual constructor(
-    maximumFractionDigits: Int,
-    roundingMethod: RoundingMethod
+    roundingMethod: RoundingMethod,
+    maximumFractionDigits: Int?,
+    maximumSignificantDigits: Int?
 ) {
     private val formatter = NSNumberFormatter().apply {
-        this.minimumFractionDigits = 0.toULong()
-        this.maximumFractionDigits = maximumFractionDigits.toULong()
-        this.roundingMode = when(roundingMethod){
-            RoundingMethod.FLOOR -> 1.toULong()
-            RoundingMethod.HALF_EVEN -> 4.toULong()
+        this.roundingMode = when (roundingMethod) {
+            RoundingMethod.HALF_UP -> NSNumberFormatterRoundHalfUp
+            RoundingMethod.DOWN -> NSNumberFormatterRoundDown
         }
-        this.numberStyle = 1.toULong()
+        this.numberStyle = NSNumberFormatterDecimalStyle
+        this.minimumFractionDigits = 0.toULong()
+        maximumFractionDigits?.let {
+            this.maximumFractionDigits = maximumFractionDigits.toULong()
+        }
+        maximumSignificantDigits?.let {
+            this.maximumSignificantDigits = maximumSignificantDigits.toULong()
+            this.usesSignificantDigits = true
+        }
     }
 
     actual fun format(value: Double): String {
