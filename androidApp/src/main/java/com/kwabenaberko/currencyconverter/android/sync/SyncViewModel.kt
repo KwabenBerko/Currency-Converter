@@ -1,5 +1,7 @@
 package com.kwabenaberko.currencyconverter.android.sync
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.kwabenaberko.currencyconverter.android.BaseViewModel
 import com.kwabenaberko.currencyconverter.domain.usecase.HasCompletedInitialSync
@@ -36,5 +38,15 @@ class SyncViewModel(
         object Syncing : State()
         object SyncError : State()
         object SyncSuccess : State()
+    }
+
+    class Factory(
+        private val hasCompletedInitialSync: HasCompletedInitialSync,
+        private val sync: Sync
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return SyncViewModel(hasCompletedInitialSync, sync) as T
+        }
     }
 }
