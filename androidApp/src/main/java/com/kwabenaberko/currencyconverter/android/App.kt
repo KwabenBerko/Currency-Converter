@@ -4,7 +4,7 @@ import android.app.Application
 import com.kwabenaberko.currencyconverter.factory.Container
 import com.kwabenaberko.currencyconverter.factory.ContainerFactory
 
-class CurrencyConverterApp : Application() {
+class App : Application() {
     lateinit var container: Container
 
     override fun onCreate() {

@@ -1,5 +1,7 @@
 package com.kwabenaberko.currencyconverter.android.currencies
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.kwabenaberko.currencyconverter.android.BaseViewModel
 import com.kwabenaberko.currencyconverter.domain.model.Currency
@@ -39,5 +41,12 @@ class CurrenciesViewModel(
             val query: String,
             val currencies: Map<Char, List<Currency>>
         ) : State()
+    }
+
+    class Factory(private val getCurrencies: GetCurrencies) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return CurrenciesViewModel(getCurrencies) as T
+        }
     }
 }

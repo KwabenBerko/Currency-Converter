@@ -1,5 +1,7 @@
 package com.kwabenaberko.currencyconverter.android.converter
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.kwabenaberko.currencyconverter.android.BaseViewModel
 import com.kwabenaberko.currencyconverter.domain.model.Money
@@ -87,5 +89,15 @@ class ConverterViewModel(
             val secondMoneyItem: MoneyViewItem,
             val isReverse: Boolean
         ) : State()
+    }
+
+    class Factory(
+        private val getDefaultCurrencies: GetDefaultCurrencies,
+        private val convertMoney: ConvertMoney
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return ConverterViewModel(getDefaultCurrencies, convertMoney) as T
+        }
     }
 }

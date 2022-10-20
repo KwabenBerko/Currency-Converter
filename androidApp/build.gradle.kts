@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ktlint)
+    id("kotlin-parcelize")
+    id("com.google.devtools.ksp") version "1.7.20-1.0.7"
 }
 
 ktlint {
@@ -32,6 +34,13 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.3.2"
     }
+    applicationVariants.all {
+        kotlin.sourceSets {
+            getByName(name) {
+                kotlin.srcDir("build/generated/ksp/$name/kotlin")
+            }
+        }
+    }
     namespace = "com.kwabenaberko.currencyconverter.android"
 }
 
@@ -43,6 +52,9 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.6.0")
     implementation("androidx.compose.ui:ui-tooling-preview:1.2.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
+    implementation("androidx.navigation:navigation-compose:2.5.2")
+    implementation("io.github.raamcosta.compose-destinations:core:1.7.22-beta")
+    ksp("io.github.raamcosta.compose-destinations:ksp:1.7.22-beta")
     implementation(libs.coroutines.core)
     implementation(libs.bundles.lifecycle)
     implementation(libs.kotlinx.collections)
