@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.State
+import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import com.kwabenaberko.currencyconverter.domain.model.Currency
 
 @Composable
@@ -40,7 +41,12 @@ fun ConverterScreenContent(
                 )
 
                 Spacer(Modifier.height(30.dp))
-                Text(text = if (state.isReverse) "Second To First" else "First To Second")
+                Text(
+                    text = when (state.conversionMode) {
+                        ConversionMode.FIRST_MONEY_TO_SECOND_MONEY -> "First To Second"
+                        ConversionMode.SECOND_MONEY_TO_FIRST_MONEY -> "Second To First"
+                    }
+                )
                 Spacer(Modifier.height(30.dp))
 
                 Text(

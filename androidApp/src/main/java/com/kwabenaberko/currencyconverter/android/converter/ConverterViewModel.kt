@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.kwabenaberko.currencyconverter.android.BaseViewModel
+import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
+import com.kwabenaberko.currencyconverter.android.runIf
 import com.kwabenaberko.currencyconverter.domain.model.Money
 import com.kwabenaberko.currencyconverter.domain.usecase.ConvertMoney
 import com.kwabenaberko.currencyconverter.domain.usecase.GetDefaultCurrencies
@@ -32,14 +34,14 @@ class ConverterViewModel(
             val newState = State.Content(
                 firstMoneyItem = firstMoneyItem,
                 secondMoneyItem = secondMoneyItem,
-                isReverse = false
+                conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
             )
 
             setState(newState)
         }
     }
 
-    fun convertFirstMoney(money: Money) = runIf<State.Content> { contentState ->
+    fun convertFirstMoney(money: Money) = getState().runIf<State.Content> { contentState ->
         viewModelScope.launch {
             val secondMoneyItem = contentState.secondMoneyItem
             val targetCurrency = secondMoneyItem.money.currency
@@ -47,14 +49,15 @@ class ConverterViewModel(
 
             val newState = contentState.copy(
                 firstMoneyItem = mapMoneyToViewItem(money),
-                secondMoneyItem = mapMoneyToViewItem(secondMoney)
+                secondMoneyItem = mapMoneyToViewItem(secondMoney),
+                conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
             )
 
             setState(newState)
         }
     }
 
-    fun convertSecondMoney(money: Money) = runIf<State.Content> { contentState ->
+    fun convertSecondMoney(money: Money) = getState().runIf<State.Content> { contentState ->
         viewModelScope.launch {
             val firstMoneyItem = contentState.firstMoneyItem
             val targetCurrency = firstMoneyItem.money.currency
@@ -63,7 +66,7 @@ class ConverterViewModel(
             val newState = contentState.copy(
                 firstMoneyItem = mapMoneyToViewItem(firstMoney),
                 secondMoneyItem = mapMoneyToViewItem(money),
-                isReverse = true
+                conversionMode = ConversionMode.SECOND_MONEY_TO_FIRST_MONEY
             )
 
             setState(newState)
@@ -87,7 +90,7 @@ class ConverterViewModel(
         data class Content(
             val firstMoneyItem: MoneyViewItem,
             val secondMoneyItem: MoneyViewItem,
-            val isReverse: Boolean
+            val conversionMode: ConversionMode
         ) : State()
     }
 

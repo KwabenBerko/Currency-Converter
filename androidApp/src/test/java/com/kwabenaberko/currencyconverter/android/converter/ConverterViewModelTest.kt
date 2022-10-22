@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import com.kwabenaberko.currencyconverter.android.MainDispatcherRule
 import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.MoneyViewItem
 import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.State
+import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import com.kwabenaberko.currencyconverter.domain.model.DefaultCurrencies
 import com.kwabenaberko.currencyconverter.domain.model.Money
 import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeCediCurrency
@@ -35,7 +36,7 @@ class ConverterViewModelTest {
         val expectedState = State.Content(
             firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1.0"),
             secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1.0"),
-            isReverse = false
+            conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
         )
         val sut = createViewModel()
 
@@ -52,7 +53,7 @@ class ConverterViewModelTest {
         val initialExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1.0"),
             secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1.0"),
-            isReverse = false
+            conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
         )
         val nextExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(
@@ -61,7 +62,7 @@ class ConverterViewModelTest {
             secondMoneyItem = MoneyViewItem(
                 money = secondMoney.copy(amount = 10.0), formattedAmount = "10.0"
             ),
-            isReverse = false
+            conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
         )
         val sut = createViewModel()
 
@@ -83,7 +84,7 @@ class ConverterViewModelTest {
         val initialExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1.0"),
             secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1.0"),
-            isReverse = false
+            conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
         )
         val nextExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(
@@ -92,7 +93,7 @@ class ConverterViewModelTest {
             secondMoneyItem = MoneyViewItem(
                 money = secondMoney.copy(amount = 1000.0), formattedAmount = "1K"
             ),
-            isReverse = false
+            conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
         )
         val sut = createViewModel()
 
@@ -114,7 +115,7 @@ class ConverterViewModelTest {
         val initialExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1.0"),
             secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1.0"),
-            isReverse = false
+            conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
         )
         val nextExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(
@@ -123,7 +124,7 @@ class ConverterViewModelTest {
             secondMoneyItem = MoneyViewItem(
                 money = secondMoney.copy(currency = USD), formattedAmount = "1.0"
             ),
-            isReverse = true
+            conversionMode = ConversionMode.SECOND_MONEY_TO_FIRST_MONEY
         )
         val sut = createViewModel()
 
@@ -145,7 +146,7 @@ class ConverterViewModelTest {
         val initialExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1.0"),
             secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1.0"),
-            isReverse = false
+            conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
         )
         val nextExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(
@@ -154,7 +155,7 @@ class ConverterViewModelTest {
             secondMoneyItem = MoneyViewItem(
                 money = secondMoney.copy(amount = 1000.0), formattedAmount = "1K"
             ),
-            isReverse = true
+            conversionMode = ConversionMode.SECOND_MONEY_TO_FIRST_MONEY
         )
         val sut = createViewModel()
 

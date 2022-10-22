@@ -9,7 +9,10 @@ import kotlinx.parcelize.TypeParceler
 
 @Parcelize
 @TypeParceler<Currency, CurrencyParceler>
-data class CurrenciesResult(val isReverse: Boolean, val currency: Currency) : Parcelable
+data class CurrenciesResult(
+    val conversionMode: ConversionMode,
+    val currency: Currency
+) : Parcelable
 
 object CurrencyParceler : Parceler<Currency> {
     override fun create(parcel: Parcel): Currency {
