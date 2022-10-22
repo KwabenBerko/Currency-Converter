@@ -5,11 +5,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kwabenaberko.currencyconverter.android.LocalContainer
+import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.Factory
+import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.State
 import com.kwabenaberko.currencyconverter.android.converter.components.ConverterScreenContent
+import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import com.kwabenaberko.currencyconverter.android.converter.model.CurrenciesResult
 import com.kwabenaberko.currencyconverter.android.converter.model.KeyPadResult
 import com.kwabenaberko.currencyconverter.android.destinations.CurrenciesScreenDestination
 import com.kwabenaberko.currencyconverter.android.destinations.KeyPadScreenDestination
+import com.kwabenaberko.currencyconverter.android.runIf
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.NavResult
@@ -29,15 +33,17 @@ fun ConverterScreen(
         when (result) {
             is NavResult.Canceled -> Unit
             is NavResult.Value -> {
-                val currentState = state
-                val currency = result.value.currency
-                if (currentState is ConverterViewModel.State.Content) {
+                state.runIf<State.Content> { currentState ->
+                    val (conversionMode, currency) = result.value
                     val firstMoney = currentState.firstMoneyItem.money
                     val secondMoney = currentState.secondMoneyItem.money
-                    if (result.value.isReverse) {
-                        viewModel.convertSecondMoney(secondMoney.copy(currency = currency))
-                    } else {
-                        viewModel.convertFirstMoney(firstMoney.copy(currency = currency))
+                    when (conversionMode) {
+                        ConversionMode.FIRST_MONEY_TO_SECOND_MONEY -> {
+                            viewModel.convertFirstMoney(firstMoney.copy(currency = currency))
+                        }
+                        ConversionMode.SECOND_MONEY_TO_FIRST_MONEY -> {
+                            viewModel.convertSecondMoney(secondMoney.copy(currency = currency))
+                        }
                     }
                 }
             }
@@ -48,15 +54,17 @@ fun ConverterScreen(
         when (result) {
             is NavResult.Canceled -> Unit
             is NavResult.Value -> {
-                val currentState = state
-                val amount = result.value.amount
-                if (currentState is ConverterViewModel.State.Content) {
+                state.runIf<State.Content> { currentState ->
+                    val (conversionMode, amount) = result.value
                     val firstMoney = currentState.firstMoneyItem.money
                     val secondMoney = currentState.secondMoneyItem.money
-                    if (result.value.isReverse) {
-                        viewModel.convertSecondMoney(secondMoney.copy(amount = amount))
-                    } else {
-                        viewModel.convertFirstMoney(firstMoney.copy(amount = amount))
+                    when (conversionMode) {
+                        ConversionMode.FIRST_MONEY_TO_SECOND_MONEY -> {
+                            viewModel.convertFirstMoney(firstMoney.copy(amount = amount))
+                        }
+                        ConversionMode.SECOND_MONEY_TO_FIRST_MONEY -> {
+                            viewModel.convertSecondMoney(secondMoney.copy(amount = amount))
+                        }
                     }
                 }
             }
@@ -66,16 +74,24 @@ fun ConverterScreen(
     ConverterScreenContent(
         state = state,
         onFirstCurrencyClick = { currency ->
-            navigator.navigate(CurrenciesScreenDestination(false))
+            navigator.navigate(
+                CurrenciesScreenDestination(ConversionMode.FIRST_MONEY_TO_SECOND_MONEY)
+            )
         },
         onFirstAmountClick = {
-            navigator.navigate(KeyPadScreenDestination(false))
+            navigator.navigate(
+                KeyPadScreenDestination(ConversionMode.FIRST_MONEY_TO_SECOND_MONEY)
+            )
         },
         onSecondCurrencyClick = { currency ->
-            navigator.navigate(CurrenciesScreenDestination(true))
+            navigator.navigate(
+                CurrenciesScreenDestination(ConversionMode.SECOND_MONEY_TO_FIRST_MONEY)
+            )
         },
         onSecondAmountClick = {
-            navigator.navigate(KeyPadScreenDestination(true))
+            navigator.navigate(
+                KeyPadScreenDestination(ConversionMode.SECOND_MONEY_TO_FIRST_MONEY)
+            )
         }
     )
 }
@@ -83,7 +99,7 @@ fun ConverterScreen(
 @Composable
 private fun converterViewModel(): ConverterViewModel {
     return with(LocalContainer.current) {
-        val factory = ConverterViewModel.Factory(
+        val factory = Factory(
             getDefaultCurrencies = this.getDefaultCurrencies,
             convertMoney = this.convertMoney
         )
