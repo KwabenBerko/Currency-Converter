@@ -8,7 +8,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kwabenaberko.currencyconverter.android.LocalContainer
 import com.kwabenaberko.currencyconverter.android.destinations.ConverterScreenDestination
 import com.kwabenaberko.currencyconverter.android.destinations.SyncScreenDestination
-import com.kwabenaberko.currencyconverter.android.sync.components.SyncScreenContent
+import com.kwabenaberko.currencyconverter.android.sync.components.SyncContent
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -30,11 +30,10 @@ fun SyncScreen(
                     inclusive = true
                 }
             }
-//            navigator.navigate(ProfileScreenDestination(ProfileScreenNavArgs(id = "Arguley")))
         }
     }
 
-    SyncScreenContent(state = state)
+    SyncContent(state = state)
 }
 
 @Composable

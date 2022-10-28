@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun KeyPadScreenContent(
+fun KeyPadContent(
     amount: String,
     onAmountChange: (String) -> Unit = {},
     onDoneClick: () -> Unit = {}
@@ -32,5 +32,5 @@ fun KeyPadScreenContent(
 @Preview
 @Composable
 fun KeyPadScreenContentPreview() {
-    KeyPadScreenContent(amount = "100")
+    KeyPadContent(amount = "100")
 }
