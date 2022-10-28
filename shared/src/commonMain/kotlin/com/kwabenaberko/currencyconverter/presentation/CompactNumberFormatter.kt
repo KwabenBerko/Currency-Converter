@@ -22,15 +22,18 @@ class CompactNumberFormatter {
                 "${formatter().format(value.div(1_000))}K"
             }
             else -> {
-                formatter(maximumFractionDigits = 6).format(value)
+                formatter(maximumFractionDigits = 6, roundingMethod = null).format(value)
             }
         }
     }
 
-    private fun formatter(maximumFractionDigits: Int = 1): DecimalFormatter {
+    private fun formatter(
+        maximumFractionDigits: Int = 1,
+        roundingMethod: RoundingMethod? = RoundingMethod.DOWN
+    ): DecimalFormatter {
         return DecimalFormatter(
             maximumFractionDigits = maximumFractionDigits,
-            roundingMethod = RoundingMethod.DOWN
+            roundingMethod = roundingMethod
         )
     }
 }

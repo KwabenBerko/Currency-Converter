@@ -1,6 +1,5 @@
 package com.kwabenaberko.currencyconverter.presentation
 
-import com.kwabenaberko.currencyconverter.DecimalFormatter
 import io.kotest.data.forAll
 import io.kotest.data.headers
 import io.kotest.data.row
