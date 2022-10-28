@@ -8,7 +8,9 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import com.kwabenaberko.currencyconverter.factory.Container
 import com.ramcosta.composedestinations.DestinationsNavHost
 
-val LocalContainer = staticCompositionLocalOf<Container> { error("No container found!") }
+val LocalContainer = staticCompositionLocalOf<Container> {
+    error("No container found!")
+}
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kwabenaberko.currencyconverter.android.LocalContainer
 import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.Factory
 import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.State
-import com.kwabenaberko.currencyconverter.android.converter.components.ConverterScreenContent
+import com.kwabenaberko.currencyconverter.android.converter.components.ConverterContent
 import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import com.kwabenaberko.currencyconverter.android.converter.model.CurrenciesResult
 import com.kwabenaberko.currencyconverter.android.converter.model.KeyPadResult
@@ -71,7 +71,7 @@ fun ConverterScreen(
         }
     }
 
-    ConverterScreenContent(
+    ConverterContent(
         state = state,
         onFirstCurrencyClick = { currency ->
             navigator.navigate(

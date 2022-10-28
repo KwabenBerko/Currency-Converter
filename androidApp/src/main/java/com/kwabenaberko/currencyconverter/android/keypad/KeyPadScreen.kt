@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import com.kwabenaberko.currencyconverter.android.converter.model.KeyPadResult
-import com.kwabenaberko.currencyconverter.android.keypad.components.KeyPadScreenContent
+import com.kwabenaberko.currencyconverter.android.keypad.components.KeyPadContent
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 
@@ -17,7 +17,7 @@ fun KeyPadScreen(
 ) {
     val (amount, setAmount) = remember { mutableStateOf("0") }
 
-    KeyPadScreenContent(
+    KeyPadContent(
         amount = amount,
         onAmountChange = setAmount,
         onDoneClick = {

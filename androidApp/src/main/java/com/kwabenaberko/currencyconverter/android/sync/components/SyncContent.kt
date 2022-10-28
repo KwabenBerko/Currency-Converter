@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.kwabenaberko.currencyconverter.android.sync.SyncViewModel.State
 
 @Composable
-fun SyncScreenContent(state: State) {
+fun SyncContent(state: State) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -29,5 +29,5 @@ fun SyncScreenContent(state: State) {
 @Preview
 @Composable
 fun SyncScreenPreview() {
-    SyncScreenContent(state = State.Idle)
+    SyncContent(state = State.Idle)
 }

@@ -46,7 +46,8 @@ android {
 
 dependencies {
     implementation(projects.shared)
-    implementation("com.google.android.material:material:1.6.1")
+    implementation(projects.sharedTest)
+    implementation("com.google.android.material:material:1.7.0")
     implementation("androidx.appcompat:appcompat:1.5.1")
     implementation("androidx.compose.material3:material3:1.0.0-rc01")
     implementation("androidx.activity:activity-compose:1.6.0")
@@ -55,6 +56,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.5.2")
     implementation("io.github.raamcosta.compose-destinations:core:1.7.22-beta")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.7.22-beta")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
     implementation(libs.coroutines.core)
     implementation(libs.bundles.lifecycle)
     implementation(libs.kotlinx.collections)
