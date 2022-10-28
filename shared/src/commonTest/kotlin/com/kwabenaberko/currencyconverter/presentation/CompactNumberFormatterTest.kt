@@ -15,9 +15,14 @@ class CompactNumberFormatterTest {
         forAll(
             table(
                 headers("rawNumber", "formattedNumber"),
-                row(0.0, "0.0"),
-                row(20.0, "20.0"),
-                row(500.0, "500.0"),
+                row(0.0, "0"),
+                row(0.00026, "0.00026"),
+                row(0.022759, "0.022759"),
+                row(0.000473, "0.000473"),
+                row(0.000418, "0.000418"),
+                row(0.000099, "0.000099"),
+                row(20.0, "20"),
+                row(500.0, "500"),
                 row(999.9, "999.9"),
             )
         ) { rawNumber, formattedNumber ->

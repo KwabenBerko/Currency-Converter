@@ -4,16 +4,18 @@ import com.ibm.icu.text.DecimalFormat
 import java.math.RoundingMode
 
 actual class DecimalFormatter actual constructor(
-    roundingMethod: RoundingMethod,
+    roundingMethod: RoundingMethod?,
     maximumFractionDigits: Int?,
     maximumSignificantDigits: Int?
 ) {
     private val formatter = DecimalFormat().apply {
-        this.roundingMode = when (roundingMethod) {
-            RoundingMethod.HALF_UP -> RoundingMode.HALF_UP.ordinal
-            RoundingMethod.DOWN -> RoundingMode.DOWN.ordinal
-        }
         this.minimumFractionDigits = 0
+        roundingMethod?.let {
+            this.roundingMode = when (roundingMethod) {
+                RoundingMethod.HALF_UP -> RoundingMode.HALF_UP.ordinal
+                RoundingMethod.DOWN -> RoundingMode.DOWN.ordinal
+            }
+        }
         maximumFractionDigits?.let {
             this.maximumFractionDigits = maximumFractionDigits
         }

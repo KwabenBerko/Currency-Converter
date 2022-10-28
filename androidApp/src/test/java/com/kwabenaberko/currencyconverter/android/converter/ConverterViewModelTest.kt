@@ -34,8 +34,8 @@ class ConverterViewModelTest {
         val firstMoney = Money(GHS, 1.0)
         val secondMoney = Money(GHS, 1.0)
         val expectedState = State.Content(
-            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1.0"),
-            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1.0"),
+            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1"),
+            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1"),
             conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
         )
         val sut = createViewModel()
@@ -51,16 +51,16 @@ class ConverterViewModelTest {
         val firstMoney = Money(GHS, 1.0)
         val secondMoney = Money(GHS, 1.0)
         val initialExpectedState = State.Content(
-            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1.0"),
-            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1.0"),
+            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1"),
+            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1"),
             conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
         )
         val nextExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(
-                money = firstMoney.copy(currency = USD), formattedAmount = "1.0"
+                money = firstMoney.copy(currency = USD), formattedAmount = "1"
             ),
             secondMoneyItem = MoneyViewItem(
-                money = secondMoney.copy(amount = 10.0), formattedAmount = "10.0"
+                money = secondMoney.copy(amount = 10.0), formattedAmount = "10"
             ),
             conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
         )
@@ -82,8 +82,8 @@ class ConverterViewModelTest {
         val firstMoney = Money(GHS, 1.0)
         val secondMoney = Money(GHS, 1.0)
         val initialExpectedState = State.Content(
-            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1.0"),
-            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1.0"),
+            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1"),
+            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1"),
             conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
         )
         val nextExpectedState = State.Content(
@@ -113,16 +113,16 @@ class ConverterViewModelTest {
         val firstMoney = Money(GHS, 1.0)
         val secondMoney = Money(GHS, 1.0)
         val initialExpectedState = State.Content(
-            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1.0"),
-            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1.0"),
+            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1"),
+            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1"),
             conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
         )
         val nextExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(
-                money = firstMoney.copy(amount = 10.0), formattedAmount = "10.0"
+                money = firstMoney.copy(amount = 10.0), formattedAmount = "10"
             ),
             secondMoneyItem = MoneyViewItem(
-                money = secondMoney.copy(currency = USD), formattedAmount = "1.0"
+                money = secondMoney.copy(currency = USD), formattedAmount = "1"
             ),
             conversionMode = ConversionMode.SECOND_MONEY_TO_FIRST_MONEY
         )
@@ -144,8 +144,8 @@ class ConverterViewModelTest {
         val firstMoney = Money(GHS, 1.0)
         val secondMoney = Money(GHS, 1.0)
         val initialExpectedState = State.Content(
-            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1.0"),
-            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1.0"),
+            firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1"),
+            secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1"),
             conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
         )
         val nextExpectedState = State.Content(

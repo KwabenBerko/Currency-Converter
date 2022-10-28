@@ -7,17 +7,19 @@ import platform.Foundation.NSNumberFormatterRoundDown
 import platform.Foundation.NSNumberFormatterRoundHalfUp
 
 actual class DecimalFormatter actual constructor(
-    roundingMethod: RoundingMethod,
+    roundingMethod: RoundingMethod?,
     maximumFractionDigits: Int?,
     maximumSignificantDigits: Int?
 ) {
     private val formatter = NSNumberFormatter().apply {
-        this.roundingMode = when (roundingMethod) {
-            RoundingMethod.HALF_UP -> NSNumberFormatterRoundHalfUp
-            RoundingMethod.DOWN -> NSNumberFormatterRoundDown
-        }
         this.numberStyle = NSNumberFormatterDecimalStyle
         this.minimumFractionDigits = 0.toULong()
+        roundingMethod?.let {
+            this.roundingMode = when (roundingMethod) {
+                RoundingMethod.HALF_UP -> NSNumberFormatterRoundHalfUp
+                RoundingMethod.DOWN -> NSNumberFormatterRoundDown
+            }
+        }
         maximumFractionDigits?.let {
             this.maximumFractionDigits = maximumFractionDigits.toULong()
         }

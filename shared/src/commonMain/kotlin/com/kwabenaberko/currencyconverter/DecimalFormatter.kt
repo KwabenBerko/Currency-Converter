@@ -6,7 +6,7 @@ enum class RoundingMethod {
 }
 
 expect class DecimalFormatter constructor(
-    roundingMethod: RoundingMethod = RoundingMethod.HALF_UP,
+    roundingMethod: RoundingMethod? = RoundingMethod.HALF_UP,
     maximumFractionDigits: Int? = null,
     maximumSignificantDigits: Int? = null,
 ) {
