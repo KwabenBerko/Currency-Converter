@@ -47,7 +47,6 @@ fun CurrenciesContent(
         )
     }
 
-
     when (state) {
         is State.Idle -> Unit
         is State.Content -> {

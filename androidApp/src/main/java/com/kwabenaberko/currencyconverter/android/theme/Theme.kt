@@ -4,7 +4,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
-
 val RedColorScheme = lightColorScheme(
     background = red_primary,
     primary = red_primary,
@@ -22,7 +21,6 @@ val WhiteColorScheme = lightColorScheme(
     surface = white_primary,
     outlineVariant = white_secondary,
 )
-
 
 @Composable
 fun CurrencyConverterTheme(

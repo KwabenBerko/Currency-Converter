@@ -195,41 +195,6 @@ fun ConversionDirection(
     }
 }
 
-//Column {
-//    Text(
-//        text = "${firstMoneyItem.money.currency}",
-//        modifier = Modifier.clickable {
-//            onFirstCurrencyClick(firstMoneyItem.money.currency)
-//        }
-//    )
-//    Spacer(Modifier.height(5.dp))
-//    Text(
-//        text = firstMoneyItem.formattedAmount,
-//        modifier = Modifier.clickable { onFirstAmountClick() }
-//    )
-//
-//    Spacer(Modifier.height(30.dp))
-//    Text(
-//        text = when (state.conversionMode) {
-//            ConversionMode.FIRST_MONEY_TO_SECOND_MONEY -> "First To Second"
-//            ConversionMode.SECOND_MONEY_TO_FIRST_MONEY -> "Second To First"
-//        }
-//    )
-//    Spacer(Modifier.height(30.dp))
-//
-//    Text(
-//        text = "$secondMoneyItem",
-//        modifier = Modifier.clickable { onSecondAmountClick() }
-//    )
-//    Spacer(Modifier.height(5.dp))
-//    Text(
-//        text = "${secondMoneyItem.money.currency}",
-//        modifier = Modifier.clickable {
-//            onSecondCurrencyClick(secondMoneyItem.money.currency)
-//        }
-//    )
-//}
-
 @Preview
 @Composable
 fun ConverterScreenContentPreview() {
