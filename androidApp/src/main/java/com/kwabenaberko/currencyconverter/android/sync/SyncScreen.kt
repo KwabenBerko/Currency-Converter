@@ -7,7 +7,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kwabenaberko.currencyconverter.android.LocalContainer
 import com.kwabenaberko.currencyconverter.android.destinations.ConverterScreenDestination
 import com.kwabenaberko.currencyconverter.android.destinations.SyncScreenDestination
-import com.kwabenaberko.currencyconverter.android.sync.components.SyncContent
+import com.kwabenaberko.currencyconverter.android.sync.components.SyncScreenContent
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
@@ -20,7 +20,7 @@ fun SyncScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
-    SyncContent(
+    SyncScreenContent(
         state = state,
         navigateToConverter = {
             navigator.navigate(ConverterScreenDestination) {

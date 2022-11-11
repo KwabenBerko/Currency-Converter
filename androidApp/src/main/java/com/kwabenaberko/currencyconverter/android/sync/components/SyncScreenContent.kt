@@ -28,7 +28,7 @@ import com.kwabenaberko.currencyconverter.android.sync.SyncViewModel.State
 import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
 
 @Composable
-fun SyncContent(
+fun SyncScreenContent(
     state: State,
     navigateToConverter: () -> Unit = {},
     retrySync: () -> Unit = {}
@@ -89,5 +89,5 @@ fun SyncContent(
 @Preview
 @Composable
 fun SyncScreenContentPreview() {
-    SyncContent(state = State.Idle)
+    SyncScreenContent(state = State.Idle)
 }
