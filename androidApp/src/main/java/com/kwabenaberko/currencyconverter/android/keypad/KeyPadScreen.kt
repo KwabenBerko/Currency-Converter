@@ -1,27 +1,28 @@
 package com.kwabenaberko.currencyconverter.android.keypad
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import com.kwabenaberko.currencyconverter.android.converter.model.KeyPadResult
-import com.kwabenaberko.currencyconverter.android.keypad.components.KeyPadContent
+import com.kwabenaberko.currencyconverter.android.keypad.components.KeyPadScreenContent
+import com.kwabenaberko.currencyconverter.android.useRedTheme
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 
 @Destination
 @Composable
 fun KeyPadScreen(
     conversionMode: ConversionMode,
+    navigator: DestinationsNavigator,
     resultNavigator: ResultBackNavigator<KeyPadResult>
 ) {
-    val (amount, setAmount) = remember { mutableStateOf("0") }
-
-    KeyPadContent(
-        amount = amount,
-        onAmountChange = setAmount,
-        onDoneClick = {
-            resultNavigator.navigateBack(KeyPadResult(conversionMode, amount.toDouble()))
+    KeyPadScreenContent(
+        useRedTheme = useRedTheme(conversionMode),
+        onBackClick = {
+            navigator.popBackStack()
+        },
+        onDone = { amount ->
+            resultNavigator.navigateBack(KeyPadResult(conversionMode, amount))
         }
     )
 }

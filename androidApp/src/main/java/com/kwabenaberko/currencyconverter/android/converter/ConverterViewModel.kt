@@ -9,10 +9,12 @@ import com.kwabenaberko.currencyconverter.android.runIf
 import com.kwabenaberko.currencyconverter.domain.model.Money
 import com.kwabenaberko.currencyconverter.domain.usecase.ConvertMoney
 import com.kwabenaberko.currencyconverter.domain.usecase.GetDefaultCurrencies
+import com.kwabenaberko.currencyconverter.domain.usecase.HasCompletedInitialSync
 import com.kwabenaberko.currencyconverter.presentation.CompactNumberFormatter
 import kotlinx.coroutines.launch
 
 class ConverterViewModel(
+    private val hasCompletedInitialSync: HasCompletedInitialSync,
     private val getDefaultCurrencies: GetDefaultCurrencies,
     private val convertMoney: ConvertMoney
 ) : BaseViewModel<ConverterViewModel.State>(State.Idle) {
@@ -20,25 +22,29 @@ class ConverterViewModel(
     private val formatter = CompactNumberFormatter()
 
     init {
-        loadConverter()
+        viewModelScope.launch {
+            if (!hasCompletedInitialSync()) {
+                setState(State.RequiresSync)
+            } else {
+                loadConverter()
+            }
+        }
     }
 
-    private fun loadConverter() {
-        viewModelScope.launch {
-            val (base, target) = getDefaultCurrencies()
-            val firstMoney = Money(currency = base, amount = 1.0)
-            val secondMoney = convertMoney(firstMoney, target)
-            val firstMoneyItem = mapMoneyToViewItem(firstMoney)
-            val secondMoneyItem = mapMoneyToViewItem(secondMoney)
+    private suspend fun loadConverter() {
+        val (base, target) = getDefaultCurrencies()
+        val firstMoney = Money(currency = base, amount = 1.0)
+        val secondMoney = convertMoney(firstMoney, target)
+        val firstMoneyItem = mapMoneyToViewItem(firstMoney)
+        val secondMoneyItem = mapMoneyToViewItem(secondMoney)
 
-            val newState = State.Content(
-                firstMoneyItem = firstMoneyItem,
-                secondMoneyItem = secondMoneyItem,
-                conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
-            )
+        val newState = State.Content(
+            firstMoneyItem = firstMoneyItem,
+            secondMoneyItem = secondMoneyItem,
+            conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
+        )
 
-            setState(newState)
-        }
+        setState(newState)
     }
 
     fun convertFirstMoney(money: Money) = getState().runIf<State.Content> { contentState ->
@@ -87,6 +93,7 @@ class ConverterViewModel(
 
     sealed class State {
         object Idle : State()
+        object RequiresSync : State()
         data class Content(
             val firstMoneyItem: MoneyViewItem,
             val secondMoneyItem: MoneyViewItem,
@@ -95,12 +102,17 @@ class ConverterViewModel(
     }
 
     class Factory(
+        private val hasCompletedInitialSync: HasCompletedInitialSync,
         private val getDefaultCurrencies: GetDefaultCurrencies,
         private val convertMoney: ConvertMoney
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ConverterViewModel(getDefaultCurrencies, convertMoney) as T
+            return ConverterViewModel(
+                hasCompletedInitialSync = hasCompletedInitialSync,
+                getDefaultCurrencies = getDefaultCurrencies,
+                convertMoney = convertMoney
+            ) as T
         }
     }
 }

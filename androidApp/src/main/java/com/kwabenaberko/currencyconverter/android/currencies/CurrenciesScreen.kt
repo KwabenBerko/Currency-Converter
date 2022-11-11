@@ -7,7 +7,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kwabenaberko.currencyconverter.android.LocalContainer
 import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import com.kwabenaberko.currencyconverter.android.converter.model.CurrenciesResult
-import com.kwabenaberko.currencyconverter.android.currencies.components.CurrenciesContent
+import com.kwabenaberko.currencyconverter.android.currencies.components.CurrenciesScreenContent
 import com.kwabenaberko.currencyconverter.android.useRedTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -24,13 +24,13 @@ fun CurrenciesScreen(
 
     val state by viewModel.state.collectAsState()
 
-    CurrenciesContent(
+    CurrenciesScreenContent(
         useRedTheme = useRedTheme(conversionMode),
         state = state,
         onBackClick = {
             navigator.popBackStack()
         },
-        onFilterChange = viewModel::loadCurrencies,
+        onFilterQueryChange = viewModel::filterCurrencies,
         onCurrencyClick = { currency ->
             resultNavigator.navigateBack(CurrenciesResult(conversionMode, currency))
         }

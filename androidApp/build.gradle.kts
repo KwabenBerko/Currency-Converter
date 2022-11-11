@@ -57,6 +57,8 @@ dependencies {
     implementation("io.github.raamcosta.compose-destinations:core:1.7.22-beta")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.7.22-beta")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
+    implementation("com.google.accompanist:accompanist-placeholder-material:0.27.0")
+    implementation("com.airbnb.android:lottie-compose:5.2.0")
     implementation(libs.coroutines.core)
     implementation(libs.bundles.lifecycle)
     implementation(libs.kotlinx.collections)

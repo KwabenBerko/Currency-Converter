@@ -25,7 +25,6 @@ class CurrenciesViewModelTest {
     @Test
     fun `should emit Content state when currencies are loaded`() = runTest {
         val expectedState = State.Content(
-            query = "",
             currencies = persistentMapOf(
                 'G' to listOf(GHS),
                 'N' to listOf(NGN),
@@ -44,7 +43,6 @@ class CurrenciesViewModelTest {
     fun `should emit Content state when currencies are filtered`() = runTest {
         val query = "G"
         val initialExpectedState = State.Content(
-            query = "",
             currencies = persistentMapOf(
                 'G' to listOf(GHS),
                 'N' to listOf(NGN),
@@ -52,19 +50,19 @@ class CurrenciesViewModelTest {
             )
         )
         val nextExpectedState = State.Content(
-            query = query,
             currencies = persistentMapOf(
                 'G' to listOf(GHS),
             )
         )
         val sut = createViewModel()
 
-        getCurrencies.result = flowOf(listOf(GHS))
-        sut.loadCurrencies(query)
-
         sut.state.test {
             assertEquals(State.Idle, awaitItem())
             assertEquals(initialExpectedState, awaitItem())
+
+            getCurrencies.result = flowOf(listOf(GHS))
+            sut.filterCurrencies(query)
+
             assertEquals(nextExpectedState, awaitItem())
         }
     }

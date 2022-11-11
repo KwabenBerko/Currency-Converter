@@ -29,7 +29,7 @@ import com.kwabenaberko.sharedtest.builder.CurrencyFactory
 private const val EMPTY_STRING = " "
 
 @Composable
-fun CurrencyListItem(
+internal fun CurrencyItem(
     currency: Currency,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
@@ -64,7 +64,7 @@ fun CurrencyListItem(
 
 @Composable
 @ReadOnlyComposable
-fun buildCurrencyTitleText(currency: Currency): AnnotatedString {
+private fun buildCurrencyTitleText(currency: Currency): AnnotatedString {
     return buildAnnotatedString {
         withStyle(SpanStyle(color = MaterialTheme.colorScheme.onPrimary)) {
             append(currency.name)
@@ -79,8 +79,8 @@ fun buildCurrencyTitleText(currency: Currency): AnnotatedString {
 
 @Preview(showBackground = true)
 @Composable
-fun CurrencyListItemPreview() {
+internal fun CurrencyItemPreview() {
     CurrencyConverterTheme {
-        CurrencyListItem(CurrencyFactory.makeCediCurrency())
+        CurrencyItem(CurrencyFactory.makeCediCurrency())
     }
 }

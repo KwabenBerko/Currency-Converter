@@ -11,6 +11,7 @@ import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeCediCurrency
 import com.kwabenaberko.sharedtest.builder.CurrencyFactory.makeDollarCurrency
 import com.kwabenaberko.sharedtest.testdouble.FakeConvertMoney
 import com.kwabenaberko.sharedtest.testdouble.FakeGetDefaultCurrencies
+import com.kwabenaberko.sharedtest.testdouble.FakeHasCompletedInitialSync
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -22,11 +23,25 @@ class ConverterViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
+    private val hasCompletedInitialSync = FakeHasCompletedInitialSync().apply {
+        this.result = true
+    }
     private val getDefaultCurrencies = FakeGetDefaultCurrencies().apply {
         this.result = DefaultCurrencies(base = GHS, target = GHS)
     }
     private val convertMoney = FakeConvertMoney().apply {
         this.result = Money(currency = GHS, amount = 1.0)
+    }
+
+    @Test
+    fun `should emit RequiresSync state if initial sync has not been completed`() = runTest {
+        hasCompletedInitialSync.result = false
+        val sut = createViewModel()
+
+        sut.state.test {
+            assertEquals(State.Idle, awaitItem())
+            assertEquals(State.RequiresSync, awaitItem())
+        }
     }
 
     @Test
@@ -172,6 +187,7 @@ class ConverterViewModelTest {
 
     private fun createViewModel(): ConverterViewModel {
         return ConverterViewModel(
+            hasCompletedInitialSync = hasCompletedInitialSync,
             getDefaultCurrencies = getDefaultCurrencies,
             convertMoney = convertMoney
         )

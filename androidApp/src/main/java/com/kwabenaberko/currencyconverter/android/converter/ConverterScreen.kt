@@ -7,18 +7,23 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kwabenaberko.currencyconverter.android.LocalContainer
 import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.Factory
 import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.State
-import com.kwabenaberko.currencyconverter.android.converter.components.ConverterContent
+import com.kwabenaberko.currencyconverter.android.converter.components.ConverterScreenContent
 import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import com.kwabenaberko.currencyconverter.android.converter.model.CurrenciesResult
 import com.kwabenaberko.currencyconverter.android.converter.model.KeyPadResult
+import com.kwabenaberko.currencyconverter.android.destinations.ConverterScreenDestination
 import com.kwabenaberko.currencyconverter.android.destinations.CurrenciesScreenDestination
 import com.kwabenaberko.currencyconverter.android.destinations.KeyPadScreenDestination
+import com.kwabenaberko.currencyconverter.android.destinations.SyncScreenDestination
 import com.kwabenaberko.currencyconverter.android.runIf
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.result.NavResult
 import com.ramcosta.composedestinations.result.ResultRecipient
 
+@RootNavGraph(start = true)
 @Destination
 @Composable
 fun ConverterScreen(
@@ -71,7 +76,7 @@ fun ConverterScreen(
         }
     }
 
-    ConverterContent(
+    ConverterScreenContent(
         state = state,
         onFirstCurrencyClick = { currency ->
             navigator.navigate(
@@ -92,6 +97,13 @@ fun ConverterScreen(
             navigator.navigate(
                 KeyPadScreenDestination(ConversionMode.SECOND_MONEY_TO_FIRST_MONEY)
             )
+        },
+        onSyncCompleted = {
+            navigator.navigate(SyncScreenDestination) {
+                popUpTo(ConverterScreenDestination) {
+                    inclusive = true
+                }
+            }
         }
     )
 }
@@ -100,6 +112,7 @@ fun ConverterScreen(
 private fun converterViewModel(): ConverterViewModel {
     return with(LocalContainer.current) {
         val factory = Factory(
+            hasCompletedInitialSync = this.hasCompletedInitialSync,
             getDefaultCurrencies = this.getDefaultCurrencies,
             convertMoney = this.convertMoney
         )
