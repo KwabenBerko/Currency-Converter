@@ -7,40 +7,56 @@ import com.kwabenaberko.currencyconverter.android.BaseViewModel
 import com.kwabenaberko.currencyconverter.domain.model.Currency
 import com.kwabenaberko.currencyconverter.domain.usecase.GetCurrencies
 import kotlinx.collections.immutable.toPersistentMap
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class CurrenciesViewModel(
     private val getCurrencies: GetCurrencies
 ) : BaseViewModel<CurrenciesViewModel.State>(State.Idle) {
 
+    private val filterQueryFlow = MutableStateFlow("")
+
     init {
-        loadCurrencies(query = null)
+        loadCurrencies()
     }
 
-    fun loadCurrencies(query: String?) {
-        getCurrencies(query)
+    fun filterCurrencies(query: String) {
+        viewModelScope.launch {
+            filterQueryFlow.emit(query)
+        }
+    }
+
+    private fun loadCurrencies() {
+        filterQueryFlow
+            .debounce { debounceTimeoutInMillis() }
+            .flatMapLatest { query -> getCurrencies(query) }
             .onEach { currencies ->
                 val groupedCurrencies = currencies
                     .groupBy { currency -> currency.name.first() }
                     .toPersistentMap()
 
-                val newState = State.Content(
-                    query = query ?: "",
-                    currencies = groupedCurrencies
-                )
+                setState(State.Content(groupedCurrencies))
+            }.launchIn(viewModelScope)
+    }
 
-                setState(newState)
-            }
-            .launchIn(viewModelScope)
+    private fun debounceTimeoutInMillis(): Long {
+        return if (getState() is State.Idle || filterQueryFlow.value.isEmpty()) {
+            0L
+        } else {
+            300L
+        }
     }
 
     sealed class State {
         object Idle : State()
-        data class Content(
-            val query: String,
-            val currencies: Map<Char, List<Currency>>
-        ) : State()
+        data class Content(val currencies: Map<Char, List<Currency>>) : State()
     }
 
     class Factory(private val getCurrencies: GetCurrencies) : ViewModelProvider.Factory {

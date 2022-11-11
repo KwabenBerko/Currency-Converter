@@ -19,7 +19,7 @@ import com.kwabenaberko.sharedtest.builder.CurrencyFactory
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CurrencyList(
+internal fun CurrencyList(
     groupedCurrencies: Map<Char, List<Currency>>,
     modifier: Modifier = Modifier,
     onCurrencyClick: (Currency) -> Unit = {}
@@ -28,20 +28,23 @@ fun CurrencyList(
         modifier = modifier.background(MaterialTheme.colorScheme.background)
     ) {
         groupedCurrencies.forEach { (header, currencies) ->
-            stickyHeader {
+            stickyHeader(key = header) {
                 Text(
                     text = "$header",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.primary)
+                        .background(MaterialTheme.colorScheme.background)
                         .padding(16.dp)
                 )
                 Divider()
             }
-            items(currencies) { currency ->
-                CurrencyListItem(
+            items(
+                items = currencies,
+                key = { currency -> currency.code }
+            ) { currency ->
+                CurrencyItem(
                     currency = currency,
                     onClick = { onCurrencyClick(currency) }
                 )
@@ -53,7 +56,7 @@ fun CurrencyList(
 
 @Preview(showBackground = true)
 @Composable
-fun CurrencyListPreview() {
+internal fun CurrencyListPreview() {
     CurrencyConverterTheme {
         val groupedCurrencies = mapOf(
             'G' to listOf(CurrencyFactory.makeCediCurrency()),
