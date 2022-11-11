@@ -23,7 +23,7 @@ internal fun CurrencyCode(
 
 @Preview
 @Composable
-private fun CurrencyCodePreview(){
+private fun CurrencyCodePreview() {
     CurrencyConverterTheme {
         CurrencyCode("GHS")
     }

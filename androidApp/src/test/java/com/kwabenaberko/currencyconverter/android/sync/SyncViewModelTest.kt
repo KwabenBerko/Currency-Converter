@@ -42,7 +42,6 @@ class SyncViewModelTest {
         }
     }
 
-
     private fun createViewModel(): SyncViewModel {
         return SyncViewModel(sync)
     }

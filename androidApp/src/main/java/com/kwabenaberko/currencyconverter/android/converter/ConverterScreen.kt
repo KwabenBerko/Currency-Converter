@@ -99,7 +99,7 @@ fun ConverterScreen(
             )
         },
         onSyncCompleted = {
-            navigator.navigate(SyncScreenDestination){
+            navigator.navigate(SyncScreenDestination) {
                 popUpTo(ConverterScreenDestination) {
                     inclusive = true
                 }

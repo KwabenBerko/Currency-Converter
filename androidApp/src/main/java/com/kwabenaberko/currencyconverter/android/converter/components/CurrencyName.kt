@@ -46,7 +46,7 @@ internal fun CurrencyName(
 
 @Preview
 @Composable
-private fun CurrencyNamePreview(){
+private fun CurrencyNamePreview() {
     CurrencyConverterTheme {
         CurrencyName(name = "Ghanaian Cedi")
     }

@@ -55,7 +55,7 @@ internal fun ConversionDirection(
 
 @Preview
 @Composable
-private fun ConversionDirectionPreview(){
+private fun ConversionDirectionPreview() {
     CurrencyConverterTheme {
         ConversionDirection(ConversionMode.FIRST_MONEY_TO_SECOND_MONEY)
     }

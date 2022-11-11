@@ -53,7 +53,6 @@ internal fun AmountTextField(
                 1.00f to Color.Transparent
             ),
         )
-
     }
 }
 
