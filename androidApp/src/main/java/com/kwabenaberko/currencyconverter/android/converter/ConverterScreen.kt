@@ -1,5 +1,6 @@
 package com.kwabenaberko.currencyconverter.android.converter
 
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -7,6 +8,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kwabenaberko.currencyconverter.android.LocalContainer
 import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.Factory
 import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.State
+import com.kwabenaberko.currencyconverter.android.converter.animation.ConverterScreenTransitions
 import com.kwabenaberko.currencyconverter.android.converter.components.ConverterScreenContent
 import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import com.kwabenaberko.currencyconverter.android.converter.model.CurrenciesResult
@@ -24,9 +26,9 @@ import com.ramcosta.composedestinations.result.NavResult
 import com.ramcosta.composedestinations.result.ResultRecipient
 
 @RootNavGraph(start = true)
-@Destination
+@Destination(style = ConverterScreenTransitions::class)
 @Composable
-fun ConverterScreen(
+fun AnimatedVisibilityScope.ConverterScreen(
     navigator: DestinationsNavigator,
     currenciesResultRecipient: ResultRecipient<CurrenciesScreenDestination, CurrenciesResult>,
     keyPadResultRecipient: ResultRecipient<KeyPadScreenDestination, KeyPadResult>,

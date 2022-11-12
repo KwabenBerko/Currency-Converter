@@ -49,7 +49,7 @@ internal fun SearchBar(
             onQueryChange(query)
         },
         textStyle = MaterialTheme.typography.labelMedium,
-        modifier = modifier.focusRequester(focusRequester),
+        modifier = Modifier.focusRequester(focusRequester).then(modifier),
         colors = TextFieldDefaults.textFieldColors(
             textColor = MaterialTheme.colorScheme.onPrimary,
             cursorColor = MaterialTheme.colorScheme.onPrimary,

@@ -1,5 +1,6 @@
 package com.kwabenaberko.currencyconverter.android.currencies
 
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -7,15 +8,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kwabenaberko.currencyconverter.android.LocalContainer
 import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import com.kwabenaberko.currencyconverter.android.converter.model.CurrenciesResult
+import com.kwabenaberko.currencyconverter.android.currencies.animation.CurrenciesScreenTransitions
 import com.kwabenaberko.currencyconverter.android.currencies.components.CurrenciesScreenContent
 import com.kwabenaberko.currencyconverter.android.useRedTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 
-@Destination
+@Destination(style = CurrenciesScreenTransitions::class)
 @Composable
-fun CurrenciesScreen(
+fun AnimatedVisibilityScope.CurrenciesScreen(
     conversionMode: ConversionMode,
     navigator: DestinationsNavigator,
     resultNavigator: ResultBackNavigator<CurrenciesResult>,

@@ -1,5 +1,10 @@
 package com.kwabenaberko.currencyconverter.android.currencies.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,15 +43,17 @@ internal fun CurrenciesScreenContent(
         systemUiController.setStatusBarColor(color = colorScheme.primary)
     }
 
-    when (state) {
-        is State.Idle -> Unit
-        is State.Content -> {
-            Content(
-                state = state,
-                onBackClick = onBackClick,
-                onFilterQueryChange = onFilterQueryChange,
-                onCurrencyClick = onCurrencyClick
-            )
+    Box(modifier = Modifier.fillMaxSize()) {
+        when (state) {
+            is State.Idle -> Unit
+            is State.Content -> {
+                Content(
+                    state = state,
+                    onBackClick = onBackClick,
+                    onFilterQueryChange = onFilterQueryChange,
+                    onCurrencyClick = onCurrencyClick
+                )
+            }
         }
     }
 }
@@ -61,8 +68,18 @@ private fun Content(
     var isSearchBarVisible by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-        Box(Modifier.padding(horizontal = 10.dp, vertical = 4.dp).height(68.dp)) {
-            if (isSearchBarVisible) {
+        Column(Modifier.padding(horizontal = 10.dp, vertical = 4.dp).height(68.dp)) {
+            AnimatedVisibility(
+                modifier = Modifier.fillMaxSize(),
+                visible = isSearchBarVisible,
+                enter = fadeIn() +
+                    slideInHorizontally(
+                        initialOffsetX = { fullWidth -> fullWidth }
+                    ),
+                exit = slideOutHorizontally(targetOffsetX = { fullWidth -> fullWidth }) +
+                    fadeOut()
+
+            ) {
                 SearchBar(
                     initialValue = "",
                     modifier = Modifier.fillMaxWidth(),
@@ -71,7 +88,9 @@ private fun Content(
                         isSearchBarVisible = false
                     }
                 )
-            } else {
+            }
+
+            if (!isSearchBarVisible) {
                 Toolbar(
                     onBackClick = onBackClick,
                     onSearchClick = {

@@ -35,14 +35,14 @@ internal fun AmountTextField(
 
         BasicTextField(
             value = textFieldValue,
-            onValueChange = { },
+            onValueChange = {},
             modifier = Modifier.background(MaterialTheme.colorScheme.background).then(modifier),
             textStyle = MaterialTheme.typography.labelLarge.copy(
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 88.sp,
                 textAlign = TextAlign.Center
             ),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             singleLine = true,
             cursorBrush = Brush.verticalGradient(
                 0.00f to Color.Transparent,

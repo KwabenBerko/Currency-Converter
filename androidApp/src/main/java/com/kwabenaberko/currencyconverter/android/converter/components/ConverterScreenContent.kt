@@ -37,17 +37,19 @@ internal fun ConverterScreenContent(
         }
     }
 
-    when (state) {
-        is State.Idle -> Unit
-        is State.RequiresSync -> Unit
-        is State.Content -> {
-            Content(
-                state = state,
-                onFirstCurrencyClick = onFirstCurrencyClick,
-                onFirstAmountClick = onFirstAmountClick,
-                onSecondCurrencyClick = onSecondCurrencyClick,
-                onSecondAmountClick = onSecondAmountClick
-            )
+    Box(modifier = Modifier.fillMaxSize()) {
+        when (state) {
+            is State.Idle -> Unit
+            is State.RequiresSync -> Unit
+            is State.Content -> {
+                Content(
+                    state = state,
+                    onFirstCurrencyClick = onFirstCurrencyClick,
+                    onFirstAmountClick = onFirstAmountClick,
+                    onSecondCurrencyClick = onSecondCurrencyClick,
+                    onSecondAmountClick = onSecondAmountClick
+                )
+            }
         }
     }
 }
