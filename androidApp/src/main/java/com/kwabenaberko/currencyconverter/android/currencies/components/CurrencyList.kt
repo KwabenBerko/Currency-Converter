@@ -37,6 +37,7 @@ internal fun CurrencyList(
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.background)
                         .padding(16.dp)
+                        .animateItemPlacement()
                 )
                 Divider()
             }
@@ -46,6 +47,7 @@ internal fun CurrencyList(
             ) { currency ->
                 CurrencyItem(
                     currency = currency,
+                    modifier = Modifier.animateItemPlacement(),
                     onClick = { onCurrencyClick(currency) }
                 )
                 Divider()

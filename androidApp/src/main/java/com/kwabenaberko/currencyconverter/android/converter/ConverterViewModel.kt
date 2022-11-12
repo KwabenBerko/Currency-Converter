@@ -33,7 +33,7 @@ class ConverterViewModel(
 
     private suspend fun loadConverter() {
         val (base, target) = getDefaultCurrencies()
-        val firstMoney = Money(currency = base, amount = 1.0)
+        val firstMoney = Money(currency = base, amount = 100.0)
         val secondMoney = convertMoney(firstMoney, target)
         val firstMoneyItem = mapMoneyToViewItem(firstMoney)
         val secondMoneyItem = mapMoneyToViewItem(secondMoney)
