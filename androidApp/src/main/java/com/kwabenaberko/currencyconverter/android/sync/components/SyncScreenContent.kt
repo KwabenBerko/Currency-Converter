@@ -30,8 +30,8 @@ import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
 @Composable
 fun SyncScreenContent(
     state: State,
-    navigateToConverter: () -> Unit = {},
-    retrySync: () -> Unit = {}
+    onSyncCompleted: () -> Unit = {},
+    onRetryClick: () -> Unit = {}
 ) = CurrencyConverterTheme(useRedTheme = true) {
     val colorScheme = MaterialTheme.colorScheme
     val systemUiController = rememberSystemUiController()
@@ -42,7 +42,7 @@ fun SyncScreenContent(
 
     LaunchedEffect(state) {
         if (state is State.SyncSuccess) {
-            navigateToConverter()
+            onSyncCompleted()
         }
     }
 
@@ -65,7 +65,7 @@ fun SyncScreenContent(
                 ) {
                     LottieAnimation(composition)
                     Button(
-                        onClick = retrySync,
+                        onClick = onRetryClick,
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(4.dp),
                         colors = ButtonDefaults.buttonColors(

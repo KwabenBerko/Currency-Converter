@@ -22,14 +22,14 @@ fun SyncScreen(
 
     SyncScreenContent(
         state = state,
-        navigateToConverter = {
+        onSyncCompleted = {
             navigator.navigate(ConverterScreenDestination) {
                 popUpTo(SyncScreenDestination) {
                     inclusive = true
                 }
             }
         },
-        retrySync = viewModel::startSync
+        onRetryClick = viewModel::startSync
     )
 }
 
