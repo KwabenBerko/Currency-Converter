@@ -16,7 +16,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,19 +29,27 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.kwabenaberko.currencyconverter.android.R
 import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
+import com.kwabenaberko.currencyconverter.presentation.AmountInputEngine.Amount
 
 @Composable
 internal fun KeyPadScreenContent(
     useRedTheme: Boolean,
+    state: Amount,
     onBackClick: () -> Unit = {},
+    onAppend: (Char) -> Unit = {},
+    onUndo: () -> Unit = {},
     onDone: (Double) -> Unit = {}
 ) = CurrencyConverterTheme(useRedTheme) {
 
     val colorScheme = MaterialTheme.colorScheme
     val focusRequester = remember { FocusRequester() }
     val systemUiController = rememberSystemUiController()
-    val (amount, setAmount) = remember { mutableStateOf(TextFieldValue("")) }
-    val isDoneEnabled = remember(amount) { amount.text.isNotEmpty() }
+    val amount = remember(state) {
+        TextFieldValue(
+            text = state.text,
+            selection = TextRange(state.text.length)
+        )
+    }
 
     LaunchedEffect(systemUiController) {
         systemUiController.setStatusBarColor(color = colorScheme.primary)
@@ -63,15 +70,7 @@ internal fun KeyPadScreenContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        TapToDeleteTextButton {
-            val newAmount = amount.text.substring(0, amount.text.length - 1)
-            setAmount(
-                amount.copy(
-                    text = newAmount,
-                    selection = TextRange(newAmount.length)
-                )
-            )
-        }
+        TapToDeleteTextButton(onClick = onUndo)
 
         AmountTextField(
             textFieldValue = amount,
@@ -85,18 +84,14 @@ internal fun KeyPadScreenContent(
             ) {
                 row.forEach { key ->
                     if (key == DONE) {
-                        DoneKeyButton(isEnabled = isDoneEnabled) {
-                            onDone(amount.text.toDouble())
+                        DoneKeyButton(isEnabled = state.isValid) {
+                            if (state.isValid) {
+                                onDone(amount.text.toDouble())
+                            }
                         }
                     } else {
                         TextKeyButton(text = key) {
-                            val newAmount = amount.text + key
-                            setAmount(
-                                amount.copy(
-                                    text = newAmount,
-                                    selection = TextRange(newAmount.length)
-                                )
-                            )
+                            onAppend(key.first())
                         }
                     }
                 }
@@ -128,5 +123,8 @@ private val KEYS = listOf(
 @Preview
 @Composable
 private fun KeyPadScreenContentPreview() {
-    KeyPadScreenContent(useRedTheme = true)
+    KeyPadScreenContent(
+        useRedTheme = true,
+        state = Amount(text = "200", isValid = true)
+    )
 }
