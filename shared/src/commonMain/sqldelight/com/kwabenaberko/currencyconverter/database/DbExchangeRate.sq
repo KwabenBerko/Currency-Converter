@@ -13,6 +13,16 @@ insert:
 INSERT INTO DbExchangeRate(baseCode, targetCode, rate)
 VALUES (?, ?, ?);
 
+isRateAvailable:
+SELECT EXISTS (
+SELECT * FROM DbExchangeRate
+WHERE baseCode = ? AND targetCode = ?
+);
+
+selectRatesForCurrency:
+SELECT * FROM DbExchangeRate
+WHERE baseCode = ?;
+
 selectRateForCurrencies:
 SELECT * FROM DbExchangeRate
 WHERE baseCode = ? AND targetCode = ?;
