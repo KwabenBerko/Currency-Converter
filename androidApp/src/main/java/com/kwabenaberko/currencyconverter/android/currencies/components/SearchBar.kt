@@ -46,7 +46,7 @@ internal fun SearchBar(
         value = query,
         onValueChange = { value ->
             setQuery(value)
-            onQueryChange(query)
+            onQueryChange(value)
         },
         textStyle = MaterialTheme.typography.labelMedium,
         modifier = Modifier.focusRequester(focusRequester).then(modifier),
