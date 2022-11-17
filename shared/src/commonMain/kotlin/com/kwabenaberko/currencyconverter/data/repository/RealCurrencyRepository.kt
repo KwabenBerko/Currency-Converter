@@ -46,7 +46,7 @@ class RealCurrencyRepository(
 
     override fun currencies(filter: String?): Flow<List<Currency>> {
         return currencyQueries
-            .selectAllCurrencies(filter = filter ?: "")
+            .selectAllCurrencies(filter = filter?.trim() ?: "")
             .asFlow()
             .flowOn(backgroundDispatcher)
             .mapToList(backgroundDispatcher)
