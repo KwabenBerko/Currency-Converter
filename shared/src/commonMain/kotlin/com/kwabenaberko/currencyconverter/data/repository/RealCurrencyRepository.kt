@@ -34,7 +34,6 @@ import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.set
 
 @OptIn(ExperimentalSettingsApi::class)
 class RealCurrencyRepository(
@@ -89,7 +88,32 @@ class RealCurrencyRepository(
 
     override suspend fun getRate(baseCode: String, targetCode: String): Double {
         return withContext(backgroundDispatcher) {
-            exchangeRateQueries
+            val isRateAvailable = exchangeRateQueries
+                .isRateAvailable(baseCode, targetCode)
+                .executeAsOne()
+
+            if (!isRateAvailable) {
+                val usdRates = exchangeRateQueries
+                    .selectRatesForCurrency(USD_RATE)
+                    .executeAsList()
+                    .associateBy { dbExchangeRate -> dbExchangeRate.targetCode }
+
+                val usdToBaseCodeRate = usdRates.getValue(baseCode).rate
+                val rate = if (targetCode.equals(USD_RATE, ignoreCase = true)) {
+                    1.0.div(usdToBaseCodeRate).toPlaces(DECIMAL_PLACES)
+                } else {
+                    val usdToTargetCodeRate = usdRates.getValue(targetCode).rate
+                    1.0.div(usdToBaseCodeRate).times(usdToTargetCodeRate).toPlaces(DECIMAL_PLACES)
+                }
+
+                exchangeRateQueries.insert(
+                    baseCode = baseCode,
+                    targetCode = targetCode,
+                    rate = rate
+                )
+            }
+
+            return@withContext exchangeRateQueries
                 .selectRateForCurrencies(baseCode, targetCode)
                 .executeAsOne()
                 .rate
@@ -119,7 +143,7 @@ class RealCurrencyRepository(
                     async { httpClient.get(Api.CURRENCY_SYMBOLS_URL) },
                     async {
                         httpClient.get(Api.EXCHANGE_RATES) {
-                            parameter("base", "USD")
+                            parameter("base", USD_RATE)
                         }
                     }
                 )
@@ -132,7 +156,6 @@ class RealCurrencyRepository(
                 val currencies = currenciesResponse.body<CurrenciesDto>().currencies
                 val symbols = symbolsResponse.body<Map<String, CurrencySymbolDto>>()
                 val (baseCode, baseCodeRates) = exchangeRatesResponse.body<ExchangeRatesDto>()
-                val exchangeRates = calculateExchangeRates(baseCode, baseCodeRates)
 
                 currencyQueries.transaction {
                     currencies.forEach { (_, currency) ->
@@ -146,10 +169,8 @@ class RealCurrencyRepository(
                 }
 
                 exchangeRateQueries.transaction {
-                    exchangeRates.forEach { (baseCode, rates) ->
-                        rates.forEach { (targetCode, rate) ->
-                            exchangeRateQueries.insert(baseCode, targetCode, rate)
-                        }
+                    baseCodeRates.forEach { (targetCode, rate) ->
+                        exchangeRateQueries.insert(baseCode, targetCode, rate)
                     }
                 }
 
@@ -166,26 +187,6 @@ class RealCurrencyRepository(
         }
     }
 
-    private fun calculateExchangeRates(
-        baseCode: String,
-        baseCodeRates: Map<String, Double>
-    ): Map<String, Map<String, Double>> {
-        val exchangeRates = mutableMapOf(baseCode to baseCodeRates)
-
-        baseCodeRates.forEach { (code, rate) ->
-            val currentCodeRates = mutableMapOf(baseCode to 1.0.div(rate).toPlaces(DECIMAL_PLACES))
-            exchangeRates[code] = currentCodeRates
-            baseCodeRates.forEach { entry ->
-                currentCodeRates[entry.key] = 1.0
-                    .div(rate)
-                    .times(entry.value)
-                    .toPlaces(places = DECIMAL_PLACES)
-            }
-        }
-
-        return exchangeRates
-    }
-
     private fun mapDbCurrenciesToDomain(dbCurrencies: List<DbCurrency>): List<Currency> {
         return dbCurrencies.map { dbCurrency -> mapDbCurrencyToDomain(dbCurrency) }
     }
@@ -195,6 +196,7 @@ class RealCurrencyRepository(
     }
 
     private companion object {
+        const val USD_RATE = "USD"
         const val DECIMAL_PLACES = 6
     }
 }
