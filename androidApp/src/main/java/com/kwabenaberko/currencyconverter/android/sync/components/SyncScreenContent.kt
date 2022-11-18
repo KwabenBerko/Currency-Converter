@@ -1,32 +1,32 @@
 package com.kwabenaberko.currencyconverter.android.sync.components
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.kwabenaberko.currencyconverter.android.R
 import com.kwabenaberko.currencyconverter.android.sync.SyncViewModel.State
 import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun SyncScreenContent(
     state: State,
@@ -47,41 +47,68 @@ fun SyncScreenContent(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.secondary),
+        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.primary),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        when (state) {
-            State.Idle -> Text("Idle")
-            State.Syncing -> Text("Syncing")
-            State.SyncError -> {
-                val composition by rememberLottieComposition(
-                    LottieCompositionSpec.RawRes(R.raw.no_internet)
-                )
-
-                Column(
-                    modifier = Modifier.padding(horizontal = 64.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    LottieAnimation(composition)
-                    Button(
-                        onClick = onRetryClick,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(4.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.onPrimary
-                        )
-                    ) {
-                        Text(
-                            text = "Retry",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.W600
-                        )
-                    }
-                }
+        AnimatedContent(targetState = state) { targetState ->
+            when (targetState) {
+                State.Idle,
+                State.Syncing -> Syncing()
+                State.SyncSuccess -> Unit
+                State.SyncError -> Error(onRetryClick = onRetryClick)
             }
-            State.SyncSuccess -> Text("Sync Success")
+        }
+    }
+}
+
+@Composable
+internal fun Syncing(modifier: Modifier = Modifier) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CircularProgressIndicator(
+            modifier = modifier,
+            color = MaterialTheme.colorScheme.onPrimary,
+            strokeWidth = 8.dp
+        )
+    }
+}
+
+@Composable
+internal fun Error(
+    modifier: Modifier = Modifier,
+    onRetryClick: () -> Unit = {}
+) {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(horizontal = 64.dp).then(modifier),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Text(
+            text = "Uhh ho! Something went wrong! Please retry",
+            color = MaterialTheme.colorScheme.onPrimary,
+            style = MaterialTheme.typography.labelMedium,
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        Button(
+            onClick = onRetryClick,
+            shape = RoundedCornerShape(4.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.onPrimary,
+                contentColor = MaterialTheme.colorScheme.primary
+            )
+        ) {
+            Text(
+                text = "Retry",
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.W600
+            )
         }
     }
 }
