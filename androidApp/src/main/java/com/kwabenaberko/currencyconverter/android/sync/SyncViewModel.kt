@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.kwabenaberko.currencyconverter.android.BaseViewModel
 import com.kwabenaberko.currencyconverter.domain.usecase.Sync
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SyncViewModel(
@@ -19,6 +20,7 @@ class SyncViewModel(
         viewModelScope.launch {
 
             setState(State.Syncing)
+            delay(5000L)
 
             when (sync()) {
                 true -> setState(State.SyncSuccess)

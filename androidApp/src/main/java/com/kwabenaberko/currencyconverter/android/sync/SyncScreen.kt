@@ -12,7 +12,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
 
-@Destination
+@Destination(style = SyncScreenTransitions::class)
 @Composable
 fun SyncScreen(
     navigator: DestinationsNavigator,

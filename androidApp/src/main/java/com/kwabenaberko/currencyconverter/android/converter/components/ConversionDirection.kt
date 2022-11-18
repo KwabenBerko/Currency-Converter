@@ -9,13 +9,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.fade
-import com.google.accompanist.placeholder.material.placeholder
 import com.kwabenaberko.currencyconverter.android.R
 import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
@@ -29,12 +25,6 @@ internal fun ConversionDirection(
 ) {
     Box(
         modifier.background(WhiteColorScheme.primary, CircleShape)
-            .placeholder(
-                visible = false,
-                color = Color(0xFF979797),
-                shape = CircleShape,
-                highlight = PlaceholderHighlight.fade()
-            )
             .border(BorderStroke(6.dp, RedColorScheme.primary), CircleShape)
             .padding(20.dp)
     ) {

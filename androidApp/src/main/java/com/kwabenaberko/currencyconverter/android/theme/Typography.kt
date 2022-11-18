@@ -18,4 +18,8 @@ val Typography = Typography(
         fontFamily = SanFrancisco,
         fontSize = 18.sp
     ),
+    labelSmall = TextStyle(
+        fontFamily = SanFrancisco,
+        fontSize = 14.sp
+    ),
 )
