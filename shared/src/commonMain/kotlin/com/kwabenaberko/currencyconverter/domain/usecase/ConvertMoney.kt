@@ -26,7 +26,7 @@ suspend fun convertMoney(
     return Money(targetCurrency, roundedAmount)
 }
 
-typealias ConvertMoney = suspend (
-    money: Money,
-    targetCurrency: Currency,
-) -> Money
+@Suppress("FUN_INTERFACE_WITH_SUSPEND_FUNCTION")
+fun interface ConvertMoney {
+    suspend operator fun invoke(money: Money, targetCurrency: Currency): Money
+}

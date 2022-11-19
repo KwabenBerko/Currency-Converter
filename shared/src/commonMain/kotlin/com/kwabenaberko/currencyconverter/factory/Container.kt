@@ -10,6 +10,7 @@ import com.kwabenaberko.currencyconverter.domain.usecase.GetCurrencies
 import com.kwabenaberko.currencyconverter.domain.usecase.GetDefaultCurrencies
 import com.kwabenaberko.currencyconverter.domain.usecase.GetRate
 import com.kwabenaberko.currencyconverter.domain.usecase.GetSyncStatus
+import com.kwabenaberko.currencyconverter.domain.usecase.HasCompletedInitialSync
 import com.kwabenaberko.currencyconverter.domain.usecase.Sync
 import com.kwabenaberko.currencyconverter.domain.usecase.convertMoney
 import com.russhwolf.settings.ObservableSettings
@@ -43,19 +44,19 @@ open class Container internal constructor(
     }
 
     val getSyncStatus: GetSyncStatus by lazy {
-        return@lazy currencyRepository::syncStatus
+        return@lazy GetSyncStatus(currencyRepository::syncStatus)
     }
 
     val sync: Sync by lazy {
-        return@lazy currencyRepository::sync
+        return@lazy Sync(currencyRepository::sync)
     }
 
     val hasCompletedInitialSync by lazy {
-        return@lazy currencyRepository::hasCompletedInitialSync
+        return@lazy HasCompletedInitialSync(currencyRepository::hasCompletedInitialSync)
     }
 
     val convertMoney: ConvertMoney by lazy {
-        return@lazy { money, targetCurrency ->
+        return@lazy ConvertMoney { money, targetCurrency ->
             convertMoney(
                 getRate = getRate,
                 setDefaultCurrencies = currencyRepository::setDefaultCurrencies,
@@ -66,14 +67,14 @@ open class Container internal constructor(
     }
 
     val getCurrencies: GetCurrencies by lazy {
-        return@lazy currencyRepository::currencies
+        return@lazy GetCurrencies(currencyRepository::currencies)
     }
 
     val getDefaultCurrencies: GetDefaultCurrencies by lazy {
-        return@lazy currencyRepository::getDefaultCurrencies
+        return@lazy GetDefaultCurrencies(currencyRepository::getDefaultCurrencies)
     }
 
     val getRate: GetRate by lazy {
-        return@lazy currencyRepository::getRate
+        return@lazy GetRate(currencyRepository::getRate)
     }
 }
