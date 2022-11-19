@@ -1,6 +1,6 @@
 package com.kwabenaberko.currencyconverter.domain.usecase
 
-typealias GetRate = suspend (
-    baseCode: String,
-    targetCode: String
-) -> Double
+@Suppress("FUN_INTERFACE_WITH_SUSPEND_FUNCTION")
+fun interface GetRate {
+    suspend operator fun invoke(baseCode: String, targetCode: String): Double
+}
