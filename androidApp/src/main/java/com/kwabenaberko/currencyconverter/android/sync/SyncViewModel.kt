@@ -3,14 +3,14 @@ package com.kwabenaberko.currencyconverter.android.sync
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.kwabenaberko.converter.domain.usecase.Sync
 import com.kwabenaberko.currencyconverter.android.BaseViewModel
-import com.kwabenaberko.currencyconverter.domain.usecase.Sync
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SyncViewModel(
     private val sync: Sync
-) : BaseViewModel<SyncViewModel.State>(State.Idle) {
+) : com.kwabenaberko.currencyconverter.android.BaseViewModel<SyncViewModel.State>(State.Idle) {
 
     init {
         startSync()

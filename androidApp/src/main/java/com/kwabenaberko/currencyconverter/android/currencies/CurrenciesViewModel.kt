@@ -3,9 +3,9 @@ package com.kwabenaberko.currencyconverter.android.currencies
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.kwabenaberko.converter.domain.model.Currency
+import com.kwabenaberko.converter.domain.usecase.GetCurrencies
 import com.kwabenaberko.currencyconverter.android.BaseViewModel
-import com.kwabenaberko.currencyconverter.domain.model.Currency
-import com.kwabenaberko.currencyconverter.domain.usecase.GetCurrencies
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class CurrenciesViewModel(
     private val getCurrencies: GetCurrencies
-) : BaseViewModel<CurrenciesViewModel.State>(State.Idle) {
+) : com.kwabenaberko.currencyconverter.android.BaseViewModel<CurrenciesViewModel.State>(State.Idle) {
 
     private val filterQueryFlow = MutableStateFlow("")
 

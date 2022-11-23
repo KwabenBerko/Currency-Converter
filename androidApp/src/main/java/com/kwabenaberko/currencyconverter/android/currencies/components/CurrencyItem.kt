@@ -22,9 +22,9 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kwabenaberko.converter.domain.model.Currency
+import com.kwabenaberko.convertertest.builder.CurrencyFactory
 import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
-import com.kwabenaberko.currencyconverter.domain.model.Currency
-import com.kwabenaberko.sharedtest.builder.CurrencyFactory
 
 private const val EMPTY_STRING = " "
 

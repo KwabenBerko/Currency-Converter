@@ -13,9 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kwabenaberko.converter.domain.model.Currency
+import com.kwabenaberko.convertertest.builder.CurrencyFactory
 import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
-import com.kwabenaberko.currencyconverter.domain.model.Currency
-import com.kwabenaberko.sharedtest.builder.CurrencyFactory
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

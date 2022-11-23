@@ -27,9 +27,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.kwabenaberko.converter.presentation.AmountInputEngine.Amount
 import com.kwabenaberko.currencyconverter.android.R
 import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
-import com.kwabenaberko.currencyconverter.presentation.AmountInputEngine.Amount
 
 @Composable
 internal fun KeyPadScreenContent(

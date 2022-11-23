@@ -1,8 +1,8 @@
 package com.kwabenaberko.currencyconverter.android
 
 import android.app.Application
-import com.kwabenaberko.currencyconverter.factory.Container
-import com.kwabenaberko.currencyconverter.factory.ContainerFactory
+import com.kwabenaberko.converter.factory.Container
+import com.kwabenaberko.converter.factory.ContainerFactory
 
 class App : Application() {
     lateinit var container: Container
