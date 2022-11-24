@@ -2,7 +2,7 @@ package com.kwabenaberko.currencyconverter.android.converter.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.kwabenaberko.currencyconverter.domain.model.Currency
+import com.kwabenaberko.converter.domain.model.Currency
 import kotlinx.parcelize.Parceler
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.TypeParceler

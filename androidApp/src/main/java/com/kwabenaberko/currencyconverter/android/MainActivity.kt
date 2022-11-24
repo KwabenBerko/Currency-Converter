@@ -7,7 +7,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
-import com.kwabenaberko.currencyconverter.factory.Container
+import com.kwabenaberko.converter.factory.Container
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
 
@@ -19,7 +19,7 @@ val LocalContainer = staticCompositionLocalOf<Container> {
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val container = (applicationContext as App).container
+        val container = (applicationContext as com.kwabenaberko.currencyconverter.android.App).container
 
         setContent {
             CompositionLocalProvider(LocalContainer provides container) {

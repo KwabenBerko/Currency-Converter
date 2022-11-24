@@ -5,7 +5,7 @@ import shared
 struct iOSApp: App {
 	var body: some Scene {
 		WindowGroup {
-			ContentView()
+			Text("Hello, World")
 		}
 	}
 }

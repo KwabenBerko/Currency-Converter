@@ -11,10 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.kwabenaberko.converter.domain.model.Currency
 import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.State
 import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
 import com.kwabenaberko.currencyconverter.android.theme.RedColorScheme
-import com.kwabenaberko.currencyconverter.domain.model.Currency
 
 @Composable
 internal fun ConverterScreenContent(

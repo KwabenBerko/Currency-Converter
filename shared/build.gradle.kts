@@ -1,27 +1,15 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.android.library)
-    alias(libs.plugins.ktlint)
-    alias(libs.plugins.sqldelight)
-}
-
-ktlint {
-    filter {
-        exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/generated/") }
-        exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/kotlin/") }
-    }
-}
-
-sqldelight {
-    database("CurrencyConverterDatabase") {
-        packageName = "com.kwabenaberko"
-    }
 }
 
 kotlin {
+    //val xcf = XCFramework(rootProject.name)
     android()
+    
     listOf(
         iosX64(),
         iosArm64(),
@@ -29,44 +17,20 @@ kotlin {
     ).forEach {
         it.binaries.framework {
             baseName = "shared"
+
+            export(projects.converter)
+            export(projects.converterTest)
+            transitiveExport = true
+
+            linkerOpts.add("-lsqlite3")
         }
     }
 
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(libs.coroutines.core)
-                implementation(libs.sqldelight.coroutines.extensions)
-                implementation(libs.multiplatformSettings)
-                implementation(libs.multiplatformSettings.coroutines)
-                implementation(libs.bundles.ktor.client)
-                implementation(libs.ktor.serialization)
-                implementation(libs.kotlinx.dateTime)
-            }
-        }
-        val commonTest by getting {
-            dependencies {
-                implementation(projects.sharedTest)
-                implementation(kotlin("test"))
-                implementation(libs.coroutines.test)
-                implementation(libs.turbine)
-                implementation(libs.kotest.assertions.core)
-                implementation(libs.multiplatformSettings.test)
-                implementation(libs.ktor.client.mock)
-            }
-        }
-        val androidMain by getting {
-            dependencies {
-                implementation(libs.sqldelight.driver.android)
-                implementation(libs.ktor.client.android)
-                implementation(libs.icu4j)
-            }
-        }
-        val androidTest by getting {
-            dependencies {
-                implementation(libs.sqldelight.driver.sqlite)
-            }
-        }
+        val commonMain by getting
+        val commonTest by getting
+        val androidMain by getting
+        val androidTest by getting
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
@@ -76,8 +40,8 @@ kotlin {
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {
-                implementation(libs.sqldelight.driver.native)
-                implementation(libs.ktor.client.darwin)
+                api(projects.converter)
+                api(projects.converterTest)
             }
         }
         val iosX64Test by getting
@@ -93,11 +57,10 @@ kotlin {
 }
 
 android {
+    namespace = "com.kwabenaberko.shared"
     compileSdk = 33
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = 22
         targetSdk = 33
     }
-    namespace = "com.kwabenaberko.currencyconverter"
 }
