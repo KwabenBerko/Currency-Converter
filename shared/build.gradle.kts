@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
-
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -7,7 +5,6 @@ plugins {
 }
 
 kotlin {
-    //val xcf = XCFramework(rootProject.name)
     android()
     
     listOf(
