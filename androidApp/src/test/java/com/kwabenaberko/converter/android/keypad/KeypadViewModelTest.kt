@@ -2,6 +2,7 @@ package com.kwabenaberko.converter.android.keypad
 
 import app.cash.turbine.test
 import com.kwabenaberko.converter.presentation.AmountInputEngine.Amount
+import com.kwabenaberko.currencyconverter.android.keypad.KeypadViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals

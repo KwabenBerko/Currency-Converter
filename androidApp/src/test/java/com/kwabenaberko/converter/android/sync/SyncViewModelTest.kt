@@ -2,8 +2,9 @@ package com.kwabenaberko.converter.android.sync
 
 import app.cash.turbine.test
 import com.kwabenaberko.converter.android.MainDispatcherRule
-import com.kwabenaberko.converter.android.sync.SyncViewModel.State
 import com.kwabenaberko.convertertest.testdouble.FakeSync
+import com.kwabenaberko.currencyconverter.android.sync.SyncViewModel
+import com.kwabenaberko.currencyconverter.android.sync.SyncViewModel.State
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals

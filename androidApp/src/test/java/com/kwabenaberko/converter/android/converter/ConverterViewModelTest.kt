@@ -2,9 +2,6 @@ package com.kwabenaberko.converter.android.converter
 
 import app.cash.turbine.test
 import com.kwabenaberko.converter.android.MainDispatcherRule
-import com.kwabenaberko.converter.android.converter.ConverterViewModel.MoneyViewItem
-import com.kwabenaberko.converter.android.converter.ConverterViewModel.State
-import com.kwabenaberko.converter.android.converter.model.ConversionMode
 import com.kwabenaberko.converter.domain.model.DefaultCurrencies
 import com.kwabenaberko.converter.domain.model.Money
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeCediCurrency
@@ -12,6 +9,10 @@ import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeDollarCurrency
 import com.kwabenaberko.convertertest.testdouble.FakeConvertMoney
 import com.kwabenaberko.convertertest.testdouble.FakeGetDefaultCurrencies
 import com.kwabenaberko.convertertest.testdouble.FakeHasCompletedInitialSync
+import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel
+import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.MoneyViewItem
+import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.State
+import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals

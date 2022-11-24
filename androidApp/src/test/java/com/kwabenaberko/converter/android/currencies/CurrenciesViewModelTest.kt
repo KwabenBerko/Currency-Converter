@@ -2,9 +2,10 @@ package com.kwabenaberko.converter.android.currencies
 
 import app.cash.turbine.test
 import com.kwabenaberko.converter.android.MainDispatcherRule
-import com.kwabenaberko.converter.android.currencies.CurrenciesViewModel.State
 import com.kwabenaberko.convertertest.builder.CurrencyFactory
 import com.kwabenaberko.convertertest.testdouble.FakeGetCurrencies
+import com.kwabenaberko.currencyconverter.android.currencies.CurrenciesViewModel
+import com.kwabenaberko.currencyconverter.android.currencies.CurrenciesViewModel.State
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
