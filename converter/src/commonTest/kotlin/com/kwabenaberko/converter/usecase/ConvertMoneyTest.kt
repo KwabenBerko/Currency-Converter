@@ -1,7 +1,7 @@
 package com.kwabenaberko.converter.usecase
 
 import com.kwabenaberko.converter.domain.model.Money
-import com.kwabenaberko.converter.domain.usecase.convertMoney
+import com.kwabenaberko.converter.domain.usecase.RealConvertMoney
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeCediCurrency
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeDollarCurrency
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeNairaCurrency
@@ -35,13 +35,15 @@ class ConvertMoneyTest {
             val getRate = FakeGetRate().apply {
                 this.result = rate
             }
+            val convertMoney = RealConvertMoney(
+                getRate = getRate,
+                setDefaultCurrencies = setDefaultCurrencies
+            )
             val expectedMoney = Money(
                 currency = targetCurrency, amount = expectedAmount
             )
 
             val actualMoney = convertMoney(
-                getRate = getRate,
-                setDefaultCurrencies = setDefaultCurrencies,
                 money = Money(currency = baseCurrency, amount = amount),
                 targetCurrency = targetCurrency
             )
@@ -56,10 +58,12 @@ class ConvertMoneyTest {
         val getRate = FakeGetRate().apply {
             result = 1.0
         }
+        val convertMoney = RealConvertMoney(
+            getRate = getRate,
+            setDefaultCurrencies = setDefaultCurrencies
+        )
 
         convertMoney(
-            getRate = getRate,
-            setDefaultCurrencies = setDefaultCurrencies,
             money = Money(currency = GHS, amount = 0.0),
             targetCurrency = NGN
         )

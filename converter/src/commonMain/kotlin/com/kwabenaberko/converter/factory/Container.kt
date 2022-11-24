@@ -11,8 +11,8 @@ import com.kwabenaberko.converter.domain.usecase.GetDefaultCurrencies
 import com.kwabenaberko.converter.domain.usecase.GetRate
 import com.kwabenaberko.converter.domain.usecase.GetSyncStatus
 import com.kwabenaberko.converter.domain.usecase.HasCompletedInitialSync
+import com.kwabenaberko.converter.domain.usecase.RealConvertMoney
 import com.kwabenaberko.converter.domain.usecase.Sync
-import com.kwabenaberko.converter.domain.usecase.convertMoney
 import com.russhwolf.settings.ObservableSettings
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
@@ -33,7 +33,7 @@ open class Container internal constructor(
         return@lazy CurrencyConverterDatabase(sqlDriver)
     }
 
-    private val currencyRepository: CurrencyRepository by lazy {
+    val currencyRepository: CurrencyRepository by lazy {
         return@lazy RealCurrencyRepository(
             httpClient = httpClient,
             currencyQueries = database.dbCurrencyQueries,
@@ -56,14 +56,10 @@ open class Container internal constructor(
     }
 
     val convertMoney: ConvertMoney by lazy {
-        return@lazy ConvertMoney { money, targetCurrency ->
-            convertMoney(
-                getRate = getRate,
-                setDefaultCurrencies = currencyRepository::setDefaultCurrencies,
-                money = money,
-                targetCurrency = targetCurrency
-            )
-        }
+        return@lazy RealConvertMoney(
+            getRate = getRate,
+            setDefaultCurrencies = currencyRepository::setDefaultCurrencies
+        )
     }
 
     val getCurrencies: GetCurrencies by lazy {
