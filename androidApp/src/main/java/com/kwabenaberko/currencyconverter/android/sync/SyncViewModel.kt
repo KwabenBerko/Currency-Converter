@@ -20,7 +20,6 @@ class SyncViewModel(
         viewModelScope.launch {
 
             setState(State.Syncing)
-            delay(5000L)
 
             when (sync()) {
                 true -> setState(State.SyncSuccess)
