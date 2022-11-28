@@ -1,39 +1,19 @@
 package com.kwabenaberko.converter.presentation
 
-import com.kwabenaberko.converter.presentation.AmountInputEngine.Amount
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-interface AmountInputEngine {
-    val amount: StateFlow<Amount>
+data class Amount(
+    val text: String = "",
+    val isValid: Boolean = false
+)
 
-    fun amount(): Amount
-    fun append(character: Char)
-    fun undo()
-
-    data class Amount(
-        val text: String = "",
-        val isValid: Boolean = false
-    )
-
-    companion object
-}
-
-fun AmountInputEngine.Companion.create(): AmountInputEngine {
-    return RealAmountInputEngine()
-}
-
-class RealAmountInputEngine : AmountInputEngine {
+class AmountInputEngine {
     private val _amount = MutableStateFlow(Amount())
-    override val amount = _amount.asStateFlow()
+    val amount = _amount.asStateFlow()
 
-    override fun amount(): Amount {
-        return _amount.value
-    }
-
-    override fun append(character: Char) {
-        val amount = amount()
+    fun add(character: Char) {
+        val amount = getAmount()
         val amountText = amount.text
 
         if (
@@ -66,8 +46,8 @@ class RealAmountInputEngine : AmountInputEngine {
         }
     }
 
-    override fun undo() {
-        val amount = amount()
+    fun pop() {
+        val amount = getAmount()
         val amountText = amount.text
         if (amountText.isNotEmpty()) {
             val newAmountValue = amountText
@@ -84,6 +64,10 @@ class RealAmountInputEngine : AmountInputEngine {
 
     private fun setAmount(newAmount: Amount) {
         _amount.value = newAmount
+    }
+
+    private fun getAmount(): Amount {
+        return _amount.value
     }
 
     private fun Char.isDot(): Boolean {

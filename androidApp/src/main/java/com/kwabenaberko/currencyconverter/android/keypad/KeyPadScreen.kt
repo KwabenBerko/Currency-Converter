@@ -22,7 +22,7 @@ fun AnimatedVisibilityScope.KeyPadScreen(
     resultNavigator: ResultBackNavigator<KeyPadResult>,
     viewModel: KeypadViewModel = keypadViewModel()
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.amount.collectAsState()
 
     KeyPadScreenContent(
         useRedTheme = useRedTheme(conversionMode),
@@ -30,8 +30,8 @@ fun AnimatedVisibilityScope.KeyPadScreen(
         onBackClick = {
             navigator.popBackStack()
         },
-        onAppend = viewModel::append,
-        onUndo = viewModel::undo,
+        onAppend = viewModel::add,
+        onUndo = viewModel::pop,
         onDone = { amount ->
             resultNavigator.navigateBack(KeyPadResult(conversionMode, amount))
         }

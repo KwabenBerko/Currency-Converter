@@ -2,18 +2,17 @@ package com.kwabenaberko.currencyconverter.android.keypad
 
 import androidx.lifecycle.ViewModel
 import com.kwabenaberko.converter.presentation.AmountInputEngine
-import com.kwabenaberko.converter.presentation.create
 
 class KeypadViewModel : ViewModel() {
 
-    private val amountEngine = AmountInputEngine.create()
-    val state = amountEngine.amount
+    private val amountEngine = AmountInputEngine()
+    val amount = amountEngine.amount
 
-    fun append(value: Char) {
-        amountEngine.append(value)
+    fun add(value: Char) {
+        amountEngine.add(value)
     }
 
-    fun undo() {
-        amountEngine.undo()
+    fun pop() {
+        amountEngine.pop()
     }
 }

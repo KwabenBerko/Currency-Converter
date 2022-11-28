@@ -1,7 +1,6 @@
 package com.kwabenaberko.converter.presentation
 
 import app.cash.turbine.test
-import com.kwabenaberko.converter.presentation.AmountInputEngine.Amount
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -10,14 +9,14 @@ import kotlin.test.assertEquals
 @OptIn(ExperimentalCoroutinesApi::class)
 class AmountInputEngineTest {
 
-    private val sut = RealAmountInputEngine()
+    private val sut = AmountInputEngine()
 
     @Test
     fun `should ignore non digit characters`() = runTest {
         sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.append('A')
+            sut.add('A')
             expectNoEvents()
         }
     }
@@ -27,13 +26,13 @@ class AmountInputEngineTest {
         sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.append('2')
+            sut.add('2')
             assertEquals(Amount(text = "2", isValid = true), awaitItem())
 
-            sut.append('.')
+            sut.add('.')
             assertEquals(Amount(text = "2.", isValid = false), awaitItem())
 
-            sut.append('0')
+            sut.add('0')
             assertEquals(Amount(text = "2.0", isValid = true), awaitItem())
         }
     }
@@ -43,10 +42,10 @@ class AmountInputEngineTest {
         sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.append('2')
+            sut.add('2')
             assertEquals(Amount(text = "2", isValid = true), awaitItem())
 
-            sut.undo()
+            sut.pop()
             assertEquals(Amount(text = "", isValid = false), awaitItem())
         }
     }
@@ -56,13 +55,13 @@ class AmountInputEngineTest {
         sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.append('2')
+            sut.add('2')
             assertEquals(Amount(text = "2", isValid = true), awaitItem())
 
-            sut.undo()
+            sut.pop()
             assertEquals(Amount(text = "", isValid = false), awaitItem())
 
-            sut.undo()
+            sut.pop()
             expectNoEvents()
         }
     }
@@ -72,7 +71,7 @@ class AmountInputEngineTest {
         sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.append('.')
+            sut.add('.')
             assertEquals(Amount(text = "0.", isValid = false), awaitItem())
         }
     }
@@ -82,13 +81,13 @@ class AmountInputEngineTest {
         sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.append('2')
+            sut.add('2')
             assertEquals(Amount(text = "2", isValid = true), awaitItem())
 
-            sut.append('.')
+            sut.add('.')
             assertEquals(Amount(text = "2.", isValid = false), awaitItem())
 
-            sut.append('.')
+            sut.add('.')
             expectNoEvents()
         }
     }
@@ -98,16 +97,16 @@ class AmountInputEngineTest {
         sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.append('2')
+            sut.add('2')
             assertEquals(Amount(text = "2", isValid = true), awaitItem())
 
-            sut.append('.')
+            sut.add('.')
             assertEquals(Amount(text = "2.", isValid = false), awaitItem())
 
-            sut.append('0')
+            sut.add('0')
             assertEquals(Amount(text = "2.0", isValid = true), awaitItem())
 
-            sut.append('0')
+            sut.add('0')
             expectNoEvents()
         }
     }

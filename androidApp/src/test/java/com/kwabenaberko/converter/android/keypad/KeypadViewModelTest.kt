@@ -1,7 +1,7 @@
 package com.kwabenaberko.converter.android.keypad
 
 import app.cash.turbine.test
-import com.kwabenaberko.converter.presentation.AmountInputEngine.Amount
+import com.kwabenaberko.converter.presentation.Amount
 import com.kwabenaberko.currencyconverter.android.keypad.KeypadViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -13,24 +13,24 @@ class KeypadViewModelTest {
     private val sut = KeypadViewModel()
 
     @Test
-    fun `should emit Amount state when a character is appended`() = runTest {
-        sut.state.test {
+    fun `should emit Amount state when a character is added`() = runTest {
+        sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.append('1')
+            sut.add('1')
             assertEquals(Amount(text = "1", isValid = true), awaitItem())
         }
     }
 
     @Test
-    fun `should emit Amount state when an undo operation occurs`() = runTest {
-        sut.state.test {
+    fun `should emit Amount state when a pop operation occurs`() = runTest {
+        sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.append('1')
+            sut.add('1')
             assertEquals(Amount(text = "1", isValid = true), awaitItem())
 
-            sut.undo()
+            sut.pop()
             assertEquals(Amount(), awaitItem())
         }
     }
