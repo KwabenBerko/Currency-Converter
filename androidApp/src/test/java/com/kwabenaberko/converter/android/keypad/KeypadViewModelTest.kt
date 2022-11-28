@@ -1,16 +1,27 @@
 package com.kwabenaberko.converter.android.keypad
 
 import app.cash.turbine.test
+import com.kwabenaberko.converter.android.MainDispatcherRule
 import com.kwabenaberko.converter.presentation.Amount
 import com.kwabenaberko.currencyconverter.android.keypad.KeypadViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class KeypadViewModelTest {
-    private val sut = KeypadViewModel()
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
+    private lateinit var sut: KeypadViewModel
+
+    @Before
+    fun setup() {
+        sut = KeypadViewModel()
+    }
 
     @Test
     fun `should emit Amount state when a character is added`() = runTest {
