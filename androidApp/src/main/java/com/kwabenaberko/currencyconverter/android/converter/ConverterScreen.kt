@@ -100,7 +100,7 @@ fun AnimatedVisibilityScope.ConverterScreen(
                 KeyPadScreenDestination(ConversionMode.SECOND_MONEY_TO_FIRST_MONEY)
             )
         },
-        onSyncCompleted = {
+        onSyncRequired = {
             navigator.navigate(SyncScreenDestination) {
                 popUpTo(ConverterScreenDestination) {
                     inclusive = true

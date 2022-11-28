@@ -33,6 +33,7 @@ fun SyncScreenContent(
     onSyncCompleted: () -> Unit = {},
     onRetryClick: () -> Unit = {}
 ) = CurrencyConverterTheme(useRedTheme = true) {
+
     val colorScheme = MaterialTheme.colorScheme
     val systemUiController = rememberSystemUiController()
 
