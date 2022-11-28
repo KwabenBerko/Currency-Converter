@@ -8,7 +8,7 @@ data class Amount(
     val isValid: Boolean = false
 )
 
-class RealAmountInputEngine {
+class AmountInputEngine {
     private val _amount = MutableStateFlow(Amount())
     val amount = _amount.asStateFlow()
 

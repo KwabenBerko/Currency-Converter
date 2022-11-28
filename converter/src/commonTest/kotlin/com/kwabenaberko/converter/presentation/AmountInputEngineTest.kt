@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 @OptIn(ExperimentalCoroutinesApi::class)
 class AmountInputEngineTest {
 
-    private val sut = RealAmountInputEngine()
+    private val sut = AmountInputEngine()
 
     @Test
     fun `should ignore non digit characters`() = runTest {
