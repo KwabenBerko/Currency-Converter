@@ -8,6 +8,7 @@ import com.kwabenaberko.converter.domain.usecase.ConvertMoney
 import com.kwabenaberko.converter.domain.usecase.GetDefaultCurrencies
 import com.kwabenaberko.converter.domain.usecase.HasCompletedInitialSync
 import com.kwabenaberko.converter.presentation.CompactNumberFormatter
+import com.kwabenaberko.currencyconverter.android.BaseViewModel
 import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import com.kwabenaberko.currencyconverter.android.runIf
 import kotlinx.coroutines.launch
@@ -16,7 +17,7 @@ class ConverterViewModel(
     private val hasCompletedInitialSync: HasCompletedInitialSync,
     private val getDefaultCurrencies: GetDefaultCurrencies,
     private val convertMoney: ConvertMoney
-) : com.kwabenaberko.currencyconverter.android.BaseViewModel<ConverterViewModel.State>(State.Idle) {
+) : BaseViewModel<ConverterViewModel.State>(State.Idle) {
 
     private val formatter = CompactNumberFormatter()
 

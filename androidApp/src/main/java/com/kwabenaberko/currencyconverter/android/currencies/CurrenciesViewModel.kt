@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class CurrenciesViewModel(
     private val getCurrencies: GetCurrencies
-) : com.kwabenaberko.currencyconverter.android.BaseViewModel<CurrenciesViewModel.State>(State.Idle) {
+) : BaseViewModel<CurrenciesViewModel.State>(State.Idle) {
 
     private val filterQueryFlow = MutableStateFlow("")
 

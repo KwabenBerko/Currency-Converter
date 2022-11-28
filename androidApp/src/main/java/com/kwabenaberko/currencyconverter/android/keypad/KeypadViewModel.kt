@@ -6,13 +6,13 @@ import com.kwabenaberko.converter.presentation.AmountInputEngine
 class KeypadViewModel : ViewModel() {
 
     private val amountEngine = AmountInputEngine()
-    val state = amountEngine.amount
+    val amount = amountEngine.amount
 
-    fun append(value: Char) {
+    fun add(value: Char) {
         amountEngine.add(value)
     }
 
-    fun undo() {
+    fun pop() {
         amountEngine.pop()
     }
 }

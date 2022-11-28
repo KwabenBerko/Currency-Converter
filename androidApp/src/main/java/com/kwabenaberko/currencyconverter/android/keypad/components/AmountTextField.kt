@@ -29,7 +29,6 @@ internal fun AmountTextField(
         ),
         singleLine = true
     )
-
 }
 
 @Preview

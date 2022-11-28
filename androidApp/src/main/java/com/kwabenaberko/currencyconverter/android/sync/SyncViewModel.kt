@@ -5,12 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.kwabenaberko.converter.domain.usecase.Sync
 import com.kwabenaberko.currencyconverter.android.BaseViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SyncViewModel(
     private val sync: Sync
-) : com.kwabenaberko.currencyconverter.android.BaseViewModel<SyncViewModel.State>(State.Idle) {
+) : BaseViewModel<SyncViewModel.State>(State.Idle) {
 
     init {
         startSync()

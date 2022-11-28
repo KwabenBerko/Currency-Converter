@@ -14,23 +14,23 @@ class KeypadViewModelTest {
 
     @Test
     fun `should emit Amount state when a character is added`() = runTest {
-        sut.state.test {
+        sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.append('1')
+            sut.add('1')
             assertEquals(Amount(text = "1", isValid = true), awaitItem())
         }
     }
 
     @Test
     fun `should emit Amount state when a pop operation occurs`() = runTest {
-        sut.state.test {
+        sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.append('1')
+            sut.add('1')
             assertEquals(Amount(text = "1", isValid = true), awaitItem())
 
-            sut.undo()
+            sut.pop()
             assertEquals(Amount(), awaitItem())
         }
     }
