@@ -23,7 +23,7 @@ internal fun ConverterScreenContent(
     onFirstAmountClick: () -> Unit = {},
     onSecondCurrencyClick: (Currency) -> Unit = {},
     onSecondAmountClick: () -> Unit = {},
-    onSyncCompleted: () -> Unit = {}
+    onSyncRequired: () -> Unit = {}
 ) {
 
     val systemUiController = rememberSystemUiController()
@@ -33,7 +33,7 @@ internal fun ConverterScreenContent(
 
     LaunchedEffect(state) {
         if (state is State.RequiresSync) {
-            onSyncCompleted()
+            onSyncRequired()
         }
     }
 
