@@ -6,6 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.kwabenaberko.converter.domain.model.Currency
 import com.kwabenaberko.converter.domain.usecase.GetCurrencies
 import com.kwabenaberko.currencyconverter.android.BaseViewModel
+import com.kwabenaberko.currencyconverter.android.currencies.CurrenciesViewModel.State.Content
+import com.kwabenaberko.currencyconverter.android.currencies.CurrenciesViewModel.State.Idle
+import com.kwabenaberko.currencyconverter.android.runIf
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -18,8 +21,9 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class CurrenciesViewModel(
+    private val selectedCurrencyCode: String,
     private val getCurrencies: GetCurrencies
-) : BaseViewModel<CurrenciesViewModel.State>(State.Idle) {
+) : BaseViewModel<CurrenciesViewModel.State>(Idle) {
 
     private val filterQueryFlow = MutableStateFlow("")
 
@@ -37,17 +41,34 @@ class CurrenciesViewModel(
         filterQueryFlow
             .debounce { debounceTimeoutInMillis() }
             .flatMapLatest { query -> getCurrencies(query) }
-            .onEach { currencies ->
-                val groupedCurrencies = currencies
-                    .groupBy { currency -> currency.name.first() }
-                    .toPersistentMap()
+            .onEach(::handleResult)
+            .launchIn(viewModelScope)
+    }
 
-                setState(State.Content(groupedCurrencies))
-            }.launchIn(viewModelScope)
+    private fun handleResult(currencies: List<Currency>) {
+        val groupedCurrencies = currencies
+            .groupBy { currency -> currency.name.first() }
+            .toPersistentMap()
+
+        getState().runIf<Idle> {
+            val selectedCurrency = currencies
+                .first { currency -> currency.code == selectedCurrencyCode }
+
+            val newState = Content(
+                selectedCurrency = selectedCurrency,
+                currencies = groupedCurrencies
+            )
+            setState(newState)
+        }
+
+        getState().runIf<Content> { currentState ->
+            val newState = currentState.copy(currencies = groupedCurrencies)
+            setState(newState)
+        }
     }
 
     private fun debounceTimeoutInMillis(): Long {
-        return if (getState() is State.Idle || filterQueryFlow.value.isEmpty()) {
+        return if (getState() is Idle || filterQueryFlow.value.isEmpty()) {
             0L
         } else {
             300L
@@ -56,13 +77,19 @@ class CurrenciesViewModel(
 
     sealed class State {
         object Idle : State()
-        data class Content(val currencies: Map<Char, List<Currency>>) : State()
+        data class Content(
+            val selectedCurrency: Currency,
+            val currencies: Map<Char, List<Currency>>
+        ) : State()
     }
 
-    class Factory(private val getCurrencies: GetCurrencies) : ViewModelProvider.Factory {
+    class Factory(
+        private val selectedCurrencyCode: String,
+        private val getCurrencies: GetCurrencies
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return CurrenciesViewModel(getCurrencies) as T
+            return CurrenciesViewModel(selectedCurrencyCode, getCurrencies) as T
         }
     }
 }

@@ -31,6 +31,7 @@ private const val EMPTY_STRING = " "
 @Composable
 internal fun CurrencyItem(
     currency: Currency,
+    isSelected: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
@@ -51,7 +52,7 @@ internal fun CurrencyItem(
 
         Spacer(Modifier.weight(0.2f))
 
-        if (1 == 0) {
+        if (isSelected) {
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = "Selected Currency",
@@ -81,6 +82,9 @@ private fun buildCurrencyTitleText(currency: Currency): AnnotatedString {
 @Composable
 internal fun CurrencyItemPreview() {
     CurrencyConverterTheme {
-        CurrencyItem(CurrencyFactory.makeCediCurrency())
+        CurrencyItem(
+            currency = CurrencyFactory.makeCediCurrency(),
+            isSelected = true
+        )
     }
 }
