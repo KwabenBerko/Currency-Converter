@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.kwabenaberko.converter.domain.model.Currency
 import com.kwabenaberko.converter.domain.usecase.GetCurrencies
 import com.kwabenaberko.currencyconverter.android.BaseViewModel
-import com.kwabenaberko.currencyconverter.android.currencies.CurrenciesViewModel.State.Idle
 import com.kwabenaberko.currencyconverter.android.currencies.CurrenciesViewModel.State.Content
+import com.kwabenaberko.currencyconverter.android.currencies.CurrenciesViewModel.State.Idle
 import com.kwabenaberko.currencyconverter.android.runIf
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.ExperimentalCoroutinesApi
