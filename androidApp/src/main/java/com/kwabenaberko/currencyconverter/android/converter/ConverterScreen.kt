@@ -82,7 +82,10 @@ fun AnimatedVisibilityScope.ConverterScreen(
         state = state,
         onFirstCurrencyClick = { currency ->
             navigator.navigate(
-                CurrenciesScreenDestination(ConversionMode.FIRST_MONEY_TO_SECOND_MONEY)
+                CurrenciesScreenDestination(
+                    conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY,
+                    selectedCurrencyCode = currency.code
+                )
             )
         },
         onFirstAmountClick = {
@@ -92,7 +95,10 @@ fun AnimatedVisibilityScope.ConverterScreen(
         },
         onSecondCurrencyClick = { currency ->
             navigator.navigate(
-                CurrenciesScreenDestination(ConversionMode.SECOND_MONEY_TO_FIRST_MONEY)
+                CurrenciesScreenDestination(
+                    conversionMode = ConversionMode.SECOND_MONEY_TO_FIRST_MONEY,
+                    selectedCurrencyCode = currency.code
+                )
             )
         },
         onSecondAmountClick = {

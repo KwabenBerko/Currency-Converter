@@ -19,9 +19,10 @@ import com.ramcosta.composedestinations.result.ResultBackNavigator
 @Composable
 fun AnimatedVisibilityScope.CurrenciesScreen(
     conversionMode: ConversionMode,
+    selectedCurrencyCode: String,
     navigator: DestinationsNavigator,
     resultNavigator: ResultBackNavigator<CurrenciesResult>,
-    viewModel: CurrenciesViewModel = currenciesViewModel(),
+    viewModel: CurrenciesViewModel = currenciesViewModel(selectedCurrencyCode),
 ) {
 
     val state by viewModel.state.collectAsState()
@@ -40,8 +41,11 @@ fun AnimatedVisibilityScope.CurrenciesScreen(
 }
 
 @Composable
-private fun currenciesViewModel(): CurrenciesViewModel {
+private fun currenciesViewModel(selectedCurrencyCode: String): CurrenciesViewModel {
     val container = LocalContainer.current
-    val factory = CurrenciesViewModel.Factory(getCurrencies = container.getCurrencies)
+    val factory = CurrenciesViewModel.Factory(
+        selectedCurrencyCode = selectedCurrencyCode,
+        getCurrencies = container.getCurrencies
+    )
     return viewModel(factory = factory)
 }

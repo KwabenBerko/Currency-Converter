@@ -21,6 +21,7 @@ import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
 @Composable
 internal fun CurrencyList(
     groupedCurrencies: Map<Char, List<Currency>>,
+    selectedCurrency: Currency,
     modifier: Modifier = Modifier,
     onCurrencyClick: (Currency) -> Unit = {}
 ) {
@@ -47,6 +48,7 @@ internal fun CurrencyList(
             ) { currency ->
                 CurrencyItem(
                     currency = currency,
+                    isSelected = selectedCurrency == currency,
                     modifier = Modifier.animateItemPlacement(),
                     onClick = { onCurrencyClick(currency) }
                 )
@@ -60,11 +62,15 @@ internal fun CurrencyList(
 @Composable
 internal fun CurrencyListPreview() {
     CurrencyConverterTheme {
+        val ghs = CurrencyFactory.makeCediCurrency()
         val groupedCurrencies = mapOf(
-            'G' to listOf(CurrencyFactory.makeCediCurrency()),
+            'G' to listOf(ghs),
             'N' to listOf(CurrencyFactory.makeNairaCurrency()),
             'U' to listOf(CurrencyFactory.makeDollarCurrency())
         )
-        CurrencyList(groupedCurrencies)
+        CurrencyList(
+            groupedCurrencies = groupedCurrencies,
+            selectedCurrency = ghs
+        )
     }
 }

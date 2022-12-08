@@ -103,6 +103,7 @@ private fun Content(
 
         CurrencyList(
             groupedCurrencies = state.currencies,
+            selectedCurrency = state.selectedCurrency,
             modifier = Modifier.padding(horizontal = 20.dp),
             onCurrencyClick = { currency ->
                 onCurrencyClick(currency)
