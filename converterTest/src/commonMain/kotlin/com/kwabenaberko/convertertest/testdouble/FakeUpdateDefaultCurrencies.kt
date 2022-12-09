@@ -1,8 +1,8 @@
 package com.kwabenaberko.convertertest.testdouble
 
-import com.kwabenaberko.converter.domain.usecase.SetDefaultCurrencies
+import com.kwabenaberko.converter.domain.usecase.UpdateDefaultCurrencies
 
-class FakeSetDefaultCurrencies : SetDefaultCurrencies {
+class FakeUpdateDefaultCurrencies : UpdateDefaultCurrencies {
     var invocations: MutableList<Pair<String, String>> = mutableListOf()
         private set
 

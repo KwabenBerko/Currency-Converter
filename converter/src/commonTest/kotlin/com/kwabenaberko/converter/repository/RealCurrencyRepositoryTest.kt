@@ -62,7 +62,7 @@ class RealCurrencyRepositoryTest {
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
-        sut.currencies(filter = null).test {
+        sut.getCurrencies(filter = null).test {
             assertEquals(listOf(GHS, USD), awaitItem())
         }
     }
@@ -78,7 +78,7 @@ class RealCurrencyRepositoryTest {
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
-        sut.currencies(filter = "abcde").test {
+        sut.getCurrencies(filter = "abcde").test {
             assertEquals(emptyList(), awaitItem())
         }
     }
@@ -94,7 +94,7 @@ class RealCurrencyRepositoryTest {
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
-        sut.currencies(filter = "e").test {
+        sut.getCurrencies(filter = "e").test {
             assertEquals(listOf(GHS, USD), awaitItem())
         }
     }
@@ -110,7 +110,7 @@ class RealCurrencyRepositoryTest {
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
-        sut.setDefaultCurrencies(GHS.code, NGN.code)
+        sut.updateDefaultCurrencies(GHS.code, NGN.code)
         val result = sut.getDefaultCurrencies()
 
         assertEquals(DefaultCurrencies(GHS, NGN), result)
@@ -164,7 +164,7 @@ class RealCurrencyRepositoryTest {
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
-        sut.syncStatus().test {
+        sut.getSyncStatus().test {
             assertEquals(null, awaitItem())
 
             val result = sut.sync()
@@ -186,7 +186,7 @@ class RealCurrencyRepositoryTest {
                 backgroundDispatcher = createTestDispatcher(testScheduler)
             )
 
-            sut.syncStatus().test {
+            sut.getSyncStatus().test {
                 assertEquals(null, awaitItem())
 
                 val result = sut.sync()
@@ -214,7 +214,7 @@ class RealCurrencyRepositoryTest {
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
-        sut.syncStatus().test {
+        sut.getSyncStatus().test {
             assertEquals(null, awaitItem())
 
             val result = sut.sync()
@@ -243,7 +243,7 @@ class RealCurrencyRepositoryTest {
                 backgroundDispatcher = createTestDispatcher(testScheduler)
             )
 
-            sut.syncStatus().test {
+            sut.getSyncStatus().test {
                 assertEquals(null, awaitItem())
 
                 val result = sut.sync()
@@ -274,7 +274,7 @@ class RealCurrencyRepositoryTest {
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
-        sut.syncStatus().test {
+        sut.getSyncStatus().test {
             assertEquals(null, awaitItem())
 
             val result = sut.sync()
@@ -306,7 +306,7 @@ class RealCurrencyRepositoryTest {
                 backgroundDispatcher = createTestDispatcher(testScheduler)
             )
 
-            sut.syncStatus().test {
+            sut.getSyncStatus().test {
                 assertEquals(null, awaitItem())
 
                 val result = sut.sync()
@@ -338,7 +338,7 @@ class RealCurrencyRepositoryTest {
                 backgroundDispatcher = createTestDispatcher(testScheduler)
             )
 
-            sut.syncStatus().test {
+            sut.getSyncStatus().test {
                 assertEquals(null, awaitItem())
 
                 val result = sut.sync()
@@ -372,7 +372,7 @@ class RealCurrencyRepositoryTest {
 
             sut.sync()
 
-            sut.currencies(filter = null).test {
+            sut.getCurrencies(filter = null).test {
                 assertTrue(awaitItem().containsAll(listOf(USD, GHS)))
             }
             assertEquals(

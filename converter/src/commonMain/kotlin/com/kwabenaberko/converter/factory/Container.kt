@@ -25,15 +25,15 @@ open class Container internal constructor(
     private val backgroundDispatcher: CoroutineDispatcher
 ) {
 
-    internal val httpClient: HttpClient by lazy {
-        return@lazy HttpClientFactory.makeClient(httpClientEngine)
-    }
-
     internal val database: CurrencyConverterDatabase by lazy {
         return@lazy CurrencyConverterDatabase(sqlDriver)
     }
 
-    val currencyRepository: CurrencyRepository by lazy {
+    private val httpClient: HttpClient by lazy {
+        return@lazy HttpClientFactory.makeClient(httpClientEngine)
+    }
+
+    private val currencyRepository: CurrencyRepository by lazy {
         return@lazy RealCurrencyRepository(
             httpClient = httpClient,
             currencyQueries = database.dbCurrencyQueries,
@@ -44,7 +44,7 @@ open class Container internal constructor(
     }
 
     val getSyncStatus: GetSyncStatus by lazy {
-        return@lazy GetSyncStatus(currencyRepository::syncStatus)
+        return@lazy GetSyncStatus(currencyRepository::getSyncStatus)
     }
 
     val sync: Sync by lazy {
@@ -58,12 +58,12 @@ open class Container internal constructor(
     val convertMoney: ConvertMoney by lazy {
         return@lazy RealConvertMoney(
             getRate = getRate,
-            setDefaultCurrencies = currencyRepository::setDefaultCurrencies
+            updateDefaultCurrencies = currencyRepository::updateDefaultCurrencies
         )
     }
 
     val getCurrencies: GetCurrencies by lazy {
-        return@lazy GetCurrencies(currencyRepository::currencies)
+        return@lazy GetCurrencies(currencyRepository::getCurrencies)
     }
 
     val getDefaultCurrencies: GetDefaultCurrencies by lazy {

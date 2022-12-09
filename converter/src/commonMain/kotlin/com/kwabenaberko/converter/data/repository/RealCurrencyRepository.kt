@@ -44,7 +44,7 @@ class RealCurrencyRepository(
     private val backgroundDispatcher: CoroutineDispatcher
 ) : CurrencyRepository {
 
-    override fun currencies(filter: String?): Flow<List<Currency>> {
+    override fun getCurrencies(filter: String?): Flow<List<Currency>> {
         return currencyQueries
             .selectAllCurrencies(filter = filter?.trim() ?: "")
             .asFlow()
@@ -77,7 +77,7 @@ class RealCurrencyRepository(
         }
     }
 
-    override suspend fun setDefaultCurrencies(baseCode: String, targetCode: String) {
+    override suspend fun updateDefaultCurrencies(baseCode: String, targetCode: String) {
         withContext(backgroundDispatcher) {
             with(settings) {
                 putString(Settings.BASE_CODE, baseCode)
@@ -120,7 +120,7 @@ class RealCurrencyRepository(
         }
     }
 
-    override fun syncStatus(): Flow<SyncStatus?> {
+    override fun getSyncStatus(): Flow<SyncStatus?> {
         return settings.getStringOrNullFlow(Settings.CURRENCIES_SYNC_STATUS)
             .flowOn(backgroundDispatcher)
             .map { encodedStatus ->

@@ -7,7 +7,7 @@ import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeDollarCurrency
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeNairaCurrency
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makePoundsCurrency
 import com.kwabenaberko.convertertest.testdouble.FakeGetRate
-import com.kwabenaberko.convertertest.testdouble.FakeSetDefaultCurrencies
+import com.kwabenaberko.convertertest.testdouble.FakeUpdateDefaultCurrencies
 import io.kotest.data.forAll
 import io.kotest.data.headers
 import io.kotest.data.row
@@ -31,13 +31,13 @@ class ConvertMoneyTest {
             )
         ) { baseCurrency, targetCurrency, rate, amount, expectedAmount ->
 
-            val setDefaultCurrencies = FakeSetDefaultCurrencies()
+            val updateDefaultCurrencies = FakeUpdateDefaultCurrencies()
             val getRate = FakeGetRate().apply {
                 this.result = rate
             }
             val convertMoney = RealConvertMoney(
                 getRate = getRate,
-                setDefaultCurrencies = setDefaultCurrencies
+                updateDefaultCurrencies = updateDefaultCurrencies
             )
             val expectedMoney = Money(
                 currency = targetCurrency, amount = expectedAmount
@@ -54,13 +54,13 @@ class ConvertMoneyTest {
 
     @Test
     fun `should set default currencies when an amount is converted`() = runTest {
-        val setDefaultCurrencies = FakeSetDefaultCurrencies()
+        val updateDefaultCurrencies = FakeUpdateDefaultCurrencies()
         val getRate = FakeGetRate().apply {
             result = 1.0
         }
         val convertMoney = RealConvertMoney(
             getRate = getRate,
-            setDefaultCurrencies = setDefaultCurrencies
+            updateDefaultCurrencies = updateDefaultCurrencies
         )
 
         convertMoney(
@@ -68,8 +68,8 @@ class ConvertMoneyTest {
             targetCurrency = NGN
         )
 
-        assertEquals(1, setDefaultCurrencies.invocations.size)
-        assertEquals(Pair(GHS.code, NGN.code), setDefaultCurrencies.invocations.first())
+        assertEquals(1, updateDefaultCurrencies.invocations.size)
+        assertEquals(Pair(GHS.code, NGN.code), updateDefaultCurrencies.invocations.first())
     }
 
     private companion object {

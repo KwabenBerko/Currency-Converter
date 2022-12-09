@@ -4,7 +4,7 @@ import com.kwabenaberko.converter.domain.model.SyncStatus
 import kotlinx.coroutines.flow.Flow
 
 interface SyncableRepository {
-    fun syncStatus(): Flow<SyncStatus?>
+    fun getSyncStatus(): Flow<SyncStatus?>
     suspend fun hasCompletedInitialSync(): Boolean
     suspend fun sync(): Boolean
 }
