@@ -12,7 +12,7 @@ fun interface ConvertMoney {
 
 class RealConvertMoney(
     private val getRate: GetRate,
-    private val setDefaultCurrencies: SetDefaultCurrencies
+    private val updateDefaultCurrencies: UpdateDefaultCurrencies
 ) : ConvertMoney {
     override suspend fun invoke(money: Money, targetCurrency: Currency): Money {
         val (baseCurrency, amount) = money
@@ -26,7 +26,7 @@ class RealConvertMoney(
         } else {
             convertedAmount.toPlaces(places = 2)
         }
-        setDefaultCurrencies(baseCode, targetCode)
+        updateDefaultCurrencies(baseCode, targetCode)
         return Money(targetCurrency, roundedAmount)
     }
 }
