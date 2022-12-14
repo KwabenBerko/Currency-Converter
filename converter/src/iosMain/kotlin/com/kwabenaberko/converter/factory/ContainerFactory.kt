@@ -11,12 +11,10 @@ import platform.Foundation.NSUserDefaults
 
 actual class ContainerFactory {
     actual fun makeContainer(): Container {
+        val configuration = nativeDatabaseConfiguration()
         return Container(
             httpClientEngine = Darwin.create(),
-            sqlDriver = NativeSqliteDriver(
-                schema = CurrencyConverterDatabase.Schema,
-                name = Database.NAME
-            ),
+            sqlDriver = NativeSqliteDriver(configuration),
             settings = NSUserDefaultsSettings(
                 NSUserDefaults(suiteName = Settings.NAME)
             ),

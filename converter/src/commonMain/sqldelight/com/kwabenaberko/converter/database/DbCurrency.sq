@@ -17,3 +17,6 @@ SELECT * FROM DbCurrency
 WHERE name LIKE ("%" || :filter || "%")
 OR code LIKE ("%" || :filter || "%")
 OR symbol LIKE ("%" || :filter || "%");
+
+deleteAllCurrencies:
+DELETE FROM DbCurrency;
