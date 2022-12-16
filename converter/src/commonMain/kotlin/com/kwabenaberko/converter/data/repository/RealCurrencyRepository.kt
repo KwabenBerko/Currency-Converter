@@ -158,6 +158,9 @@ class RealCurrencyRepository(
                 val (baseCode, baseCodeRates) = exchangeRatesResponse.body<ExchangeRatesDto>()
 
                 currencyQueries.transaction {
+
+                    currencyQueries.deleteAllCurrencies()
+
                     currencies.forEach { (_, currency) ->
                         val symbol = symbols[currency.code]?.symbol ?: currency.code
                         currencyQueries.insert(
@@ -166,9 +169,7 @@ class RealCurrencyRepository(
                             symbol = symbol
                         )
                     }
-                }
 
-                exchangeRateQueries.transaction {
                     baseCodeRates.forEach { (targetCode, rate) ->
                         exchangeRateQueries.insert(baseCode, targetCode, rate)
                     }

@@ -35,6 +35,7 @@ import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -47,6 +48,20 @@ class RealCurrencyRepositoryTest {
     private val sqlDriver = TestSqlDriverFactory().create()
     private val database = CurrencyConverterDatabase(sqlDriver)
 
+    @BeforeTest
+    fun setup(){
+        with(database.dbCurrencyQueries) {
+            insert(USD.code, USD.name, USD.symbol)
+            insert(GHS.code, GHS.name, GHS.symbol)
+            insert(NGN.code, NGN.name, NGN.symbol)
+        }
+
+        with(database.dbExchangeRateQueries) {
+            insert(baseCode = USD.code, targetCode = GHS.code, rate = 10.015024)
+            insert(baseCode = GHS.code, targetCode = NGN.code, rate = 42.235564)
+        }
+    }
+
     @AfterTest
     fun teardown() {
         sqlDriver.close()
@@ -54,26 +69,17 @@ class RealCurrencyRepositoryTest {
 
     @Test
     fun `should return currencies in sorted order`() = runTest {
-        with(database.dbCurrencyQueries) {
-            insert(USD.code, USD.name, USD.symbol)
-            insert(GHS.code, GHS.name, GHS.symbol)
-        }
         val sut = createCurrencyRepository(
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
         sut.getCurrencies(filter = null).test {
-            assertEquals(listOf(GHS, USD), awaitItem())
+            assertEquals(listOf(GHS, NGN, USD), awaitItem())
         }
     }
 
     @Test
     fun `should return an empty list if no match is found for filter`() = runTest {
-        with(database.dbCurrencyQueries) {
-            insert(USD.code, USD.name, USD.symbol)
-            insert(GHS.code, GHS.name, GHS.symbol)
-        }
-
         val sut = createCurrencyRepository(
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
@@ -85,27 +91,17 @@ class RealCurrencyRepositoryTest {
 
     @Test
     fun `should return currencies in a sorted order if a match is found for filter`() = runTest {
-        with(database.dbCurrencyQueries) {
-            insert(USD.code, USD.name, USD.symbol)
-            insert(GHS.code, GHS.name, GHS.symbol)
-        }
-
         val sut = createCurrencyRepository(
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
         sut.getCurrencies(filter = "e").test {
-            assertEquals(listOf(GHS, USD), awaitItem())
+            assertEquals(listOf(GHS, NGN, USD), awaitItem())
         }
     }
 
     @Test
     fun `should set default currencies`() = runTest {
-        with(database.dbCurrencyQueries) {
-            insert(USD.code, USD.name, USD.symbol)
-            insert(GHS.code, GHS.name, GHS.symbol)
-            insert(NGN.code, NGN.name, NGN.symbol)
-        }
         val sut = createCurrencyRepository(
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
@@ -119,10 +115,6 @@ class RealCurrencyRepositoryTest {
     @Test
     fun `should return USD and GHS as default currencies if no default currencies have been set`() =
         runTest {
-            with(database.dbCurrencyQueries) {
-                insert(USD.code, USD.name, USD.symbol)
-                insert(GHS.code, GHS.name, GHS.symbol)
-            }
             val sut = createCurrencyRepository(
                 backgroundDispatcher = createTestDispatcher(testScheduler)
             )
@@ -134,10 +126,6 @@ class RealCurrencyRepositoryTest {
 
     @Test
     fun `should return rate for base and target codes`() = runTest {
-        with(database.dbExchangeRateQueries) {
-            insert(baseCode = USD.code, targetCode = GHS.code, rate = 10.015024)
-            insert(baseCode = GHS.code, targetCode = NGN.code, rate = 42.235564)
-        }
         val sut = createCurrencyRepository(
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
@@ -352,6 +340,7 @@ class RealCurrencyRepositoryTest {
     @Test
     fun `should save currencies and correctly convert rates when sync is successful`() =
         runTest {
+
             val mockEngine = MockEngine.create {
                 addHandler { request ->
                     when {
@@ -453,6 +442,10 @@ class RealCurrencyRepositoryTest {
                 "${GHS.code}": {
                   "code": "${GHS.code}",
                   "description": "${GHS.name}"
+                },
+                "${NGN.code}": {
+                  "code": "${NGN.code}",
+                  "description": "${NGN.name}"
                 },
                 "${USD.code}": {
                   "code": "${USD.code}",
