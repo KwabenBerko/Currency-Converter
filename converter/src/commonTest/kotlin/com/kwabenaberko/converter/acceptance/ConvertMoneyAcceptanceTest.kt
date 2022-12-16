@@ -27,6 +27,11 @@ class ConvertMoneyAcceptanceTest {
 
     @BeforeTest
     fun setup() {
+        with(container.database.dbCurrencyQueries) {
+            listOf(USD, GHS, NGN, GBP, EUR).forEach { currency ->
+                insert(currency.code, currency.name, currency.symbol)
+            }
+        }
         with(container.database.dbExchangeRateQueries) {
             insert(USD.code, GHS.code, 10.015024)
             insert(GHS.code, NGN.code, 42.235564)
@@ -52,7 +57,8 @@ class ConvertMoneyAcceptanceTest {
             )
         ) { baseCode: String, targetCode: String, amount: Double, expectedAmount: Double ->
             val expectedMoney = Money(
-                currency = makeCurrency(targetCode), amount = expectedAmount
+                currency = makeCurrency(targetCode),
+                amount = expectedAmount
             )
 
             val actualMoney = sut(
