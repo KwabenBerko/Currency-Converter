@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface SyncableRepository {
     fun getSyncStatus(): Flow<SyncStatus?>
-    suspend fun hasCompletedInitialSync(): Boolean
+    fun hasCompletedInitialSync(): Flow<Boolean>
     suspend fun sync(): Boolean
 }

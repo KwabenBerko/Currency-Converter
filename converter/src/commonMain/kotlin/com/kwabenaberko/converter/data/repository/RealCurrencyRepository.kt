@@ -2,6 +2,7 @@ package com.kwabenaberko.converter.data.repository
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.coroutines.mapToOne
 import com.kwabenaberko.converter.data.Api
 import com.kwabenaberko.converter.data.Settings
 import com.kwabenaberko.converter.data.network.dto.CurrenciesDto
@@ -17,6 +18,8 @@ import com.kwabenaberko.converter.domain.repository.CurrencyRepository
 import com.kwabenaberko.converter.toPlaces
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.ObservableSettings
+import com.russhwolf.settings.coroutines.getLongOrNullFlow
+import com.russhwolf.settings.coroutines.getStringFlow
 import com.russhwolf.settings.coroutines.getStringOrNullFlow
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -25,17 +28,22 @@ import io.ktor.client.request.parameter
 import io.ktor.http.isSuccess
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlin.collections.component1
 import kotlin.collections.component2
 
-@OptIn(ExperimentalSettingsApi::class)
+@OptIn(ExperimentalSettingsApi::class, ExperimentalCoroutinesApi::class)
 class RealCurrencyRepository(
     private val httpClient: HttpClient,
     private val currencyQueries: DbCurrencyQueries,
@@ -57,11 +65,11 @@ class RealCurrencyRepository(
 
     }
 
-    override suspend fun getDefaultCurrencies(): DefaultCurrencies {
-        return withContext(backgroundDispatcher) {
-            val baseCode = settings.getString(Settings.BASE_CODE, "USD")
-            val targetCode = settings.getString(Settings.TARGET_CODE, "GHS")
+    override fun getDefaultCurrencies(): Flow<DefaultCurrencies> {
+        val baseCodeFlow = settings.getStringFlow(Settings.BASE_CODE, "USD")
+        val targetCodeFlow = settings.getStringFlow(Settings.TARGET_CODE, "GHS")
 
+        return combine(baseCodeFlow, targetCodeFlow){ baseCode, targetCode ->
             val baseCurrency = currencyQueries
                 .selectCurrencyByCode(baseCode)
                 .executeAsOne()
@@ -74,7 +82,8 @@ class RealCurrencyRepository(
                 base = mapDbCurrencyToDomain(baseCurrency),
                 target = mapDbCurrencyToDomain(targetCurrency)
             )
-        }
+
+        }.flowOn(backgroundDispatcher)
     }
 
     override suspend fun updateDefaultCurrencies(baseCode: String, targetCode: String) {
@@ -86,38 +95,43 @@ class RealCurrencyRepository(
         }
     }
 
-    override suspend fun getRate(baseCode: String, targetCode: String): Double {
-        return withContext(backgroundDispatcher) {
-            val isRateAvailable = exchangeRateQueries
-                .isRateAvailable(baseCode, targetCode)
-                .executeAsOne()
+    override fun getRate(baseCode: String, targetCode: String): Flow<Double> {
+        val isRateAvailableFlow = exchangeRateQueries
+            .isRateAvailable(baseCode, targetCode)
+            .asFlow()
+            .mapToOne(backgroundDispatcher)
 
-            if (!isRateAvailable) {
-                val usdRates = exchangeRateQueries
-                    .selectRatesForCurrency(USD_RATE)
-                    .executeAsList()
-                    .associateBy { dbExchangeRate -> dbExchangeRate.targetCode }
+        return isRateAvailableFlow
+            .take(1)
+            .flatMapLatest { isRateAvailable ->
+                if (!isRateAvailable) {
+                    val usdRates = exchangeRateQueries
+                        .selectRatesForCurrency(USD_RATE)
+                        .executeAsList()
+                        .associateBy { dbExchangeRate -> dbExchangeRate.targetCode }
 
-                val usdToBaseCodeRate = usdRates.getValue(baseCode).rate
-                val rate = if (targetCode.equals(USD_RATE, ignoreCase = true)) {
-                    1.0.div(usdToBaseCodeRate).toPlaces(DECIMAL_PLACES)
-                } else {
-                    val usdToTargetCodeRate = usdRates.getValue(targetCode).rate
-                    1.0.div(usdToBaseCodeRate).times(usdToTargetCodeRate).toPlaces(DECIMAL_PLACES)
+                    val usdToBaseCodeRate = usdRates.getValue(baseCode).rate
+                    val rate = if (targetCode.equals(USD_RATE, ignoreCase = true)) {
+                        1.0.div(usdToBaseCodeRate).toPlaces(DECIMAL_PLACES)
+                    } else {
+                        val usdToTargetCodeRate = usdRates.getValue(targetCode).rate
+                        1.0.div(usdToBaseCodeRate).times(usdToTargetCodeRate).toPlaces(DECIMAL_PLACES)
+                    }
+
+                    exchangeRateQueries.insert(
+                        baseCode = baseCode,
+                        targetCode = targetCode,
+                        rate = rate
+                    )
                 }
 
-                exchangeRateQueries.insert(
-                    baseCode = baseCode,
-                    targetCode = targetCode,
-                    rate = rate
-                )
+                exchangeRateQueries
+                    .selectRateForCurrencies(baseCode, targetCode)
+                    .asFlow()
+                    .flowOn(backgroundDispatcher)
+                    .mapToOne(backgroundDispatcher)
+                    .map { dbExchangeRate ->  dbExchangeRate.rate}
             }
-
-            return@withContext exchangeRateQueries
-                .selectRateForCurrencies(baseCode, targetCode)
-                .executeAsOne()
-                .rate
-        }
     }
 
     override fun getSyncStatus(): Flow<SyncStatus?> {
@@ -128,10 +142,11 @@ class RealCurrencyRepository(
             }
     }
 
-    override suspend fun hasCompletedInitialSync(): Boolean {
-        return withContext(backgroundDispatcher) {
-            settings.hasKey(Settings.CURRENCIES_LAST_SYNC_DATE)
-        }
+    override fun hasCompletedInitialSync(): Flow<Boolean> {
+        return settings
+            .getLongOrNullFlow(Settings.CURRENCIES_LAST_SYNC_DATE)
+            .map { lastSyncDate -> lastSyncDate != null }
+            .flowOn(backgroundDispatcher)
     }
 
     override suspend fun sync(): Boolean {

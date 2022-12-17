@@ -107,9 +107,9 @@ class RealCurrencyRepositoryTest {
         )
 
         sut.updateDefaultCurrencies(GHS.code, NGN.code)
-        val result = sut.getDefaultCurrencies()
-
-        assertEquals(DefaultCurrencies(GHS, NGN), result)
+        sut.getDefaultCurrencies().test {
+            assertEquals(DefaultCurrencies(GHS, NGN), awaitItem())
+        }
     }
 
     @Test
@@ -119,9 +119,9 @@ class RealCurrencyRepositoryTest {
                 backgroundDispatcher = createTestDispatcher(testScheduler)
             )
 
-            val result = sut.getDefaultCurrencies()
-
-            assertEquals(DefaultCurrencies(USD, GHS), result)
+            sut.getDefaultCurrencies().test {
+                assertEquals(DefaultCurrencies(USD, GHS), awaitItem())
+            }
         }
 
     @Test
@@ -137,8 +137,9 @@ class RealCurrencyRepositoryTest {
                 row(GHS.code, NGN.code, 42.235564)
             ),
         ) { baseCode, targetCode, expectedRate ->
-            val rate = sut.getRate(baseCode, targetCode)
-            assertEquals(expectedRate, rate)
+            sut.getRate(baseCode, targetCode).test {
+                assertEquals(expectedRate, awaitItem())
+            }
         }
     }
 
@@ -364,18 +365,15 @@ class RealCurrencyRepositoryTest {
             sut.getCurrencies(filter = null).test {
                 assertTrue(awaitItem().containsAll(listOf(USD, GHS)))
             }
-            assertEquals(
-                expected = 10.015024,
-                actual = sut.getRate(USD.code, GHS.code)
-            )
-            assertEquals(
-                expected = 0.099850,
-                actual = sut.getRate(GHS.code, USD.code)
-            )
-            assertEquals(
-                expected = 42.235564,
-                actual = sut.getRate(GHS.code, NGN.code)
-            )
+            sut.getRate(USD.code, GHS.code).test {
+                assertEquals(10.015024, awaitItem())
+            }
+            sut.getRate(GHS.code, USD.code).test {
+                assertEquals(0.099850, awaitItem())
+            }
+            sut.getRate(GHS.code, NGN.code).test {
+                assertEquals(42.235564, awaitItem())
+            }
         }
 
     @Test
@@ -384,9 +382,9 @@ class RealCurrencyRepositoryTest {
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
-        val result = sut.hasCompletedInitialSync()
-
-        assertFalse(result)
+        sut.hasCompletedInitialSync().test {
+            assertFalse(awaitItem())
+        }
     }
 
     @Test
@@ -399,9 +397,9 @@ class RealCurrencyRepositoryTest {
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
-        val result = sut.hasCompletedInitialSync()
-
-        assertTrue(result)
+        sut.hasCompletedInitialSync().test {
+            assertTrue(awaitItem())
+        }
     }
 
     private val defaultHeaders = headersOf(
