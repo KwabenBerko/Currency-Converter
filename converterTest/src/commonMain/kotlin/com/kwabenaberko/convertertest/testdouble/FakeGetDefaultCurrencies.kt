@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class FakeGetDefaultCurrencies : GetDefaultCurrencies {
     lateinit var result: Flow<DefaultCurrencies>
 
-    override suspend fun invoke(): Flow<DefaultCurrencies> {
+    override fun invoke(): Flow<DefaultCurrencies> {
         return result
     }
 }
