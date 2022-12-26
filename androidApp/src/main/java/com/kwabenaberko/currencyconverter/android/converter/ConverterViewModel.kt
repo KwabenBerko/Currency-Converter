@@ -11,6 +11,7 @@ import com.kwabenaberko.converter.presentation.CompactNumberFormatter
 import com.kwabenaberko.currencyconverter.android.BaseViewModel
 import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import com.kwabenaberko.currencyconverter.android.runIf
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class ConverterViewModel(
@@ -23,7 +24,7 @@ class ConverterViewModel(
 
     init {
         viewModelScope.launch {
-            if (!hasCompletedInitialSync()) {
+            if (!hasCompletedInitialSync().first()) {
                 setState(State.RequiresSync)
             } else {
                 loadConverter()
@@ -32,9 +33,9 @@ class ConverterViewModel(
     }
 
     private suspend fun loadConverter() {
-        val (base, target) = getDefaultCurrencies()
+        val (base, target) = getDefaultCurrencies().first()
         val firstMoney = Money(currency = base, amount = 1.0)
-        val secondMoney = convertMoney(firstMoney, target)
+        val secondMoney = convertMoney(firstMoney, target).first()
         val firstMoneyItem = mapMoneyToViewItem(firstMoney)
         val secondMoneyItem = mapMoneyToViewItem(secondMoney)
 
@@ -51,7 +52,7 @@ class ConverterViewModel(
         viewModelScope.launch {
             val secondMoneyItem = contentState.secondMoneyItem
             val targetCurrency = secondMoneyItem.money.currency
-            val secondMoney = convertMoney(money, targetCurrency)
+            val secondMoney = convertMoney(money, targetCurrency).first()
 
             val newState = contentState.copy(
                 firstMoneyItem = mapMoneyToViewItem(money),
@@ -67,7 +68,7 @@ class ConverterViewModel(
         viewModelScope.launch {
             val firstMoneyItem = contentState.firstMoneyItem
             val targetCurrency = firstMoneyItem.money.currency
-            val firstMoney = convertMoney(money, targetCurrency)
+            val firstMoney = convertMoney(money, targetCurrency).first()
 
             val newState = contentState.copy(
                 firstMoneyItem = mapMoneyToViewItem(firstMoney),
