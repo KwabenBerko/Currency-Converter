@@ -1,6 +1,7 @@
 package com.kwabenaberko.converter.domain.usecase
 
-@Suppress("FUN_INTERFACE_WITH_SUSPEND_FUNCTION")
+import kotlinx.coroutines.flow.Flow
+
 fun interface HasCompletedInitialSync {
-    suspend operator fun invoke(): Boolean
+    operator fun invoke(): Flow<Boolean>
 }

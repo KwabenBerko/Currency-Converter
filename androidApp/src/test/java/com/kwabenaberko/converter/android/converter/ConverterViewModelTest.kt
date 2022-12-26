@@ -14,6 +14,7 @@ import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.M
 import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.State
 import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -25,18 +26,18 @@ class ConverterViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val hasCompletedInitialSync = FakeHasCompletedInitialSync().apply {
-        this.result = true
+        this.result = flowOf(true)
     }
     private val getDefaultCurrencies = FakeGetDefaultCurrencies().apply {
-        this.result = DefaultCurrencies(base = GHS, target = GHS)
+        this.result = flowOf(DefaultCurrencies(base = GHS, target = GHS))
     }
     private val convertMoney = FakeConvertMoney().apply {
-        this.result = Money(currency = GHS, amount = 1.0)
+        this.result = flowOf(Money(currency = GHS, amount = 1.0))
     }
 
     @Test
     fun `should emit RequiresSync state if initial sync has not been completed`() = runTest {
-        hasCompletedInitialSync.result = false
+        hasCompletedInitialSync.result = flowOf(false)
         val sut = createViewModel()
 
         sut.state.test {
@@ -86,7 +87,7 @@ class ConverterViewModelTest {
             assertEquals(State.Idle, awaitItem())
             assertEquals(initialExpectedState, awaitItem())
 
-            convertMoney.result = Money(currency = GHS, amount = 10.0)
+            convertMoney.result = flowOf(Money(currency = GHS, amount = 10.0))
             sut.convertFirstMoney(firstMoney.copy(currency = USD))
 
             assertEquals(nextExpectedState, awaitItem())
@@ -117,7 +118,7 @@ class ConverterViewModelTest {
             assertEquals(State.Idle, awaitItem())
             assertEquals(initialExpectedState, awaitItem())
 
-            convertMoney.result = Money(currency = GHS, amount = 1000.0)
+            convertMoney.result = flowOf(Money(currency = GHS, amount = 1000.0))
             sut.convertFirstMoney(firstMoney.copy(amount = 1000.0))
 
             assertEquals(nextExpectedState, awaitItem())
@@ -148,7 +149,7 @@ class ConverterViewModelTest {
             assertEquals(State.Idle, awaitItem())
             assertEquals(initialExpectedState, awaitItem())
 
-            convertMoney.result = Money(currency = GHS, amount = 10.0)
+            convertMoney.result = flowOf(Money(currency = GHS, amount = 10.0))
             sut.convertSecondMoney(secondMoney.copy(currency = USD))
 
             assertEquals(nextExpectedState, awaitItem())
@@ -179,7 +180,7 @@ class ConverterViewModelTest {
             assertEquals(State.Idle, awaitItem())
             assertEquals(initialExpectedState, awaitItem())
 
-            convertMoney.result = Money(currency = GHS, amount = 1000.0)
+            convertMoney.result = flowOf(Money(currency = GHS, amount = 1000.0))
             sut.convertSecondMoney(secondMoney.copy(amount = 1000.0))
 
             assertEquals(nextExpectedState, awaitItem())

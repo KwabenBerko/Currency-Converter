@@ -1,6 +1,7 @@
 package com.kwabenaberko.converter.domain.usecase
 
-@Suppress("FUN_INTERFACE_WITH_SUSPEND_FUNCTION")
+import kotlinx.coroutines.flow.Flow
+
 fun interface GetRate {
-    suspend operator fun invoke(baseCode: String, targetCode: String): Double
+    operator fun invoke(baseCode: String, targetCode: String): Flow<Double>
 }

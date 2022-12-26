@@ -1,5 +1,6 @@
 package com.kwabenaberko.converter.acceptance
 
+import app.cash.turbine.test
 import com.kwabenaberko.converter.TestContainer
 import com.kwabenaberko.converter.domain.model.Money
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeCediCurrency
@@ -61,12 +62,12 @@ class ConvertMoneyAcceptanceTest {
                 amount = expectedAmount
             )
 
-            val actualMoney = sut(
+            sut(
                 Money(currency = makeCurrency(baseCode), amount = amount),
                 makeCurrency(targetCode)
-            )
-
-            assertEquals(expectedMoney, actualMoney)
+            ).test {
+                assertEquals(expectedMoney, awaitItem())
+            }
         }
     }
 

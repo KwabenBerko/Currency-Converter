@@ -1,5 +1,6 @@
 package com.kwabenaberko.converter.acceptance
 
+import app.cash.turbine.test
 import app.cash.turbine.testIn
 import com.kwabenaberko.converter.TestContainer
 import com.kwabenaberko.converter.data.Api
@@ -71,13 +72,13 @@ class SyncAcceptanceTest {
                 row(NGN.code, GHS.code, 0.023677),
             )
         ) { baseCode, targetCode, rate ->
-            assertEquals(
-                expected = rate,
-                actual = getRate(baseCode, targetCode)
-            )
+            getRate(baseCode, targetCode).test {
+                assertEquals(rate, awaitItem())
+            }
+            hasCompletedInitialSync().test {
+                assertTrue(awaitItem())
+            }
         }
-
-        assertTrue(hasCompletedInitialSync())
     }
 
     private fun makeHttpClientEngine(): HttpClientEngine {

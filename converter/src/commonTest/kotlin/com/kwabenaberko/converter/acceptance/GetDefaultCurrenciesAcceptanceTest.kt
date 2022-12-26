@@ -1,5 +1,6 @@
 package com.kwabenaberko.converter.acceptance
 
+import app.cash.turbine.test
 import com.kwabenaberko.converter.TestContainer
 import com.kwabenaberko.converter.domain.model.Currency
 import com.kwabenaberko.converter.domain.model.DefaultCurrencies
@@ -14,6 +15,9 @@ import io.kotest.data.headers
 import io.kotest.data.row
 import io.kotest.data.table
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -50,7 +54,9 @@ class GetDefaultCurrenciesAcceptanceTest {
     @Test
     fun `should return USD and GHS as the base and target currency respectively if no default currencies exist`() =
         runTest {
-            assertEquals(DefaultCurrencies(USD, GHS), sut())
+            sut().test {
+                assertEquals(DefaultCurrencies(USD, GHS), awaitItem())
+            }
         }
 
     @Test
@@ -68,9 +74,11 @@ class GetDefaultCurrenciesAcceptanceTest {
             convertMoney(
                 Money(currency = baseCurrency, amount = 0.0),
                 targetCurrency
-            )
+            ).first()
 
-            assertEquals(DefaultCurrencies(baseCurrency, targetCurrency), sut())
+            sut().test {
+                assertEquals(DefaultCurrencies(baseCurrency, targetCurrency), awaitItem())
+            }
         }
     }
 

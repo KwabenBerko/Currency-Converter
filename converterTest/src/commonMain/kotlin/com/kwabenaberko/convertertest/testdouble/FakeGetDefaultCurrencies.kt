@@ -2,11 +2,12 @@ package com.kwabenaberko.convertertest.testdouble
 
 import com.kwabenaberko.converter.domain.model.DefaultCurrencies
 import com.kwabenaberko.converter.domain.usecase.GetDefaultCurrencies
+import kotlinx.coroutines.flow.Flow
 
 class FakeGetDefaultCurrencies : GetDefaultCurrencies {
-    lateinit var result: DefaultCurrencies
+    lateinit var result: Flow<DefaultCurrencies>
 
-    override suspend fun invoke(): DefaultCurrencies {
+    override fun invoke(): Flow<DefaultCurrencies> {
         return result
     }
 }

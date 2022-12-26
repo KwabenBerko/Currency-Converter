@@ -1,5 +1,6 @@
 package com.kwabenaberko.converter.usecase
 
+import app.cash.turbine.test
 import com.kwabenaberko.converter.domain.model.Money
 import com.kwabenaberko.converter.domain.usecase.RealConvertMoney
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeCediCurrency
@@ -13,6 +14,8 @@ import io.kotest.data.headers
 import io.kotest.data.row
 import io.kotest.data.table
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -33,7 +36,7 @@ class ConvertMoneyTest {
 
             val updateDefaultCurrencies = FakeUpdateDefaultCurrencies()
             val getRate = FakeGetRate().apply {
-                this.result = rate
+                this.result = flowOf(rate)
             }
             val convertMoney = RealConvertMoney(
                 getRate = getRate,
@@ -43,12 +46,13 @@ class ConvertMoneyTest {
                 currency = targetCurrency, amount = expectedAmount
             )
 
-            val actualMoney = convertMoney(
+            convertMoney(
                 money = Money(currency = baseCurrency, amount = amount),
                 targetCurrency = targetCurrency
-            )
-
-            assertEquals(expectedMoney, actualMoney)
+            ).test {
+                assertEquals(expectedMoney, awaitItem())
+                cancelAndIgnoreRemainingEvents()
+            }
         }
     }
 
@@ -56,7 +60,7 @@ class ConvertMoneyTest {
     fun `should set default currencies when an amount is converted`() = runTest {
         val updateDefaultCurrencies = FakeUpdateDefaultCurrencies()
         val getRate = FakeGetRate().apply {
-            result = 1.0
+            result = flowOf(1.0)
         }
         val convertMoney = RealConvertMoney(
             getRate = getRate,
@@ -66,10 +70,11 @@ class ConvertMoneyTest {
         convertMoney(
             money = Money(currency = GHS, amount = 0.0),
             targetCurrency = NGN
-        )
-
-        assertEquals(1, updateDefaultCurrencies.invocations.size)
-        assertEquals(Pair(GHS.code, NGN.code), updateDefaultCurrencies.invocations.first())
+        ).test {
+            assertEquals(1, updateDefaultCurrencies.invocations.size)
+            assertEquals(Pair(GHS.code, NGN.code), updateDefaultCurrencies.invocations.first())
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     private companion object {
