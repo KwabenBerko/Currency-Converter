@@ -15,6 +15,7 @@ import io.kotest.data.row
 import io.kotest.data.table
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -35,7 +36,7 @@ class ConvertMoneyTest {
 
             val updateDefaultCurrencies = FakeUpdateDefaultCurrencies()
             val getRate = FakeGetRate().apply {
-                this.result = MutableStateFlow(rate)
+                this.result = flowOf(rate)
             }
             val convertMoney = RealConvertMoney(
                 getRate = getRate,
@@ -50,6 +51,7 @@ class ConvertMoneyTest {
                 targetCurrency = targetCurrency
             ).test {
                 assertEquals(expectedMoney, awaitItem())
+                cancelAndIgnoreRemainingEvents()
             }
         }
     }
@@ -58,7 +60,7 @@ class ConvertMoneyTest {
     fun `should set default currencies when an amount is converted`() = runTest {
         val updateDefaultCurrencies = FakeUpdateDefaultCurrencies()
         val getRate = FakeGetRate().apply {
-            result = MutableStateFlow(1.0)
+            result = flowOf(1.0)
         }
         val convertMoney = RealConvertMoney(
             getRate = getRate,
