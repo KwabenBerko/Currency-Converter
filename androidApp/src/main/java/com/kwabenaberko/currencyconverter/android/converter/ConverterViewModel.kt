@@ -10,7 +10,6 @@ import com.kwabenaberko.converter.domain.usecase.GetDefaultCurrencies
 import com.kwabenaberko.converter.domain.usecase.HasCompletedInitialSync
 import com.kwabenaberko.converter.presentation.CompactNumberFormatter
 import com.kwabenaberko.currencyconverter.android.BaseViewModel
-import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.State.*
 import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,7 +27,7 @@ class ConverterViewModel(
     private val hasCompletedInitialSync: HasCompletedInitialSync,
     private val getDefaultCurrencies: GetDefaultCurrencies,
     private val convertMoney: ConvertMoney
-) : BaseViewModel<ConverterViewModel.State>(Idle) {
+) : BaseViewModel<ConverterViewModel.State>(State.Idle) {
 
     private val converterFlow = MutableSharedFlow<Triple<Money, Currency, ConversionMode>>()
     private val formatter = CompactNumberFormatter()
@@ -39,7 +38,7 @@ class ConverterViewModel(
             .onEach { hasCompleted ->
                 when (hasCompleted) {
                     true -> loadConverter()
-                    false -> setState(RequiresSync)
+                    false -> setState(State.RequiresSync)
                 }
             }.launchIn(viewModelScope)
     }
@@ -52,7 +51,6 @@ class ConverterViewModel(
                 convertMoney(money, target).map { convertedMoney ->
                     data to convertedMoney
                 }
-
             }
             .onEach { pair ->
                 val (data, convertedMoney) = pair
@@ -70,18 +68,17 @@ class ConverterViewModel(
                 val firstMoneyItem = moneyToViewItem(firstMoney)
                 val secondMoneyItem = moneyToViewItem(secondMoney)
 
-                val newState = Content(
+                val newState = State.Content(
                     firstMoneyItem = firstMoneyItem,
                     secondMoneyItem = secondMoneyItem,
                     conversionMode = conversionMode
                 )
 
                 setState(newState)
-
             }.launchIn(viewModelScope)
     }
 
-    fun convertFirstMoney(amount: Double) = runIf<Content> { contentState ->
+    fun convertFirstMoney(amount: Double) = runIf<State.Content> { contentState ->
         val (firstMoney, secondMoney) = moniesFrom(contentState)
 
         convertFirstMoney(
@@ -90,7 +87,7 @@ class ConverterViewModel(
         )
     }
 
-    fun convertFirstMoney(currency: Currency) = runIf<Content> { contentState ->
+    fun convertFirstMoney(currency: Currency) = runIf<State.Content> { contentState ->
         val (firstMoney, secondMoney) = moniesFrom(contentState)
 
         convertFirstMoney(
@@ -99,7 +96,7 @@ class ConverterViewModel(
         )
     }
 
-    fun convertSecondMoney(amount: Double) = runIf<Content> { contentState ->
+    fun convertSecondMoney(amount: Double) = runIf<State.Content> { contentState ->
         val (firstMoney, secondMoney) = moniesFrom(contentState)
 
         convertSecondMoney(
@@ -108,7 +105,7 @@ class ConverterViewModel(
         )
     }
 
-    fun convertSecondMoney(currency: Currency) = runIf<Content> { contentState ->
+    fun convertSecondMoney(currency: Currency) = runIf<State.Content> { contentState ->
         val (firstMoney, secondMoney) = moniesFrom(contentState)
 
         convertSecondMoney(
@@ -137,7 +134,7 @@ class ConverterViewModel(
         return Triple(money, target, ConversionMode.FIRST_TO_SECOND)
     }
 
-    private fun moniesFrom(contentState: Content): Pair<Money, Money> {
+    private fun moniesFrom(contentState: State.Content): Pair<Money, Money> {
         val (firstMoneyViewItem, secondMoneyViewItem) = contentState
         return Pair(firstMoneyViewItem.money, secondMoneyViewItem.money)
     }
