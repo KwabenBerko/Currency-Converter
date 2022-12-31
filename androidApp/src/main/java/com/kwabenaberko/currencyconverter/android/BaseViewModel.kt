@@ -15,4 +15,11 @@ abstract class BaseViewModel<T>(initialState: T) : ViewModel() {
     protected fun getState(): T {
         return _state.value
     }
+
+    protected inline fun <reified T> runIf(block: (T) -> Unit) {
+        val currentState = getState()
+        if (currentState is T) {
+            block(currentState)
+        }
+    }
 }

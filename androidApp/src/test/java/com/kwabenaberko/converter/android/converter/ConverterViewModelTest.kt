@@ -53,7 +53,7 @@ class ConverterViewModelTest {
         val expectedState = State.Content(
             firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1"),
             secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1"),
-            conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
+            conversionMode = ConversionMode.FIRST_TO_SECOND
         )
         val sut = createViewModel()
 
@@ -70,7 +70,7 @@ class ConverterViewModelTest {
         val initialExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1"),
             secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1"),
-            conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
+            conversionMode = ConversionMode.FIRST_TO_SECOND
         )
         val nextExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(
@@ -79,7 +79,7 @@ class ConverterViewModelTest {
             secondMoneyItem = MoneyViewItem(
                 money = secondMoney.copy(amount = 10.0), formattedAmount = "10"
             ),
-            conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
+            conversionMode = ConversionMode.FIRST_TO_SECOND
         )
         val sut = createViewModel()
 
@@ -88,7 +88,7 @@ class ConverterViewModelTest {
             assertEquals(initialExpectedState, awaitItem())
 
             convertMoney.result = flowOf(Money(currency = GHS, amount = 10.0))
-            sut.convertFirstMoney(firstMoney.copy(currency = USD))
+            sut.convertFirstMoney(USD)
 
             assertEquals(nextExpectedState, awaitItem())
         }
@@ -101,7 +101,7 @@ class ConverterViewModelTest {
         val initialExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1"),
             secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1"),
-            conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
+            conversionMode = ConversionMode.FIRST_TO_SECOND
         )
         val nextExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(
@@ -110,7 +110,7 @@ class ConverterViewModelTest {
             secondMoneyItem = MoneyViewItem(
                 money = secondMoney.copy(amount = 1000.0), formattedAmount = "1K"
             ),
-            conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
+            conversionMode = ConversionMode.FIRST_TO_SECOND
         )
         val sut = createViewModel()
 
@@ -119,7 +119,7 @@ class ConverterViewModelTest {
             assertEquals(initialExpectedState, awaitItem())
 
             convertMoney.result = flowOf(Money(currency = GHS, amount = 1000.0))
-            sut.convertFirstMoney(firstMoney.copy(amount = 1000.0))
+            sut.convertFirstMoney(1000.0)
 
             assertEquals(nextExpectedState, awaitItem())
         }
@@ -132,7 +132,7 @@ class ConverterViewModelTest {
         val initialExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1"),
             secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1"),
-            conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
+            conversionMode = ConversionMode.FIRST_TO_SECOND
         )
         val nextExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(
@@ -141,7 +141,7 @@ class ConverterViewModelTest {
             secondMoneyItem = MoneyViewItem(
                 money = secondMoney.copy(currency = USD), formattedAmount = "1"
             ),
-            conversionMode = ConversionMode.SECOND_MONEY_TO_FIRST_MONEY
+            conversionMode = ConversionMode.SECOND_TO_FIRST
         )
         val sut = createViewModel()
 
@@ -150,7 +150,7 @@ class ConverterViewModelTest {
             assertEquals(initialExpectedState, awaitItem())
 
             convertMoney.result = flowOf(Money(currency = GHS, amount = 10.0))
-            sut.convertSecondMoney(secondMoney.copy(currency = USD))
+            sut.convertSecondMoney(USD)
 
             assertEquals(nextExpectedState, awaitItem())
         }
@@ -163,7 +163,7 @@ class ConverterViewModelTest {
         val initialExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(money = firstMoney, formattedAmount = "1"),
             secondMoneyItem = MoneyViewItem(money = secondMoney, formattedAmount = "1"),
-            conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY
+            conversionMode = ConversionMode.FIRST_TO_SECOND
         )
         val nextExpectedState = State.Content(
             firstMoneyItem = MoneyViewItem(
@@ -172,7 +172,7 @@ class ConverterViewModelTest {
             secondMoneyItem = MoneyViewItem(
                 money = secondMoney.copy(amount = 1000.0), formattedAmount = "1K"
             ),
-            conversionMode = ConversionMode.SECOND_MONEY_TO_FIRST_MONEY
+            conversionMode = ConversionMode.SECOND_TO_FIRST
         )
         val sut = createViewModel()
 
@@ -181,7 +181,7 @@ class ConverterViewModelTest {
             assertEquals(initialExpectedState, awaitItem())
 
             convertMoney.result = flowOf(Money(currency = GHS, amount = 1000.0))
-            sut.convertSecondMoney(secondMoney.copy(amount = 1000.0))
+            sut.convertSecondMoney(1000.0)
 
             assertEquals(nextExpectedState, awaitItem())
         }

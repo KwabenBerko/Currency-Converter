@@ -30,10 +30,10 @@ internal fun ConversionDirection(
     ) {
         Icon(
             painter = when (mode) {
-                ConversionMode.FIRST_MONEY_TO_SECOND_MONEY -> {
+                ConversionMode.FIRST_TO_SECOND -> {
                     painterResource(R.drawable.ic_long_arrow_down)
                 }
-                ConversionMode.SECOND_MONEY_TO_FIRST_MONEY -> {
+                ConversionMode.SECOND_TO_FIRST -> {
                     painterResource(R.drawable.ic_long_arrow_up)
                 }
             },
@@ -47,6 +47,6 @@ internal fun ConversionDirection(
 @Composable
 private fun ConversionDirectionPreview() {
     CurrencyConverterTheme {
-        ConversionDirection(ConversionMode.FIRST_MONEY_TO_SECOND_MONEY)
+        ConversionDirection(ConversionMode.FIRST_TO_SECOND)
     }
 }
