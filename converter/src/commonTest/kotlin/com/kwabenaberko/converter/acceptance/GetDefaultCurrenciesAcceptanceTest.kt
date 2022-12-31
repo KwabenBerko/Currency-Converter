@@ -15,15 +15,15 @@ import io.kotest.data.headers
 import io.kotest.data.row
 import io.kotest.data.table
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.test.runTest
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@OptIn(FlowPreview::class)
 @ExperimentalCoroutinesApi
 class GetDefaultCurrenciesAcceptanceTest {
 
@@ -71,14 +71,11 @@ class GetDefaultCurrenciesAcceptanceTest {
             )
         ) { baseCurrency: Currency, targetCurrency: Currency ->
 
-            convertMoney(
-                Money(currency = baseCurrency, amount = 0.0),
-                targetCurrency
-            ).first()
-
-            sut().test {
-                assertEquals(DefaultCurrencies(baseCurrency, targetCurrency), awaitItem())
-            }
+            convertMoney(Money(currency = baseCurrency, amount = 0.0), targetCurrency)
+                .flatMapConcat { sut() }
+                .test {
+                    assertEquals(DefaultCurrencies(baseCurrency, targetCurrency), awaitItem())
+                }
         }
     }
 

@@ -7,7 +7,6 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kwabenaberko.currencyconverter.android.LocalContainer
 import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.Factory
-import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.State
 import com.kwabenaberko.currencyconverter.android.converter.animation.ConverterScreenTransitions
 import com.kwabenaberko.currencyconverter.android.converter.components.ConverterScreenContent
 import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
@@ -17,7 +16,6 @@ import com.kwabenaberko.currencyconverter.android.destinations.ConverterScreenDe
 import com.kwabenaberko.currencyconverter.android.destinations.CurrenciesScreenDestination
 import com.kwabenaberko.currencyconverter.android.destinations.KeyPadScreenDestination
 import com.kwabenaberko.currencyconverter.android.destinations.SyncScreenDestination
-import com.kwabenaberko.currencyconverter.android.runIf
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -40,17 +38,13 @@ fun AnimatedVisibilityScope.ConverterScreen(
         when (result) {
             is NavResult.Canceled -> Unit
             is NavResult.Value -> {
-                state.runIf<State.Content> { currentState ->
-                    val (conversionMode, currency) = result.value
-                    val firstMoney = currentState.firstMoneyItem.money
-                    val secondMoney = currentState.secondMoneyItem.money
-                    when (conversionMode) {
-                        ConversionMode.FIRST_MONEY_TO_SECOND_MONEY -> {
-                            viewModel.convertFirstMoney(firstMoney.copy(currency = currency))
-                        }
-                        ConversionMode.SECOND_MONEY_TO_FIRST_MONEY -> {
-                            viewModel.convertSecondMoney(secondMoney.copy(currency = currency))
-                        }
+                val (conversionMode, currency) = result.value
+                when (conversionMode) {
+                    ConversionMode.FIRST_TO_SECOND -> {
+                        viewModel.convertFirstMoney(currency)
+                    }
+                    ConversionMode.SECOND_TO_FIRST -> {
+                        viewModel.convertSecondMoney(currency)
                     }
                 }
             }
@@ -61,17 +55,13 @@ fun AnimatedVisibilityScope.ConverterScreen(
         when (result) {
             is NavResult.Canceled -> Unit
             is NavResult.Value -> {
-                state.runIf<State.Content> { currentState ->
-                    val (conversionMode, amount) = result.value
-                    val firstMoney = currentState.firstMoneyItem.money
-                    val secondMoney = currentState.secondMoneyItem.money
-                    when (conversionMode) {
-                        ConversionMode.FIRST_MONEY_TO_SECOND_MONEY -> {
-                            viewModel.convertFirstMoney(firstMoney.copy(amount = amount))
-                        }
-                        ConversionMode.SECOND_MONEY_TO_FIRST_MONEY -> {
-                            viewModel.convertSecondMoney(secondMoney.copy(amount = amount))
-                        }
+                val (conversionMode, amount) = result.value
+                when (conversionMode) {
+                    ConversionMode.FIRST_TO_SECOND -> {
+                        viewModel.convertFirstMoney(amount)
+                    }
+                    ConversionMode.SECOND_TO_FIRST -> {
+                        viewModel.convertSecondMoney(amount)
                     }
                 }
             }
@@ -83,27 +73,27 @@ fun AnimatedVisibilityScope.ConverterScreen(
         onFirstCurrencyClick = { currency ->
             navigator.navigate(
                 CurrenciesScreenDestination(
-                    conversionMode = ConversionMode.FIRST_MONEY_TO_SECOND_MONEY,
+                    conversionMode = ConversionMode.FIRST_TO_SECOND,
                     selectedCurrencyCode = currency.code
                 )
             )
         },
         onFirstAmountClick = {
             navigator.navigate(
-                KeyPadScreenDestination(ConversionMode.FIRST_MONEY_TO_SECOND_MONEY)
+                KeyPadScreenDestination(ConversionMode.FIRST_TO_SECOND)
             )
         },
         onSecondCurrencyClick = { currency ->
             navigator.navigate(
                 CurrenciesScreenDestination(
-                    conversionMode = ConversionMode.SECOND_MONEY_TO_FIRST_MONEY,
+                    conversionMode = ConversionMode.SECOND_TO_FIRST,
                     selectedCurrencyCode = currency.code
                 )
             )
         },
         onSecondAmountClick = {
             navigator.navigate(
-                KeyPadScreenDestination(ConversionMode.SECOND_MONEY_TO_FIRST_MONEY)
+                KeyPadScreenDestination(ConversionMode.SECOND_TO_FIRST)
             )
         },
         onSyncRequired = {
