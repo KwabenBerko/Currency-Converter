@@ -26,7 +26,7 @@ class App : Application(), Configuration.Provider {
         container.hasCompletedInitialSync()
             .onEach { hasCompleted ->
                 if (hasCompleted) {
-                    schedulePeriodicSync()
+                    SyncWorker.enqueue(this)
                 }
             }.launchIn(mainScope)
     }
@@ -39,24 +39,5 @@ class App : Application(), Configuration.Provider {
             .setMinimumLoggingLevel(Log.DEBUG)
             .setWorkerFactory(workerFactory)
             .build()
-    }
-
-    private fun schedulePeriodicSync() {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(3, TimeUnit.HOURS)
-            .setInitialDelay(3, TimeUnit.HOURS)
-            .setConstraints(constraints)
-            .build()
-
-        WorkManager
-            .getInstance(this)
-            .enqueueUniquePeriodicWork(
-                SyncWorker.TAG,
-                ExistingPeriodicWorkPolicy.KEEP,
-                syncRequest
-            )
     }
 }

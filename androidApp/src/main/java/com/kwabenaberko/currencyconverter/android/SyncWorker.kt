@@ -1,22 +1,31 @@
 package com.kwabenaberko.currencyconverter.android
 
 import android.content.Context
+import androidx.work.Constraints
 import androidx.work.CoroutineWorker
+import androidx.work.ExistingWorkPolicy
 import androidx.work.ListenableWorker
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import com.kwabenaberko.converter.domain.usecase.Sync
+import java.util.concurrent.TimeUnit
 
 class SyncWorker(
-    appContext: Context,
+    private val appContext: Context,
     workerParameters: WorkerParameters,
     private val sync: Sync
 ) : CoroutineWorker(appContext, workerParameters) {
 
     override suspend fun doWork(): Result {
         return when (sync()) {
-            true -> Result.success()
-            false -> Result.failure()
+            true -> {
+                enqueue(appContext, ExistingWorkPolicy.APPEND)
+                Result.success()
+            }
+            false -> Result.retry()
         }
     }
 
@@ -31,6 +40,22 @@ class SyncWorker(
     }
 
     companion object {
-        const val TAG = "sync"
+        private const val TAG = "sync"
+
+        fun enqueue(
+            context: Context,
+            existingWorkPolicy: ExistingWorkPolicy = ExistingWorkPolicy.KEEP
+        ) {
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+
+            val syncWork = OneTimeWorkRequestBuilder<SyncWorker>()
+                .setInitialDelay(12, TimeUnit.HOURS)
+                .setConstraints(constraints)
+                .build()
+
+            WorkManager.getInstance(context).enqueueUniqueWork(TAG, existingWorkPolicy, syncWork)
+        }
     }
 }
