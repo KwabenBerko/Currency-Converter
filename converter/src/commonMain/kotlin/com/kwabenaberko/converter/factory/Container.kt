@@ -73,4 +73,10 @@ open class Container internal constructor(
     val getRate: GetRate by lazy {
         return@lazy GetRate(currencyRepository::getRate)
     }
+
+    /**
+     * This empty companion object allows library users to create a static extension
+     * on the Container class
+     */
+    companion object
 }

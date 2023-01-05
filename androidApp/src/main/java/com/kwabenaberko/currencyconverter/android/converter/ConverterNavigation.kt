@@ -1,19 +1,21 @@
 package com.kwabenaberko.currencyconverter.android.converter
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
-import com.kwabenaberko.currencyconverter.android.LocalContainer
+import com.kwabenaberko.converter.factory.Container
 import com.kwabenaberko.currencyconverter.android.converter.currencies.currenciesScreen
 import com.kwabenaberko.currencyconverter.android.converter.currencies.navigateToCurrencies
 import com.kwabenaberko.currencyconverter.android.converter.home.HomeRoute
 import com.kwabenaberko.currencyconverter.android.converter.home.homeScreen
 import com.kwabenaberko.currencyconverter.android.converter.keypad.keypadScreen
 import com.kwabenaberko.currencyconverter.android.converter.keypad.navigateToKeyPad
+import com.kwabenaberko.currencyconverter.android.instance
 import com.kwabenaberko.currencyconverter.android.rememberParentEntry
 
 const val ConverterRoute = "converter"
@@ -61,7 +63,7 @@ fun NavGraphBuilder.converterGraph(
 
 @Composable
 private fun converterViewModel(owner: ViewModelStoreOwner): ConverterViewModel {
-    return with(LocalContainer.current) {
+    return with(Container.instance(LocalContext.current)) {
         val factory = ConverterViewModel.Factory(
             hasCompletedInitialSync,
             getDefaultCurrencies,
