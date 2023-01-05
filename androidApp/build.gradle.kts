@@ -3,8 +3,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ktlint)
-    id("kotlin-parcelize")
-    id("com.google.devtools.ksp") version "1.7.20-1.0.7"
 }
 
 ktlint {
@@ -54,9 +52,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:1.3.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
     implementation("androidx.navigation:navigation-compose:2.5.3")
-    implementation("io.github.raamcosta.compose-destinations:animations-core:1.7.30-beta")
-    ksp("io.github.raamcosta.compose-destinations:ksp:1.7.30-beta")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.28.0")
     implementation("androidx.work:work-runtime-ktx:2.7.1")
     implementation(libs.coroutines.core)
     implementation(libs.bundles.lifecycle)
