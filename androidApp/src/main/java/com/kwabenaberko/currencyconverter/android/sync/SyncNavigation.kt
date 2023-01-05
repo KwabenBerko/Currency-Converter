@@ -6,13 +6,15 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.google.accompanist.navigation.animation.composable
-import com.kwabenaberko.currencyconverter.android.LocalContainer
+import com.kwabenaberko.converter.factory.Container
+import com.kwabenaberko.currencyconverter.android.instance
 
 const val SyncRoute = "sync"
 
@@ -40,7 +42,7 @@ fun NavGraphBuilder.syncScreen(onNavigateToConverter: () -> Unit) {
 
 @Composable
 private fun syncViewModel(owner: ViewModelStoreOwner): SyncViewModel {
-    return with(LocalContainer.current) {
+    return with(Container.instance(LocalContext.current)) {
         val factory = SyncViewModel.Factory(this.sync)
         viewModel(viewModelStoreOwner = owner, factory = factory)
     }
