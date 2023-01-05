@@ -22,7 +22,7 @@ class SyncWorker(
     override suspend fun doWork(): Result {
         return when (sync()) {
             true -> {
-                enqueue(appContext, ExistingWorkPolicy.APPEND)
+                create(appContext, ExistingWorkPolicy.APPEND)
                 Result.success()
             }
             false -> Result.retry()
@@ -42,7 +42,7 @@ class SyncWorker(
     companion object {
         private const val TAG = "sync"
 
-        fun enqueue(
+        fun create(
             context: Context,
             existingWorkPolicy: ExistingWorkPolicy = ExistingWorkPolicy.KEEP
         ) {

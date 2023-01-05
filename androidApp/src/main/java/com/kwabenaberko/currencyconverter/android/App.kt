@@ -20,7 +20,7 @@ class App : Application(), Configuration.Provider {
         container.hasCompletedInitialSync()
             .onEach { hasCompleted ->
                 if (hasCompleted) {
-                    SyncWorker.enqueue(this)
+                    SyncWorker.create(this)
                 }
             }.launchIn(mainScope)
     }
