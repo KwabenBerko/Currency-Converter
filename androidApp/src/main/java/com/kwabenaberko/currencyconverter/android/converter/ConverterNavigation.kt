@@ -8,17 +8,17 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.kwabenaberko.currencyconverter.android.LocalContainer
-import com.kwabenaberko.currencyconverter.android.converter.home.HomeRoute
-import com.kwabenaberko.currencyconverter.android.converter.home.homeScreen
 import com.kwabenaberko.currencyconverter.android.converter.currencies.currenciesScreen
 import com.kwabenaberko.currencyconverter.android.converter.currencies.navigateToCurrencies
+import com.kwabenaberko.currencyconverter.android.converter.home.HomeRoute
+import com.kwabenaberko.currencyconverter.android.converter.home.homeScreen
 import com.kwabenaberko.currencyconverter.android.converter.keypad.keypadScreen
 import com.kwabenaberko.currencyconverter.android.converter.keypad.navigateToKeyPad
 import com.kwabenaberko.currencyconverter.android.rememberParentEntry
 
 const val ConverterRoute = "converter"
 
-fun NavController.navigateToConverter(navOptions: NavOptions?){
+fun NavController.navigateToConverter(navOptions: NavOptions?) {
     navigate(ConverterRoute, navOptions)
 }
 
@@ -56,7 +56,6 @@ fun NavGraphBuilder.converterGraph(
                 navController.popBackStack()
             }
         )
-
     }
 }
 

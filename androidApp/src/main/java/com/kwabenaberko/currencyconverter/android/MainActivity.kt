@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                     syncScreen(
                         onNavigateToConverter = {
                             val navOptions = navOptions {
-                                popUpTo(SyncRoute){
+                                popUpTo(SyncRoute) {
                                     inclusive = true
                                 }
                             }

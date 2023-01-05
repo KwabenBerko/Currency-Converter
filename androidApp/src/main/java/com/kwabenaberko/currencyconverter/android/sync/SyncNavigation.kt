@@ -16,7 +16,7 @@ import com.kwabenaberko.currencyconverter.android.LocalContainer
 
 const val SyncRoute = "sync"
 
-fun NavController.navigateToSync(navOptions: NavOptions? = null){
+fun NavController.navigateToSync(navOptions: NavOptions? = null) {
     navigate(SyncRoute, navOptions)
 }
 

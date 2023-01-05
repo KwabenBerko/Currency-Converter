@@ -11,7 +11,6 @@ import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.composable
 import com.kwabenaberko.converter.domain.model.Currency
 import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel
-import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.*
 import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 
 internal const val HomeRoute = "home"
