@@ -30,7 +30,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.2"
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
     applicationVariants.all {
         kotlin.sourceSets {
@@ -45,20 +45,18 @@ android {
 dependencies {
     implementation(projects.converter)
     implementation(projects.converterTest)
-    implementation("com.google.android.material:material:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.5.1")
-    implementation("androidx.compose.material3:material3:1.1.0-alpha03")
-    implementation("androidx.activity:activity-compose:1.6.1")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.3.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
-    implementation("androidx.navigation:navigation-compose:2.5.3")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
-    implementation("com.google.accompanist:accompanist-navigation-animation:0.28.0")
-    implementation("androidx.work:work-runtime-ktx:2.7.1")
+    implementation(libs.compose.material)
+    implementation(libs.activityCompose)
+    implementation(libs.compose.ui.preview)
+    implementation(libs.viewModelCompose)
+    implementation(libs.navigationCompose)
+    implementation(libs.accompanist.systemuiController)
+    implementation(libs.accompanist.navigationAnimation)
+    implementation(libs.workmanager)
     implementation(libs.coroutines.core)
     implementation(libs.bundles.lifecycle)
     implementation(libs.kotlinx.collections)
-    debugImplementation("androidx.compose.ui:ui-tooling:1.3.2")
+    debugImplementation(libs.compose.ui.tooling)
     testImplementation(projects.converterTest)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.junit)

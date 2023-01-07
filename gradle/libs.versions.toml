@@ -1,23 +1,40 @@
 [versions]
-androidGradlePlugin = "7.3.0-rc01"
+androidGradlePlugin = "7.4.0-rc03"
+activityCompose = "1.6.1"
+navigationCompose = "2.5.3"
+viewModelCompose = "2.5.1"
+compose = "1.4.0-alpha02"
+compose-compiler = "1.4.0-dev-k1.8.0-33c0ad36f83"
+compose-material3 = "1.1.0-alpha03"
+accompanist = "0.28.0"
+workmanager = "2.7.1"
 catalogUpdate = "0.7.0"
 coroutines = "1.6.4"
 icu4j = "72.1"
 junit = "4.13.2"
 kotest = "5.5.4"
-kotlin = "1.7.20"
+kotlin = "1.8.0"
 kotlinxCollections = "0.3.5"
 kotlinxDateTime = "0.4.0"
 ktlint = "11.0.0"
-ktor = "2.2.1"
+ktor = "2.2.2"
 lifeCycleVersion = "2.6.0-alpha03"
 multiplatformSettings = "1.0.0-alpha01"
 nativeCoroutines = "0.13.3"
-sqldelight = "2.0.0-alpha04"
+sqldelight = "2.0.0-alpha03"
 turbine = "0.12.1"
 versions = "0.44.0"
 
 [libraries]
+activityCompose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+navigationCompose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+viewModelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewModelCompose" }
+compose-ui-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+compose-material = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
+accompanist-systemuiController = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
+accompanist-navigationAnimation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
+workmanager = { module = "androidx.work:work-runtime-ktx", version.ref = "workmanager" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 icu4j = { module = "com.ibm.icu:icu4j", version.ref = "icu4j" }
@@ -28,7 +45,7 @@ kotlinx-dateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 ktor-client-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
-ktor-client-darwin = "io.ktor:ktor-client-darwin:2.1.0"
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
@@ -36,9 +53,9 @@ lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-common-java8",
 lifecycle-viewModel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifeCycleVersion" }
 multiplatformSettings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 multiplatformSettings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "multiplatformSettings" }
-multiplatformSettings-test = "com.russhwolf:multiplatform-settings-test:1.0.0-RC"
+multiplatformSettings-test = { module = "com.russhwolf:multiplatform-settings-test", version.ref = "multiplatformSettings" }
 sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqldelight-driver-android = "app.cash.sqldelight:android-driver:2.0.0-alpha03"
+sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
 sqldelight-driver-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }

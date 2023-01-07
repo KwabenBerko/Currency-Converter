@@ -1,8 +1,8 @@
 package com.kwabenaberko.currencyconverter.android
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.navOptions
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -15,7 +15,7 @@ import com.kwabenaberko.currencyconverter.android.sync.navigateToSync
 import com.kwabenaberko.currencyconverter.android.sync.syncScreen
 
 @OptIn(ExperimentalAnimationApi::class)
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
