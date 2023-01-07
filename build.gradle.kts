@@ -17,6 +17,7 @@ plugins {
 allprojects {
     repositories {
         google()
+        maven("https://androidx.dev/storage/compose-compiler/repository")
         mavenCentral()
     }
 }
