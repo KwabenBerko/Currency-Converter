@@ -1,8 +1,10 @@
 package com.kwabenaberko.currencyconverter.android
 
 import android.content.Context
+import android.content.res.Configuration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.unit.Density
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.kwabenaberko.converter.factory.Container
@@ -15,6 +17,14 @@ fun Container.Companion.instance(context: Context): Container {
         container = ContainerFactory(context).makeContainer()
     }
     return container as Container
+}
+
+fun Density.isAtMostXhdpi(): Boolean {
+    return this.density <= 2.0
+}
+
+fun Configuration.isAtMostMediumHeight(): Boolean {
+    return this.screenHeightDp <= 900
 }
 
 fun useRedTheme(conversionMode: ConversionMode): Boolean {

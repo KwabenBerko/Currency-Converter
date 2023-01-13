@@ -21,6 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
@@ -45,6 +47,9 @@ internal fun KeyPadScreen(
     onDone: (Double) -> Unit = {}
 ) = CurrencyConverterTheme(useRedTheme) {
 
+    val density = LocalDensity.current.density
+    val configuration = LocalConfiguration.current
+    val isBool = density <= 2.0 && configuration.screenHeightDp <= 900
     val colorScheme = MaterialTheme.colorScheme
     val focusRequester = remember { FocusRequester() }
     val systemUiController = rememberSystemUiController()

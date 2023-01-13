@@ -21,7 +21,7 @@ internal fun ConverterPane(
         modifier = Modifier.background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
             .then(modifier),
-        verticalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.SpaceAround,
         horizontalAlignment = Alignment.CenterHorizontally,
         content = content
     )

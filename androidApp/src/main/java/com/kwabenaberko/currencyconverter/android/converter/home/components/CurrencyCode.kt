@@ -1,6 +1,5 @@
 package com.kwabenaberko.currencyconverter.android.converter.home.components
 
-import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,11 +10,11 @@ import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
 @Composable
 internal fun CurrencyCode(
     code: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = code,
-        modifier = Modifier.background(MaterialTheme.colorScheme.background).then(modifier),
+        modifier = modifier,
         style = MaterialTheme.typography.labelLarge,
         color = MaterialTheme.colorScheme.secondary
     )

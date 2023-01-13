@@ -1,6 +1,5 @@
 package com.kwabenaberko.currencyconverter.android.converter.home.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -15,14 +14,17 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
 
 @Composable
 internal fun CurrencyAmount(
-    formattedAmount: String,
+    amount: String,
     symbol: String,
     modifier: Modifier = Modifier,
+    amountFontSize: TextUnit = 88.sp,
+    symbolFontSize: TextUnit = 24.sp,
     onClick: () -> Unit = {}
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -31,11 +33,12 @@ internal fun CurrencyAmount(
     Text(
         text = buildText(
             isPressed = isPressed,
-            formattedAmount = formattedAmount,
-            symbol = symbol
+            amount = amount,
+            amountFontSize = amountFontSize,
+            symbol = symbol,
+            symbolFontSize = symbolFontSize
         ),
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
             .clickable(
                 interactionSource = interactionSource,
                 indication = null,
@@ -49,8 +52,10 @@ internal fun CurrencyAmount(
 @Composable
 private fun buildText(
     isPressed: Boolean,
-    formattedAmount: String,
-    symbol: String
+    amount: String,
+    amountFontSize: TextUnit,
+    symbol: String,
+    symbolFontSize: TextUnit
 ): AnnotatedString {
     return buildAnnotatedString {
         withStyle(
@@ -60,10 +65,10 @@ private fun buildText(
                 } else {
                     MaterialTheme.colorScheme.onPrimary
                 },
-                fontSize = 88.sp
+                fontSize = amountFontSize
             )
         ) {
-            append(formattedAmount)
+            append(amount)
         }
         withStyle(
             SpanStyle(
@@ -72,7 +77,7 @@ private fun buildText(
                 } else {
                     MaterialTheme.colorScheme.secondary
                 },
-                fontSize = 24.sp
+                fontSize = symbolFontSize
             )
         ) {
             append(symbol)
@@ -85,7 +90,7 @@ private fun buildText(
 private fun CurrencyAmountPreview() {
     CurrencyConverterTheme {
         CurrencyAmount(
-            formattedAmount = "5M",
+            amount = "5M",
             symbol = "GHS"
         )
     }

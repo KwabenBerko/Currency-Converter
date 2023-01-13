@@ -18,10 +18,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kwabenaberko.currencyconverter.android.isAtMostMediumHeight
+import com.kwabenaberko.currencyconverter.android.isAtMostXhdpi
 import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
 
 @Composable
@@ -31,11 +35,15 @@ internal fun KeyButton(
     backgroundColor: Color = MaterialTheme.colorScheme.secondary,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    val density = LocalDensity.current
+    val configuration = LocalConfiguration.current
+    val shouldAdjustSize = density.isAtMostXhdpi() && configuration.isAtMostMediumHeight()
+
     Column(
         modifier = Modifier
             .clip(CircleShape)
             .background(backgroundColor, CircleShape)
-            .size(68.dp)
+            .size(if (shouldAdjustSize) 58.dp else 68.dp)
             .clickable(onClick = onClick)
             .then(modifier),
         verticalArrangement = Arrangement.Center,
