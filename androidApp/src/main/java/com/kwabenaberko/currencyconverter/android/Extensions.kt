@@ -20,6 +20,14 @@ fun Container.Companion.instance(context: Context): Container {
 }
 
 fun Density.isAtMostXhdpi(): Boolean {
+    /**
+     * 0.75 - ldpi
+     * 1.0 - mdpi
+     * 1.5 - hdpi
+     * 2.0 - xhdpi
+     * 3.0 - xxhdpi
+     * 4.0 - xxxhdpi
+     */
     return this.density <= 2.0
 }
 

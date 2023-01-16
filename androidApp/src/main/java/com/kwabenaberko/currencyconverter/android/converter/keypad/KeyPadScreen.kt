@@ -28,6 +28,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.kwabenaberko.converter.presentation.Amount
 import com.kwabenaberko.currencyconverter.android.R
@@ -35,6 +36,8 @@ import com.kwabenaberko.currencyconverter.android.converter.keypad.components.Am
 import com.kwabenaberko.currencyconverter.android.converter.keypad.components.DoneKeyButton
 import com.kwabenaberko.currencyconverter.android.converter.keypad.components.TapToDeleteTextButton
 import com.kwabenaberko.currencyconverter.android.converter.keypad.components.TextKeyButton
+import com.kwabenaberko.currencyconverter.android.isAtMostMediumHeight
+import com.kwabenaberko.currencyconverter.android.isAtMostXhdpi
 import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
 
 @Composable
@@ -47,12 +50,13 @@ internal fun KeyPadScreen(
     onDone: (Double) -> Unit = {}
 ) = CurrencyConverterTheme(useRedTheme) {
 
-    val density = LocalDensity.current.density
-    val configuration = LocalConfiguration.current
-    val isBool = density <= 2.0 && configuration.screenHeightDp <= 900
     val colorScheme = MaterialTheme.colorScheme
     val focusRequester = remember { FocusRequester() }
     val systemUiController = rememberSystemUiController()
+    val density = LocalDensity.current
+    val configuration = LocalConfiguration.current
+    val shouldAdjustSize = density.isAtMostXhdpi() && configuration.isAtMostMediumHeight()
+
     val amount = remember(state) {
         TextFieldValue(
             text = state.text,
@@ -83,6 +87,7 @@ internal fun KeyPadScreen(
 
         AmountTextField(
             textFieldValue = amount,
+            fontSize = if (shouldAdjustSize) 78.sp else 88.sp,
             modifier = Modifier.focusRequester(focusRequester)
         )
 
@@ -93,13 +98,19 @@ internal fun KeyPadScreen(
             ) {
                 row.forEach { key ->
                     if (key == DONE) {
-                        DoneKeyButton(isEnabled = state.isValid) {
+                        DoneKeyButton(
+                            buttonSize = if (shouldAdjustSize) 58.dp else 68.dp,
+                            isEnabled = state.isValid
+                        ) {
                             if (state.isValid) {
                                 onDone(amount.text.toDouble())
                             }
                         }
                     } else {
-                        TextKeyButton(text = key) {
+                        TextKeyButton(
+                            text = key,
+                            buttonSize = if (shouldAdjustSize) 58.dp else 68.dp
+                        ) {
                             onAppend(key.first())
                         }
                     }

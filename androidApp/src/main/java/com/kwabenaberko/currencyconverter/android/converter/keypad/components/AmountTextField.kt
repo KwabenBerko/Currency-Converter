@@ -5,25 +5,19 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import com.kwabenaberko.currencyconverter.android.isAtMostMediumHeight
-import com.kwabenaberko.currencyconverter.android.isAtMostXhdpi
 import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
 
 @Composable
 internal fun AmountTextField(
     textFieldValue: TextFieldValue,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    fontSize: TextUnit = 88.sp,
 ) {
-
-    val density = LocalDensity.current
-    val configuration = LocalConfiguration.current
-    val shouldAdjustSize = density.isAtMostXhdpi() && configuration.isAtMostMediumHeight()
 
     BasicTextField(
         value = textFieldValue,
@@ -32,7 +26,7 @@ internal fun AmountTextField(
         modifier = Modifier.background(MaterialTheme.colorScheme.background).then(modifier),
         textStyle = MaterialTheme.typography.labelLarge.copy(
             color = MaterialTheme.colorScheme.onPrimary,
-            fontSize = if (shouldAdjustSize) 78.sp else 88.sp,
+            fontSize = fontSize,
             textAlign = TextAlign.Center
         ),
         singleLine = true
