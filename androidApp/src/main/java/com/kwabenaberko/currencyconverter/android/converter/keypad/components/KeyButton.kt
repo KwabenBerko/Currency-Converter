@@ -18,32 +18,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kwabenaberko.currencyconverter.android.isAtMostMediumHeight
-import com.kwabenaberko.currencyconverter.android.isAtMostXhdpi
 import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
 
 @Composable
 internal fun KeyButton(
+    buttonSize: Dp,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colorScheme.secondary,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val density = LocalDensity.current
-    val configuration = LocalConfiguration.current
-    val shouldAdjustSize = density.isAtMostXhdpi() && configuration.isAtMostMediumHeight()
-
     Column(
         modifier = Modifier
             .clip(CircleShape)
             .background(backgroundColor, CircleShape)
-            .size(if (shouldAdjustSize) 58.dp else 68.dp)
+            .size(buttonSize)
             .clickable(onClick = onClick)
             .then(modifier),
         verticalArrangement = Arrangement.Center,
@@ -55,9 +49,11 @@ internal fun KeyButton(
 internal fun DoneKeyButton(
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
+    buttonSize: Dp = 68.dp,
     onClick: () -> Unit = {}
 ) {
     KeyButton(
+        buttonSize = buttonSize,
         onClick = onClick,
         modifier = modifier,
         backgroundColor = MaterialTheme.colorScheme.onPrimary
@@ -80,9 +76,11 @@ internal fun DoneKeyButton(
 internal fun TextKeyButton(
     text: String,
     modifier: Modifier = Modifier,
+    buttonSize: Dp = 68.dp,
     onClick: () -> Unit = {}
 ) {
     KeyButton(
+        buttonSize = buttonSize,
         onClick = onClick,
         modifier = modifier
     ) {
