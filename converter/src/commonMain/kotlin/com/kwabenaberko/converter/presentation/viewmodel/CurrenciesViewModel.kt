@@ -1,13 +1,9 @@
-package com.kwabenaberko.currencyconverter.android.converter.currencies
+package com.kwabenaberko.converter.presentation.viewmodel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.kwabenaberko.converter.domain.model.Currency
 import com.kwabenaberko.converter.domain.usecase.GetCurrencies
-import com.kwabenaberko.currencyconverter.android.BaseViewModel
-import com.kwabenaberko.currencyconverter.android.converter.currencies.CurrenciesViewModel.State.Content
-import com.kwabenaberko.currencyconverter.android.converter.currencies.CurrenciesViewModel.State.Idle
+import com.kwabenaberko.converter.presentation.viewmodel.CurrenciesViewModel.State.Content
+import com.kwabenaberko.converter.presentation.viewmodel.CurrenciesViewModel.State.Idle
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -31,7 +27,7 @@ class CurrenciesViewModel(
     }
 
     fun filterCurrencies(query: String) {
-        viewModelScope.launch {
+        scope.launch {
             filterQueryFlow.emit(query)
         }
     }
@@ -41,7 +37,7 @@ class CurrenciesViewModel(
             .debounce { debounceTimeoutInMillis() }
             .flatMapLatest { query -> getCurrencies(query) }
             .onEach(::handleResult)
-            .launchIn(viewModelScope)
+            .launchIn(scope)
     }
 
     private fun handleResult(currencies: List<Currency>) {
@@ -80,15 +76,5 @@ class CurrenciesViewModel(
             val selectedCurrency: Currency,
             val currencies: Map<Char, List<Currency>>
         ) : State()
-    }
-
-    class Factory(
-        private val selectedCurrencyCode: String,
-        private val getCurrencies: GetCurrencies
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return CurrenciesViewModel(selectedCurrencyCode, getCurrencies) as T
-        }
     }
 }

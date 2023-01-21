@@ -14,11 +14,8 @@ kotlin {
     ).forEach {
         it.binaries.framework {
             baseName = "shared"
-
             export(projects.converter)
             export(projects.converterTest)
-            transitiveExport = true
-
             linkerOpts.add("-lsqlite3")
         }
     }

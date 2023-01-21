@@ -9,6 +9,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.kwabenaberko.converter.factory.Container
+import com.kwabenaberko.converter.presentation.viewmodel.ConverterViewModel
 import com.kwabenaberko.currencyconverter.android.converter.currencies.currenciesScreen
 import com.kwabenaberko.currencyconverter.android.converter.currencies.navigateToCurrencies
 import com.kwabenaberko.currencyconverter.android.converter.home.HomeRoute
@@ -64,7 +65,7 @@ fun NavGraphBuilder.converterGraph(
 @Composable
 private fun converterViewModel(owner: ViewModelStoreOwner): ConverterViewModel {
     return with(Container.instance(LocalContext.current)) {
-        val factory = ConverterViewModel.Factory(
+        val factory = ConverterViewModelFactory(
             hasCompletedInitialSync,
             getDefaultCurrencies,
             convertMoney

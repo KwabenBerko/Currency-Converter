@@ -1,26 +1,32 @@
-package com.kwabenaberko.converter.android.converter.keypad
+package com.kwabenaberko.converter.presentation.viewmodel
 
 import app.cash.turbine.test
-import com.kwabenaberko.converter.android.MainDispatcherRule
 import com.kwabenaberko.converter.presentation.Amount
-import com.kwabenaberko.currencyconverter.android.converter.keypad.KeypadViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import kotlinx.coroutines.test.setMain
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class KeypadViewModelTest {
-    @get:Rule
-    val mainDispatcherRule = MainDispatcherRule()
-
     private lateinit var sut: KeypadViewModel
 
-    @Before
+    @BeforeTest
     fun setup() {
+        Dispatchers.setMain(StandardTestDispatcher())
         sut = KeypadViewModel()
+    }
+
+    @AfterTest
+    fun teardown() {
+        Dispatchers.resetMain()
     }
 
     @Test

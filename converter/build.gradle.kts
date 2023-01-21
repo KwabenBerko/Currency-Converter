@@ -2,10 +2,11 @@
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.nativeCoroutines)
     alias(libs.plugins.android.library)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.sqldelight)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.nativeCoroutines)
 }
 
 ktlint {
@@ -16,9 +17,18 @@ ktlint {
 }
 
 sqldelight {
-    database("CurrencyConverterDatabase") {
-        packageName = "com.kwabenaberko"
+    sqldelight {
+        databases { // new wrapper
+            create("CurrencyConverterDatabase") {
+                packageName.set("com.kwabenaberko") // packageName is now a Property<String>
+            }
+            linkSqlite.set(true)
+        }
     }
+}
+
+kotlin.sourceSets.all {
+    languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
 }
 
 kotlin {
@@ -29,7 +39,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "shared"
+            baseName = "converter"
         }
     }
 
@@ -43,6 +53,8 @@ kotlin {
                 implementation(libs.bundles.ktor.client)
                 implementation(libs.ktor.serialization)
                 implementation(libs.kotlinx.dateTime)
+                implementation(libs.kotlinx.collections)
+                implementation(libs.kmmViewModel)
             }
         }
         val commonTest by getting {
@@ -61,6 +73,7 @@ kotlin {
                 implementation(libs.sqldelight.driver.android)
                 implementation(libs.ktor.client.android)
                 implementation(libs.icu4j)
+                implementation(libs.viewModelKtx)
             }
         }
         val androidTest by getting {

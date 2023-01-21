@@ -9,7 +9,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.kwabenaberko.converter.factory.Container
 import com.kwabenaberko.converter.factory.ContainerFactory
-import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
+import com.kwabenaberko.converter.presentation.model.ConversionMode
 
 private var container: Container? = null
 fun Container.Companion.instance(context: Context): Container {

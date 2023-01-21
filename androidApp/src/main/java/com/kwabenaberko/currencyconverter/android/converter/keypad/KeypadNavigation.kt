@@ -14,8 +14,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.composable
-import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel
-import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
+import com.kwabenaberko.converter.presentation.model.ConversionMode
+import com.kwabenaberko.converter.presentation.viewmodel.ConverterViewModel
+import com.kwabenaberko.converter.presentation.viewmodel.KeypadViewModel
 import com.kwabenaberko.currencyconverter.android.useRedTheme
 
 internal const val KeyPadRoute = "keypad?mode={mode}"

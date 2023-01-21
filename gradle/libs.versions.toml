@@ -1,10 +1,10 @@
 [versions]
-androidGradlePlugin = "7.4.0"
+androidGradlePlugin = "8.0.0-alpha11"
 activityCompose = "1.6.1"
 navigationCompose = "2.5.3"
-viewModelCompose = "2.5.1"
-compose = "1.4.0-alpha02"
-compose-compiler = "1.4.0-dev-k1.8.0-33c0ad36f83"
+viewModelCompose = "2.6.0-alpha04"
+compose = "1.4.0-alpha04"
+compose-compiler = "1.4.0"
 compose-material3 = "1.1.0-alpha03"
 accompanist = "0.28.0"
 workmanager = "2.7.1"
@@ -14,14 +14,16 @@ icu4j = "72.1"
 junit = "4.13.2"
 kotest = "5.5.4"
 kotlin = "1.8.0"
+ksp = "1.8.0-1.0.8"
 kotlinxCollections = "0.3.5"
 kotlinxDateTime = "0.4.0"
 ktlint = "11.0.0"
 ktor = "2.2.2"
 lifeCycleVersion = "2.6.0-alpha03"
 multiplatformSettings = "1.0.0-alpha01"
-nativeCoroutines = "0.13.3"
-sqldelight = "2.0.0-alpha03"
+kmmViewModel = "1.0.0-ALPHA-3"
+nativeCoroutines = "1.0.0-ALPHA-4"
+sqldelight = "2.0.0-alpha05"
 turbine = "0.12.1"
 versions = "0.44.0"
 
@@ -29,6 +31,7 @@ versions = "0.44.0"
 activityCompose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 navigationCompose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 viewModelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewModelCompose" }
+viewModelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "viewModelCompose" }
 compose-ui-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-material = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
@@ -51,6 +54,7 @@ ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "lifeCycleVersion" }
 lifecycle-viewModel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifeCycleVersion" }
+kmmViewModel = {module = "com.rickclephas.kmm:kmm-viewmodel-core", version.ref = "kmmViewModel"}
 multiplatformSettings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 multiplatformSettings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "multiplatformSettings" }
 multiplatformSettings-test = { module = "com.russhwolf:multiplatform-settings-test", version.ref = "multiplatformSettings" }
@@ -79,6 +83,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-gradlePlugin = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = {id = "com.google.devtools.ksp", version.ref = "ksp"}
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 nativeCoroutines = { id = "com.rickclephas.kmp.nativecoroutines", version.ref = "nativeCoroutines" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }

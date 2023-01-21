@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.kwabenaberko.converter.domain.model.Currency
-import com.kwabenaberko.currencyconverter.android.converter.currencies.CurrenciesViewModel.State
+import com.kwabenaberko.converter.presentation.viewmodel.CurrenciesViewModel.State
 import com.kwabenaberko.currencyconverter.android.converter.currencies.components.CurrencyList
 import com.kwabenaberko.currencyconverter.android.converter.currencies.components.SearchBar
 import com.kwabenaberko.currencyconverter.android.converter.currencies.components.Toolbar

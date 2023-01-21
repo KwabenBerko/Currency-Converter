@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.kwabenaberko.currencyconverter.android.sync.SyncViewModel.State
+import com.kwabenaberko.converter.presentation.viewmodel.SyncViewModel.State
 import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
 
 @OptIn(ExperimentalAnimationApi::class)
