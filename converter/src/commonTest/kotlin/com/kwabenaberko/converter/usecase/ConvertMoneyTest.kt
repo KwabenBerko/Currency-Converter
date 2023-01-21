@@ -7,8 +7,8 @@ import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeCediCurrency
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeDollarCurrency
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeNairaCurrency
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makePoundsCurrency
-import com.kwabenaberko.convertertest.testdouble.FakeGetRate
-import com.kwabenaberko.convertertest.testdouble.FakeUpdateDefaultCurrencies
+import com.kwabenaberko.converter.testdouble.FakeGetRate
+import com.kwabenaberko.converter.testdouble.FakeUpdateDefaultCurrencies
 import io.kotest.data.forAll
 import io.kotest.data.headers
 import io.kotest.data.row

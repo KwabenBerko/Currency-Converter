@@ -14,6 +14,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.google.accompanist.navigation.animation.composable
 import com.kwabenaberko.converter.factory.Container
+import com.kwabenaberko.converter.presentation.viewmodel.SyncViewModel
 import com.kwabenaberko.currencyconverter.android.instance
 
 const val SyncRoute = "sync"
@@ -43,7 +44,7 @@ fun NavGraphBuilder.syncScreen(onNavigateToConverter: () -> Unit) {
 @Composable
 private fun syncViewModel(owner: ViewModelStoreOwner): SyncViewModel {
     return with(Container.instance(LocalContext.current)) {
-        val factory = SyncViewModel.Factory(this.sync)
+        val factory = SyncViewModelFactory(this.sync)
         viewModel(viewModelStoreOwner = owner, factory = factory)
     }
 }

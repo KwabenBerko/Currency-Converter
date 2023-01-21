@@ -1,4 +1,4 @@
-package com.kwabenaberko.convertertest.testdouble
+package com.kwabenaberko.converter.testdouble
 
 import com.kwabenaberko.converter.domain.model.Currency
 import com.kwabenaberko.converter.domain.model.Money

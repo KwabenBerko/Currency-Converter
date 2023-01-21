@@ -1,17 +1,18 @@
-package com.kwabenaberko.currencyconverter.android.converter.keypad
+package com.kwabenaberko.converter.presentation.viewmodel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.kwabenaberko.converter.presentation.Amount
 import com.kwabenaberko.converter.presentation.AmountInputEngine
+import com.rickclephas.kmm.viewmodel.KMMViewModel
+import com.rickclephas.kmm.viewmodel.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 
-class KeypadViewModel : ViewModel() {
+class KeypadViewModel : KMMViewModel() {
 
+    private val scope = viewModelScope.coroutineScope
     private val amountEngine = AmountInputEngine()
     private val _amount = MutableStateFlow(Amount())
     val amount = _amount.asStateFlow()
@@ -20,7 +21,7 @@ class KeypadViewModel : ViewModel() {
         amountEngine.amount
             .onEach { value ->
                 _amount.update { value }
-            }.launchIn(viewModelScope)
+            }.launchIn(scope)
     }
 
     fun add(value: Char) {

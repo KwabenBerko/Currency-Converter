@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kwabenaberko.converter.presentation.model.ConversionMode
 import com.kwabenaberko.currencyconverter.android.R
-import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
 import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
 import com.kwabenaberko.currencyconverter.android.theme.RedColorScheme
 import com.kwabenaberko.currencyconverter.android.theme.WhiteColorScheme

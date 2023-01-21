@@ -12,7 +12,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "sharedTest"
+            baseName = "converterTest"
         }
     }
 
@@ -54,4 +54,5 @@ android {
         minSdk = 24
         targetSdk = 33
     }
+    namespace = "com.kwabenaberko.convertertest"
 }

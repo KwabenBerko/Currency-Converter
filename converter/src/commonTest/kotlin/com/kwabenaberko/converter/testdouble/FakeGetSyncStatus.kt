@@ -1,4 +1,4 @@
-package com.kwabenaberko.convertertest.testdouble
+package com.kwabenaberko.converter.testdouble
 
 import com.kwabenaberko.converter.domain.model.SyncStatus
 import com.kwabenaberko.converter.domain.usecase.GetSyncStatus

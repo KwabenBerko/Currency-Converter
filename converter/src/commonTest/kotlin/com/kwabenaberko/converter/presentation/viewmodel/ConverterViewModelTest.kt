@@ -1,30 +1,30 @@
-package com.kwabenaberko.converter.android.converter
+package com.kwabenaberko.converter.presentation.viewmodel
 
 import app.cash.turbine.test
-import com.kwabenaberko.converter.android.MainDispatcherRule
 import com.kwabenaberko.converter.domain.model.DefaultCurrencies
 import com.kwabenaberko.converter.domain.model.Money
+import com.kwabenaberko.converter.presentation.model.ConversionMode
+import com.kwabenaberko.converter.presentation.viewmodel.ConverterViewModel.MoneyViewItem
+import com.kwabenaberko.converter.presentation.viewmodel.ConverterViewModel.State
+import com.kwabenaberko.converter.testdouble.FakeConvertMoney
+import com.kwabenaberko.converter.testdouble.FakeGetDefaultCurrencies
+import com.kwabenaberko.converter.testdouble.FakeHasCompletedInitialSync
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeCediCurrency
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeDollarCurrency
-import com.kwabenaberko.convertertest.testdouble.FakeConvertMoney
-import com.kwabenaberko.convertertest.testdouble.FakeGetDefaultCurrencies
-import com.kwabenaberko.convertertest.testdouble.FakeHasCompletedInitialSync
-import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel
-import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.MoneyViewItem
-import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel.State
-import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Rule
-import org.junit.Test
+import kotlinx.coroutines.test.setMain
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ConverterViewModelTest {
-    @get:Rule
-    val mainDispatcherRule = MainDispatcherRule()
-
     private val hasCompletedInitialSync = FakeHasCompletedInitialSync().apply {
         this.result = flowOf(true)
     }
@@ -33,6 +33,16 @@ class ConverterViewModelTest {
     }
     private val convertMoney = FakeConvertMoney().apply {
         this.result = flowOf(Money(currency = GHS, amount = 1.0))
+    }
+
+    @BeforeTest
+    fun setup() {
+        Dispatchers.setMain(StandardTestDispatcher())
+    }
+
+    @AfterTest
+    fun teardown() {
+        Dispatchers.resetMain()
     }
 
     @Test

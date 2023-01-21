@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.activityCompose)
     implementation(libs.compose.ui.preview)
     implementation(libs.viewModelCompose)
+    implementation(libs.kmmViewModel)
     implementation(libs.navigationCompose)
     implementation(libs.accompanist.systemuiController)
     implementation(libs.accompanist.navigationAnimation)

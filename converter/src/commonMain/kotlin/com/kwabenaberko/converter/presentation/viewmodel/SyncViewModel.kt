@@ -1,10 +1,6 @@
-package com.kwabenaberko.currencyconverter.android.sync
+package com.kwabenaberko.converter.presentation.viewmodel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.kwabenaberko.converter.domain.usecase.Sync
-import com.kwabenaberko.currencyconverter.android.BaseViewModel
 import kotlinx.coroutines.launch
 
 class SyncViewModel(
@@ -16,7 +12,7 @@ class SyncViewModel(
     }
 
     fun startSync() {
-        viewModelScope.launch {
+        scope.launch {
 
             setState(State.Syncing)
 
@@ -32,14 +28,5 @@ class SyncViewModel(
         object Syncing : State()
         object SyncError : State()
         object SyncSuccess : State()
-    }
-
-    class Factory(
-        private val sync: Sync
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SyncViewModel(sync) as T
-        }
     }
 }

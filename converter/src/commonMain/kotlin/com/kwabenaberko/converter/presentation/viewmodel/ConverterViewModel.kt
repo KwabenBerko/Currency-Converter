@@ -1,16 +1,12 @@
-package com.kwabenaberko.currencyconverter.android.converter
+package com.kwabenaberko.converter.presentation.viewmodel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.kwabenaberko.converter.domain.model.Currency
 import com.kwabenaberko.converter.domain.model.Money
 import com.kwabenaberko.converter.domain.usecase.ConvertMoney
 import com.kwabenaberko.converter.domain.usecase.GetDefaultCurrencies
 import com.kwabenaberko.converter.domain.usecase.HasCompletedInitialSync
 import com.kwabenaberko.converter.presentation.CompactNumberFormatter
-import com.kwabenaberko.currencyconverter.android.BaseViewModel
-import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
+import com.kwabenaberko.converter.presentation.model.ConversionMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
@@ -40,7 +36,7 @@ class ConverterViewModel(
                     true -> loadConverter()
                     false -> setState(State.RequiresSync)
                 }
-            }.launchIn(viewModelScope)
+            }.launchIn(scope)
     }
 
     private fun loadConverter() {
@@ -75,7 +71,7 @@ class ConverterViewModel(
                 )
 
                 setState(newState)
-            }.launchIn(viewModelScope)
+            }.launchIn(scope)
     }
 
     fun convertFirstMoney(amount: Double) = runIf<State.Content> { contentState ->
@@ -116,14 +112,14 @@ class ConverterViewModel(
 
     private fun convertFirstMoney(money: Money, targetCurrency: Currency) {
         val data = Triple(money, targetCurrency, ConversionMode.FIRST_TO_SECOND)
-        viewModelScope.launch {
+        scope.launch {
             converterFlow.emit(data)
         }
     }
 
     private fun convertSecondMoney(money: Money, targetCurrency: Currency) {
         val data = Triple(money, targetCurrency, ConversionMode.SECOND_TO_FIRST)
-        viewModelScope.launch {
+        scope.launch {
             converterFlow.emit(data)
         }
     }
@@ -159,20 +155,5 @@ class ConverterViewModel(
             val secondMoneyItem: MoneyViewItem,
             val conversionMode: ConversionMode
         ) : State()
-    }
-
-    class Factory(
-        private val hasCompletedInitialSync: HasCompletedInitialSync,
-        private val getDefaultCurrencies: GetDefaultCurrencies,
-        private val convertMoney: ConvertMoney
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ConverterViewModel(
-                hasCompletedInitialSync = hasCompletedInitialSync,
-                getDefaultCurrencies = getDefaultCurrencies,
-                convertMoney = convertMoney
-            ) as T
-        }
     }
 }

@@ -17,8 +17,9 @@ import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.composable
 import com.kwabenaberko.converter.domain.model.Currency
 import com.kwabenaberko.converter.factory.Container
-import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel
-import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
+import com.kwabenaberko.converter.presentation.model.ConversionMode
+import com.kwabenaberko.converter.presentation.viewmodel.ConverterViewModel
+import com.kwabenaberko.converter.presentation.viewmodel.CurrenciesViewModel
 import com.kwabenaberko.currencyconverter.android.instance
 import com.kwabenaberko.currencyconverter.android.useRedTheme
 
@@ -76,6 +77,7 @@ internal fun NavGraphBuilder.currenciesScreen(
                     ConversionMode.FIRST_TO_SECOND -> {
                         converterViewModel.convertFirstMoney(currency)
                     }
+
                     ConversionMode.SECOND_TO_FIRST -> {
                         converterViewModel.convertSecondMoney(currency)
                     }
@@ -92,7 +94,7 @@ fun currenciesViewModel(
     selectedCurrencyCode: String
 ): CurrenciesViewModel {
     return with(Container.instance(LocalContext.current)) {
-        val factory = CurrenciesViewModel.Factory(
+        val factory = CurrenciesViewModelFactory(
             selectedCurrencyCode = selectedCurrencyCode,
             getCurrencies = this.getCurrencies
         )

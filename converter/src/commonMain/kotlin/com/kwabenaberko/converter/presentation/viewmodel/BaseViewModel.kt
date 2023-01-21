@@ -1,11 +1,13 @@
-package com.kwabenaberko.currencyconverter.android
+package com.kwabenaberko.converter.presentation.viewmodel
 
-import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.rickclephas.kmm.viewmodel.KMMViewModel
+import com.rickclephas.kmm.viewmodel.MutableStateFlow
+import com.rickclephas.kmm.viewmodel.coroutineScope
 import kotlinx.coroutines.flow.asStateFlow
 
-abstract class BaseViewModel<T>(initialState: T) : ViewModel() {
-    private val _state = MutableStateFlow(initialState)
+abstract class BaseViewModel<T>(initialState: T) : KMMViewModel() {
+    protected val scope = viewModelScope.coroutineScope
+    private val _state = MutableStateFlow(viewModelScope, initialState)
     val state = _state.asStateFlow()
 
     protected fun setState(newState: T) {

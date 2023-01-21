@@ -10,8 +10,8 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.composable
 import com.kwabenaberko.converter.domain.model.Currency
-import com.kwabenaberko.currencyconverter.android.converter.ConverterViewModel
-import com.kwabenaberko.currencyconverter.android.converter.model.ConversionMode
+import com.kwabenaberko.converter.presentation.model.ConversionMode
+import com.kwabenaberko.converter.presentation.viewmodel.ConverterViewModel
 
 internal const val HomeRoute = "home"
 
