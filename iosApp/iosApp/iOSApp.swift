@@ -1,4 +1,5 @@
 import SwiftUI
+import KMMViewModelSwiftUI
 import shared
 
 extension Container {
@@ -8,8 +9,8 @@ extension Container {
 enum Destination: Hashable {
     case converter
     case sync
-    case keypad
-    case currencies
+    case keypad(conversionMode: ConversionMode)
+    case currencies(selectedCurrency: Currency, conversionMode: ConversionMode)
 }
 
 final class Navigator: ObservableObject {
@@ -27,6 +28,11 @@ final class Navigator: ObservableObject {
 @main
 struct iOSApp: App {
     @StateObject private var navigator = Navigator()
+    @StateViewModel private var viewModel = ConverterViewModel(
+        hasCompletedInitialSync: Container.shared.hasCompletedInitialSync,
+        getDefaultCurrencies: Container.shared.getDefaultCurrencies,
+        convertMoney: Container.shared.convertMoney
+    )
     
     var body: some Scene {
         WindowGroup {
@@ -36,11 +42,17 @@ struct iOSApp: App {
                         switch destination {
                         case .converter: ConverterView()
                         case .sync: SyncView()
-                        case .currencies: CurrenciesView()
-                        case .keypad: KeyPadView()
+                        case .currencies(let selectedCurrency, let conversionMode):
+                            CurrenciesView(
+                                selectedCurrencyCode: selectedCurrency.code,
+                                conversionMode: conversionMode
+                            )
+                        case .keypad(let conversionMode):
+                            KeyPadView(conversionMode: conversionMode)
                         }
                     }
             }
+            .environmentViewModel($viewModel)
             .environmentObject(navigator)
         }
     }

@@ -17,6 +17,7 @@ kotlin {
             export(projects.converter)
             export(projects.converterTest)
             linkerOpts.add("-lsqlite3")
+            freeCompilerArgs = freeCompilerArgs + ("-Xobjc-generics")
         }
     }
 

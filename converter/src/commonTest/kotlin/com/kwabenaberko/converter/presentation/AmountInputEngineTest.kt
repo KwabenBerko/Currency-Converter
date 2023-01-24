@@ -16,7 +16,7 @@ class AmountInputEngineTest {
         sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.add('A')
+            sut.add("A")
             expectNoEvents()
         }
     }
@@ -26,13 +26,13 @@ class AmountInputEngineTest {
         sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.add('2')
+            sut.add("2")
             assertEquals(Amount(text = "2", isValid = true), awaitItem())
 
-            sut.add('.')
+            sut.add(".")
             assertEquals(Amount(text = "2.", isValid = false), awaitItem())
 
-            sut.add('0')
+            sut.add("0")
             assertEquals(Amount(text = "2.0", isValid = true), awaitItem())
         }
     }
@@ -42,7 +42,7 @@ class AmountInputEngineTest {
         sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.add('2')
+            sut.add("2")
             assertEquals(Amount(text = "2", isValid = true), awaitItem())
 
             sut.pop()
@@ -55,7 +55,7 @@ class AmountInputEngineTest {
         sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.add('2')
+            sut.add("2")
             assertEquals(Amount(text = "2", isValid = true), awaitItem())
 
             sut.pop()
@@ -71,7 +71,7 @@ class AmountInputEngineTest {
         sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.add('.')
+            sut.add(".")
             assertEquals(Amount(text = "0.", isValid = false), awaitItem())
         }
     }
@@ -81,13 +81,13 @@ class AmountInputEngineTest {
         sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.add('2')
+            sut.add("2")
             assertEquals(Amount(text = "2", isValid = true), awaitItem())
 
-            sut.add('.')
+            sut.add(".")
             assertEquals(Amount(text = "2.", isValid = false), awaitItem())
 
-            sut.add('.')
+            sut.add(".")
             expectNoEvents()
         }
     }
@@ -97,16 +97,16 @@ class AmountInputEngineTest {
         sut.amount.test {
             assertEquals(Amount(), awaitItem())
 
-            sut.add('2')
+            sut.add("2")
             assertEquals(Amount(text = "2", isValid = true), awaitItem())
 
-            sut.add('.')
+            sut.add(".")
             assertEquals(Amount(text = "2.", isValid = false), awaitItem())
 
-            sut.add('0')
+            sut.add("0")
             assertEquals(Amount(text = "2.0", isValid = true), awaitItem())
 
-            sut.add('0')
+            sut.add("0")
             expectNoEvents()
         }
     }

@@ -8,18 +8,22 @@
 
 import Foundation
 import SwiftUI
+import KMMViewModelSwiftUI
 import shared
 
 struct SyncView: View {
-    @StateObject private var viewModel = SyncViewModel(sync: Container.shared.sync)
+    @EnvironmentObject private var navigator: Navigator
+    @StateViewModel private var viewModel = SyncViewModel(sync: Container.shared.sync)
     
     var body: some View {
         SyncContentView(
-            state: viewModel.state,
+            state: viewModel.state as! SyncViewModel.State,
             onSyncCompleted: {
+                navigator.navigate(.converter)
             },
             onRetryClick: viewModel.startSync
         )
+        .toolbar(.hidden)
     }
 }
 
@@ -33,14 +37,15 @@ private struct SyncContentView: View {
             redColorTheme.background.ignoresSafeArea()
             
             switch state {
-            case .idle: EmptyView()
-            case .syncing: SyncingView()
-            case .syncSuccess: EmptyView()
-            case .syncError: ErrorView(onRetryClick: onRetryClick)
+            case is SyncViewModel.StateIdle: EmptyView()
+            case is SyncViewModel.StateSyncing: SyncingView()
+            case is SyncViewModel.StateSyncSuccess: EmptyView()
+            case is SyncViewModel.StateSyncError: ErrorView(onRetryClick: onRetryClick)
+            default: EmptyView()
             }
         }
         .onChange(of: state){ currentState in
-            if(currentState == .syncSuccess){
+            if(currentState is SyncViewModel.StateSyncSuccess){
                 onSyncCompleted()
             }
         }

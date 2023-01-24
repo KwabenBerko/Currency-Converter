@@ -51,7 +51,7 @@ internal fun NavGraphBuilder.keypadScreen(
         )
         val converterViewModel = getConverterViewModel(backStackEntry)
         val viewModel = keypadViewModel(backStackEntry)
-        val state by viewModel.amount.collectAsState()
+        val state by viewModel.state.collectAsState()
 
         KeyPadScreen(
             useRedTheme = useRedTheme(conversionMode),

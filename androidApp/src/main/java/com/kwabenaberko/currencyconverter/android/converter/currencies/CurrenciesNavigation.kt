@@ -71,7 +71,7 @@ internal fun NavGraphBuilder.currenciesScreen(
             useRedTheme = useRedTheme(conversionMode),
             state = state,
             onBackClick = onNavigateBack,
-            onFilterQueryChange = viewModel::filterCurrencies,
+            onFilterCurrencies = viewModel::filterCurrencies,
             onCurrencyClick = { currency ->
                 when (conversionMode) {
                     ConversionMode.FIRST_TO_SECOND -> {

@@ -8,44 +8,52 @@
 
 import Foundation
 import SwiftUI
+import KMMViewModelSwiftUI
 import shared
 
 struct ConverterView: View {
     @EnvironmentObject private var navigator: Navigator
-    @StateObject private var viewModel = ConverterViewModel(
-        hasCompletedInitialSync: Container.shared.hasCompletedInitialSync,
-        getDefaultCurrencies: Container.shared.getDefaultCurrencies,
-        convertMoney: Container.shared.convertMoney
-    )
+    @EnvironmentViewModel private var viewModel: ConverterViewModel
     
     var body: some View {
         ConverterContentView(
-            state: viewModel.state,
-            onFirstCurrencyClick: {
-                navigator.navigate(.currencies)
+            state: viewModel.state as! ConverterViewModel.State,
+            onFirstCurrencyClick: { currency in
+                navigator.navigate(
+                    .currencies(
+                        selectedCurrency: currency,
+                        conversionMode: .firstToSecond
+                    )
+                )
             },
             onFirstAmountClick: {
-                navigator.navigate(.keypad)
+                navigator.navigate(.keypad(conversionMode: .firstToSecond))
             },
-            onSecondCurrencyClick: {
-                navigator.navigate(.currencies)
+            onSecondCurrencyClick: { currency in
+                navigator.navigate(
+                    .currencies(
+                        selectedCurrency: currency,
+                        conversionMode: .secondToFirst
+                    )
+                )
             },
             onSecondAmountClick: {
-                navigator.navigate(.keypad)
+                navigator.navigate(.keypad(conversionMode: .secondToFirst))
             },
             onSyncRequired: {
                 navigator.navigate(.sync)
             }
         )
+        .toolbar(.hidden)
     }
 }
 
 private struct ConverterContentView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     var state: ConverterViewModel.State
-    var onFirstCurrencyClick: () -> Void = {}
+    var onFirstCurrencyClick: (Currency) -> Void = {_ in }
     var onFirstAmountClick: () -> Void = {}
-    var onSecondCurrencyClick: () -> Void = {}
+    var onSecondCurrencyClick: (Currency) -> Void = {_ in }
     var onSecondAmountClick: () -> Void = {}
     var onSyncRequired: () -> Void = {}
     
@@ -56,26 +64,34 @@ private struct ConverterContentView: View {
         return ZStack {
             redColorTheme.background.ignoresSafeArea()
             switch state {
-            case .idle: EmptyView()
-            case .requireSync: EmptyView()
-            case .content:
+            case is ConverterViewModel.StateIdle: EmptyView()
+            case is ConverterViewModel.StateRequiresSync: EmptyView()
+            case let content as ConverterViewModel.StateContent:
+                let firstMoneyItem = content.firstMoneyItem
+                let secondMoneyItem = content.secondMoneyItem
+                
                 ZStack {
                     VStack {
                         VStack {
+                            let currency = firstMoneyItem.money.currency
+                            let formattedAmount = firstMoneyItem.formattedAmount
+                            
                             CurrencyNameView(
-                                name: "United States Dollar",
+                                name: currency.name,
                                 textColor: redColorTheme.onPrimary,
                                 backgroundColor: redColorTheme.background,
                                 fontSize: shouldAdjustSize ? 22 : 24,
-                                onClick: onFirstCurrencyClick
+                                onClick: {
+                                    onFirstCurrencyClick(currency)
+                                }
                             )
                             
                             Spacer()
                             
                             CurrencyAmountView(
-                                amount: "500K",
+                                amount: formattedAmount,
                                 amountFontSize: shouldAdjustSize ? 78 : 88,
-                                symbol: "$",
+                                symbol: currency.symbol,
                                 symbolFontSize: shouldAdjustSize ? 20 : 24,
                                 amountTextColor: redColorTheme.onPrimary,
                                 symbolTextColor: redColorTheme.secondary,
@@ -86,7 +102,7 @@ private struct ConverterContentView: View {
                             Spacer()
                             
                             CurrencyCodeView(
-                                code: "USD",
+                                code: currency.code,
                                 textColor: redColorTheme.secondary,
                                 backgroundColor: redColorTheme.background
                             )
@@ -98,8 +114,11 @@ private struct ConverterContentView: View {
                         
                         
                         VStack {
+                            let currency = secondMoneyItem.money.currency
+                            let formattedAmount = secondMoneyItem.formattedAmount
+                            
                             CurrencyCodeView(
-                                code: "GHS",
+                                code: currency.code,
                                 textColor: whiteColorTheme.secondary,
                                 backgroundColor: whiteColorTheme.background.opacity(1)
                             )
@@ -108,9 +127,9 @@ private struct ConverterContentView: View {
                             Spacer()
                             
                             CurrencyAmountView(
-                                amount: "1.5M",
+                                amount: formattedAmount,
                                 amountFontSize: shouldAdjustSize ? 78 : 88,
-                                symbol: "GHS",
+                                symbol: currency.symbol,
                                 symbolFontSize: shouldAdjustSize ? 20 : 24,
                                 amountTextColor: whiteColorTheme.onPrimary,
                                 symbolTextColor: whiteColorTheme.secondary,
@@ -121,11 +140,13 @@ private struct ConverterContentView: View {
                             Spacer()
                             
                             CurrencyNameView(
-                                name: "Ghanaian Cedi",
+                                name: currency.name,
                                 textColor: whiteColorTheme.onPrimary,
                                 backgroundColor: whiteColorTheme.background,
                                 fontSize: shouldAdjustSize ? 22 : 24,
-                                onClick: onSecondCurrencyClick
+                                onClick:  {
+                                    onSecondCurrencyClick(currency)
+                                }
                             )
                             
                         }
@@ -135,22 +156,13 @@ private struct ConverterContentView: View {
                         
                     }
                     
-                    ZStack {
-                        Image(Icons.longArrowDown)
-                            .font(.system(size: 46))
-                            .foregroundColor(Color.red)
-                    }
-                    .padding(20)
-                    .background(Circle().fill(whiteColorTheme.background))
-                    .overlay(
-                        Circle()
-                            .stroke(redColorTheme.primary, lineWidth: 6)
-                    )
+                    ConversionDirection(conversionMode: content.conversionMode)
                 }
+            default: EmptyView()
             }
         }
         .onChange(of: state){ currentState in
-            if(currentState == .requireSync){
+            if(currentState is ConverterViewModel.StateRequiresSync){
                 onSyncRequired()
             }
         }
@@ -193,6 +205,7 @@ private struct CurrencyAmountView: View {
                     + Text(symbol)
                         .font(.appFont(size: symbolFontSize))
                         .foregroundColor(symbolTextColor)
+                    
                 }
             }
         }
@@ -211,8 +224,29 @@ private struct CurrencyCodeView: View {
     }
 }
 
-struct ConverterContentView_Preview: PreviewProvider {
-    static var previews: some View {
-        ConverterContentView(state: .content)
+private struct ConversionDirection: View {
+    var conversionMode: ConversionMode
+    
+    var body: some View {
+        ZStack {
+            let icon = conversionMode == ConversionMode.firstToSecond ? Icons.longArrowDown : Icons.longArrowUp
+            
+            Image(icon)
+                .font(.system(size: 46))
+                .foregroundColor(Color.red)
+        }
+        .padding(20)
+        .background(Circle().fill(whiteColorTheme.background))
+        .overlay(
+            Circle()
+                .stroke(redColorTheme.primary, lineWidth: 6)
+        )
     }
 }
+
+struct ConverterContentView_Preview: PreviewProvider {
+    static var previews: some View {
+        ConverterContentView(state: ConverterViewModel.StateIdle())
+    }
+}
+

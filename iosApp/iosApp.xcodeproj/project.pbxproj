@@ -9,42 +9,25 @@
 /* Begin PBXBuildFile section */
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
-		1373014F29761FF000875CB1 /* SyncViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1373013929761FEF00875CB1 /* SyncViewModel.swift */; };
 		1373015029761FF000875CB1 /* SyncView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1373013A29761FEF00875CB1 /* SyncView.swift */; };
 		1373015129761FF000875CB1 /* KeypadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1373013C29761FF000875CB1 /* KeypadView.swift */; };
-		1373015229761FF000875CB1 /* KeyPadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1373013D29761FF000875CB1 /* KeyPadViewModel.swift */; };
 		1373015329761FF000875CB1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1373013F29761FF000875CB1 /* Preview Assets.xcassets */; };
 		1373015429761FF000875CB1 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1373014129761FF000875CB1 /* Typography.swift */; };
 		1373015529761FF000875CB1 /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1373014229761FF000875CB1 /* Icon.swift */; };
 		1373015629761FF000875CB1 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1373014329761FF000875CB1 /* Theme.swift */; };
 		1373015729761FF000875CB1 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1373014429761FF000875CB1 /* Color.swift */; };
 		1373015829761FF000875CB1 /* ConverterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1373014629761FF000875CB1 /* ConverterView.swift */; };
-		1373015929761FF000875CB1 /* ConverterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1373014729761FF000875CB1 /* ConverterViewModel.swift */; };
 		1373015A29761FF000875CB1 /* sf_regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1373014929761FF000875CB1 /* sf_regular.otf */; };
-		1373015B29761FF000875CB1 /* CurrenciesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1373014B29761FF000875CB1 /* CurrenciesViewModel.swift */; };
 		1373015C29761FF000875CB1 /* CurrenciesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1373014C29761FF000875CB1 /* CurrenciesView.swift */; };
-		1373015D29761FF000875CB1 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1373014E29761FF000875CB1 /* BaseViewModel.swift */; };
-		137301662976207600875CB1 /* KeypadViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1373015F2976207600875CB1 /* KeypadViewModelTests.swift */; };
-		137301672976207600875CB1 /* ConverterViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137301612976207600875CB1 /* ConverterViewModelTests.swift */; };
-		137301682976207600875CB1 /* CurrenciesViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137301632976207600875CB1 /* CurrenciesViewModelTests.swift */; };
-		137301692976207600875CB1 /* SyncViewmodelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137301652976207600875CB1 /* SyncViewmodelTests.swift */; };
-		137D277429761A6B00DDD377 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 137D277329761A6B00DDD377 /* OrderedCollections */; };
-		137D277729761A8700DDD377 /* CombineSchedulers in Frameworks */ = {isa = PBXBuildFile; productRef = 137D277629761A8700DDD377 /* CombineSchedulers */; };
-		137D277A29761AFB00DDD377 /* KMPNativeCoroutinesAsync in Frameworks */ = {isa = PBXBuildFile; productRef = 137D277929761AFB00DDD377 /* KMPNativeCoroutinesAsync */; };
-		137D277C29761AFB00DDD377 /* KMPNativeCoroutinesCombine in Frameworks */ = {isa = PBXBuildFile; productRef = 137D277B29761AFB00DDD377 /* KMPNativeCoroutinesCombine */; };
-		137D277E29761AFB00DDD377 /* KMPNativeCoroutinesCore in Frameworks */ = {isa = PBXBuildFile; productRef = 137D277D29761AFB00DDD377 /* KMPNativeCoroutinesCore */; };
+		13FDE172297BCA4800CC01F7 /* KMMViewModelCore in Frameworks */ = {isa = PBXBuildFile; productRef = 13FDE171297BCA4800CC01F7 /* KMMViewModelCore */; };
+		13FDE174297BCA4800CC01F7 /* KMMViewModelSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 13FDE173297BCA4800CC01F7 /* KMMViewModelSwiftUI */; };
+		13FDE176297BCA6600CC01F7 /* KMMViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FDE175297BCA6600CC01F7 /* KMMViewModel.swift */; };
+		13FDE179297BCD9100CC01F7 /* KMPNativeCoroutinesAsync in Frameworks */ = {isa = PBXBuildFile; productRef = 13FDE178297BCD9100CC01F7 /* KMPNativeCoroutinesAsync */; };
+		13FDE17B297BCD9100CC01F7 /* KMPNativeCoroutinesCombine in Frameworks */ = {isa = PBXBuildFile; productRef = 13FDE17A297BCD9100CC01F7 /* KMPNativeCoroutinesCombine */; };
+		13FDE17D297BCD9100CC01F7 /* KMPNativeCoroutinesCore in Frameworks */ = {isa = PBXBuildFile; productRef = 13FDE17C297BCD9100CC01F7 /* KMPNativeCoroutinesCore */; };
+		13FDE17F297BCD9100CC01F7 /* KMPNativeCoroutinesRxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 13FDE17E297BCD9100CC01F7 /* KMPNativeCoroutinesRxSwift */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		137D2757297617B000DDD377 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7555FF73242A565900829871 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7555FF7A242A565900829871;
-			remoteInfo = iosApp;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		7555FFB4242A642300829871 /* Embed Frameworks */ = {
@@ -62,48 +45,33 @@
 /* Begin PBXFileReference section */
 		058557BA273AAA24004C7B11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		1373013929761FEF00875CB1 /* SyncViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncViewModel.swift; sourceTree = "<group>"; };
 		1373013A29761FEF00875CB1 /* SyncView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncView.swift; sourceTree = "<group>"; };
 		1373013C29761FF000875CB1 /* KeypadView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeypadView.swift; sourceTree = "<group>"; };
-		1373013D29761FF000875CB1 /* KeyPadViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyPadViewModel.swift; sourceTree = "<group>"; };
 		1373013F29761FF000875CB1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1373014129761FF000875CB1 /* Typography.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
 		1373014229761FF000875CB1 /* Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
 		1373014329761FF000875CB1 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		1373014429761FF000875CB1 /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		1373014629761FF000875CB1 /* ConverterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConverterView.swift; sourceTree = "<group>"; };
-		1373014729761FF000875CB1 /* ConverterViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConverterViewModel.swift; sourceTree = "<group>"; };
 		1373014929761FF000875CB1 /* sf_regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sf_regular.otf; sourceTree = "<group>"; };
-		1373014B29761FF000875CB1 /* CurrenciesViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrenciesViewModel.swift; sourceTree = "<group>"; };
 		1373014C29761FF000875CB1 /* CurrenciesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrenciesView.swift; sourceTree = "<group>"; };
-		1373014E29761FF000875CB1 /* BaseViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
-		1373015F2976207600875CB1 /* KeypadViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeypadViewModelTests.swift; sourceTree = "<group>"; };
-		137301612976207600875CB1 /* ConverterViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConverterViewModelTests.swift; sourceTree = "<group>"; };
-		137301632976207600875CB1 /* CurrenciesViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrenciesViewModelTests.swift; sourceTree = "<group>"; };
-		137301652976207600875CB1 /* SyncViewmodelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncViewmodelTests.swift; sourceTree = "<group>"; };
-		137D2753297617B000DDD377 /* iosAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iosAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		13FDE175297BCA6600CC01F7 /* KMMViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KMMViewModel.swift; sourceTree = "<group>"; };
 		2152FB032600AC8F00CF470E /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		137D2750297617B000DDD377 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		7555FF78242A565900829871 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				137D277729761A8700DDD377 /* CombineSchedulers in Frameworks */,
-				137D277E29761AFB00DDD377 /* KMPNativeCoroutinesCore in Frameworks */,
-				137D277C29761AFB00DDD377 /* KMPNativeCoroutinesCombine in Frameworks */,
-				137D277429761A6B00DDD377 /* OrderedCollections in Frameworks */,
-				137D277A29761AFB00DDD377 /* KMPNativeCoroutinesAsync in Frameworks */,
+				13FDE17D297BCD9100CC01F7 /* KMPNativeCoroutinesCore in Frameworks */,
+				13FDE17F297BCD9100CC01F7 /* KMPNativeCoroutinesRxSwift in Frameworks */,
+				13FDE172297BCA4800CC01F7 /* KMMViewModelCore in Frameworks */,
+				13FDE17B297BCD9100CC01F7 /* KMPNativeCoroutinesCombine in Frameworks */,
+				13FDE179297BCD9100CC01F7 /* KMPNativeCoroutinesAsync in Frameworks */,
+				13FDE174297BCA4800CC01F7 /* KMMViewModelSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,7 +89,6 @@
 		1373013829761FEF00875CB1 /* Sync */ = {
 			isa = PBXGroup;
 			children = (
-				1373013929761FEF00875CB1 /* SyncViewModel.swift */,
 				1373013A29761FEF00875CB1 /* SyncView.swift */,
 			);
 			path = Sync;
@@ -131,7 +98,6 @@
 			isa = PBXGroup;
 			children = (
 				1373013C29761FF000875CB1 /* KeypadView.swift */,
-				1373013D29761FF000875CB1 /* KeyPadViewModel.swift */,
 			);
 			path = Keypad;
 			sourceTree = "<group>";
@@ -159,7 +125,6 @@
 			isa = PBXGroup;
 			children = (
 				1373014629761FF000875CB1 /* ConverterView.swift */,
-				1373014729761FF000875CB1 /* ConverterViewModel.swift */,
 			);
 			path = Converter;
 			sourceTree = "<group>";
@@ -175,68 +140,15 @@
 		1373014A29761FF000875CB1 /* Currencies */ = {
 			isa = PBXGroup;
 			children = (
-				1373014B29761FF000875CB1 /* CurrenciesViewModel.swift */,
 				1373014C29761FF000875CB1 /* CurrenciesView.swift */,
 			);
 			path = Currencies;
-			sourceTree = "<group>";
-		};
-		1373014D29761FF000875CB1 /* Base */ = {
-			isa = PBXGroup;
-			children = (
-				1373014E29761FF000875CB1 /* BaseViewModel.swift */,
-			);
-			path = Base;
-			sourceTree = "<group>";
-		};
-		1373015E2976207600875CB1 /* Keypad */ = {
-			isa = PBXGroup;
-			children = (
-				1373015F2976207600875CB1 /* KeypadViewModelTests.swift */,
-			);
-			path = Keypad;
-			sourceTree = "<group>";
-		};
-		137301602976207600875CB1 /* Converter */ = {
-			isa = PBXGroup;
-			children = (
-				137301612976207600875CB1 /* ConverterViewModelTests.swift */,
-			);
-			path = Converter;
-			sourceTree = "<group>";
-		};
-		137301622976207600875CB1 /* Currencies */ = {
-			isa = PBXGroup;
-			children = (
-				137301632976207600875CB1 /* CurrenciesViewModelTests.swift */,
-			);
-			path = Currencies;
-			sourceTree = "<group>";
-		};
-		137301642976207600875CB1 /* Sync */ = {
-			isa = PBXGroup;
-			children = (
-				137301652976207600875CB1 /* SyncViewmodelTests.swift */,
-			);
-			path = Sync;
-			sourceTree = "<group>";
-		};
-		137D2754297617B000DDD377 /* iosAppTests */ = {
-			isa = PBXGroup;
-			children = (
-				137301602976207600875CB1 /* Converter */,
-				137301622976207600875CB1 /* Currencies */,
-				1373015E2976207600875CB1 /* Keypad */,
-				137301642976207600875CB1 /* Sync */,
-			);
-			path = iosAppTests;
 			sourceTree = "<group>";
 		};
 		7555FF72242A565900829871 = {
 			isa = PBXGroup;
 			children = (
 				7555FF7D242A565900829871 /* iosApp */,
-				137D2754297617B000DDD377 /* iosAppTests */,
 				7555FF7C242A565900829871 /* Products */,
 				7555FFB0242A642200829871 /* Frameworks */,
 			);
@@ -246,7 +158,6 @@
 			isa = PBXGroup;
 			children = (
 				7555FF7B242A565900829871 /* iosApp.app */,
-				137D2753297617B000DDD377 /* iosAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -254,7 +165,6 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
-				1373014D29761FF000875CB1 /* Base */,
 				1373014529761FF000875CB1 /* Converter */,
 				1373014A29761FF000875CB1 /* Currencies */,
 				1373014829761FF000875CB1 /* Fonts */,
@@ -266,6 +176,7 @@
 				7555FF8C242A565B00829871 /* Info.plist */,
 				2152FB032600AC8F00CF470E /* iOSApp.swift */,
 				058557D7273AAEEB004C7B11 /* Preview Content */,
+				13FDE175297BCA6600CC01F7 /* KMMViewModel.swift */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -280,24 +191,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		137D2752297617B000DDD377 /* iosAppTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 137D275B297617B000DDD377 /* Build configuration list for PBXNativeTarget "iosAppTests" */;
-			buildPhases = (
-				137D274F297617B000DDD377 /* Sources */,
-				137D2750297617B000DDD377 /* Frameworks */,
-				137D2751297617B000DDD377 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				137D2758297617B000DDD377 /* PBXTargetDependency */,
-			);
-			name = iosAppTests;
-			productName = iosAppTests;
-			productReference = 137D2753297617B000DDD377 /* iosAppTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		7555FF7A242A565900829871 /* iosApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7555FFA5242A565B00829871 /* Build configuration list for PBXNativeTarget "iosApp" */;
@@ -314,11 +207,12 @@
 			);
 			name = iosApp;
 			packageProductDependencies = (
-				137D277329761A6B00DDD377 /* OrderedCollections */,
-				137D277629761A8700DDD377 /* CombineSchedulers */,
-				137D277929761AFB00DDD377 /* KMPNativeCoroutinesAsync */,
-				137D277B29761AFB00DDD377 /* KMPNativeCoroutinesCombine */,
-				137D277D29761AFB00DDD377 /* KMPNativeCoroutinesCore */,
+				13FDE171297BCA4800CC01F7 /* KMMViewModelCore */,
+				13FDE173297BCA4800CC01F7 /* KMMViewModelSwiftUI */,
+				13FDE178297BCD9100CC01F7 /* KMPNativeCoroutinesAsync */,
+				13FDE17A297BCD9100CC01F7 /* KMPNativeCoroutinesCombine */,
+				13FDE17C297BCD9100CC01F7 /* KMPNativeCoroutinesCore */,
+				13FDE17E297BCD9100CC01F7 /* KMPNativeCoroutinesRxSwift */,
 			);
 			productName = iosApp;
 			productReference = 7555FF7B242A565900829871 /* iosApp.app */;
@@ -334,10 +228,6 @@
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = orgName;
 				TargetAttributes = {
-					137D2752297617B000DDD377 = {
-						CreatedOnToolsVersion = 14.1;
-						TestTargetID = 7555FF7A242A565900829871;
-					};
 					7555FF7A242A565900829871 = {
 						CreatedOnToolsVersion = 11.3.1;
 					};
@@ -353,28 +243,19 @@
 			);
 			mainGroup = 7555FF72242A565900829871;
 			packageReferences = (
-				137D277229761A6B00DDD377 /* XCRemoteSwiftPackageReference "swift-collections" */,
-				137D277529761A8700DDD377 /* XCRemoteSwiftPackageReference "combine-schedulers" */,
-				137D277829761AFB00DDD377 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */,
+				13FDE170297BCA4800CC01F7 /* XCRemoteSwiftPackageReference "KMM-ViewModel" */,
+				13FDE177297BCD9100CC01F7 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */,
 			);
 			productRefGroup = 7555FF7C242A565900829871 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				7555FF7A242A565900829871 /* iosApp */,
-				137D2752297617B000DDD377 /* iosAppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		137D2751297617B000DDD377 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		7555FF79242A565900829871 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -409,17 +290,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		137D274F297617B000DDD377 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				137301662976207600875CB1 /* KeypadViewModelTests.swift in Sources */,
-				137301682976207600875CB1 /* CurrenciesViewModelTests.swift in Sources */,
-				137301672976207600875CB1 /* ConverterViewModelTests.swift in Sources */,
-				137301692976207600875CB1 /* SyncViewmodelTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		7555FF77242A565900829871 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -427,70 +297,19 @@
 				1373015129761FF000875CB1 /* KeypadView.swift in Sources */,
 				1373015629761FF000875CB1 /* Theme.swift in Sources */,
 				1373015029761FF000875CB1 /* SyncView.swift in Sources */,
-				1373015D29761FF000875CB1 /* BaseViewModel.swift in Sources */,
-				1373015B29761FF000875CB1 /* CurrenciesViewModel.swift in Sources */,
 				1373015829761FF000875CB1 /* ConverterView.swift in Sources */,
 				1373015C29761FF000875CB1 /* CurrenciesView.swift in Sources */,
 				1373015529761FF000875CB1 /* Icon.swift in Sources */,
-				1373015229761FF000875CB1 /* KeyPadViewModel.swift in Sources */,
+				13FDE176297BCA6600CC01F7 /* KMMViewModel.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				1373015429761FF000875CB1 /* Typography.swift in Sources */,
-				1373014F29761FF000875CB1 /* SyncViewModel.swift in Sources */,
 				1373015729761FF000875CB1 /* Color.swift in Sources */,
-				1373015929761FF000875CB1 /* ConverterViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		137D2758297617B000DDD377 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7555FF7A242A565900829871 /* iosApp */;
-			targetProxy = 137D2757297617B000DDD377 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
-		137D2759297617B000DDD377 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kwabenaberko.iosAppTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iosApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/iosApp";
-			};
-			name = Debug;
-		};
-		137D275A297617B000DDD377 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kwabenaberko.iosAppTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iosApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/iosApp";
-			};
-			name = Release;
-		};
 		7555FFA3242A565B00829871 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -662,15 +481,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		137D275B297617B000DDD377 /* Build configuration list for PBXNativeTarget "iosAppTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				137D2759297617B000DDD377 /* Debug */,
-				137D275A297617B000DDD377 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		7555FF76242A565900829871 /* Build configuration list for PBXProject "iosApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -692,57 +502,54 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		137D277229761A6B00DDD377 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+		13FDE170297BCA4800CC01F7 /* XCRemoteSwiftPackageReference "KMM-ViewModel" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-collections.git";
+			repositoryURL = "https://github.com/rickclephas/KMM-ViewModel.git";
 			requirement = {
 				kind = exactVersion;
-				version = 1.0.3;
+				version = "1.0.0-ALPHA-3";
 			};
 		};
-		137D277529761A8700DDD377 /* XCRemoteSwiftPackageReference "combine-schedulers" */ = {
+		13FDE177297BCD9100CC01F7 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pointfreeco/combine-schedulers.git";
+			repositoryURL = "https://github.com/rickclephas/KMP-NativeCoroutines";
 			requirement = {
 				kind = exactVersion;
-				version = 0.9.1;
-			};
-		};
-		137D277829761AFB00DDD377 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/rickclephas/KMP-NativeCoroutines.git";
-			requirement = {
-				kind = exactVersion;
-				version = 0.13.3;
+				version = "1.0.0-ALPHA-4";
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		137D277329761A6B00DDD377 /* OrderedCollections */ = {
+		13FDE171297BCA4800CC01F7 /* KMMViewModelCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 137D277229761A6B00DDD377 /* XCRemoteSwiftPackageReference "swift-collections" */;
-			productName = OrderedCollections;
+			package = 13FDE170297BCA4800CC01F7 /* XCRemoteSwiftPackageReference "KMM-ViewModel" */;
+			productName = KMMViewModelCore;
 		};
-		137D277629761A8700DDD377 /* CombineSchedulers */ = {
+		13FDE173297BCA4800CC01F7 /* KMMViewModelSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 137D277529761A8700DDD377 /* XCRemoteSwiftPackageReference "combine-schedulers" */;
-			productName = CombineSchedulers;
+			package = 13FDE170297BCA4800CC01F7 /* XCRemoteSwiftPackageReference "KMM-ViewModel" */;
+			productName = KMMViewModelSwiftUI;
 		};
-		137D277929761AFB00DDD377 /* KMPNativeCoroutinesAsync */ = {
+		13FDE178297BCD9100CC01F7 /* KMPNativeCoroutinesAsync */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 137D277829761AFB00DDD377 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			package = 13FDE177297BCD9100CC01F7 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
 			productName = KMPNativeCoroutinesAsync;
 		};
-		137D277B29761AFB00DDD377 /* KMPNativeCoroutinesCombine */ = {
+		13FDE17A297BCD9100CC01F7 /* KMPNativeCoroutinesCombine */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 137D277829761AFB00DDD377 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			package = 13FDE177297BCD9100CC01F7 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
 			productName = KMPNativeCoroutinesCombine;
 		};
-		137D277D29761AFB00DDD377 /* KMPNativeCoroutinesCore */ = {
+		13FDE17C297BCD9100CC01F7 /* KMPNativeCoroutinesCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 137D277829761AFB00DDD377 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			package = 13FDE177297BCD9100CC01F7 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
 			productName = KMPNativeCoroutinesCore;
+		};
+		13FDE17E297BCD9100CC01F7 /* KMPNativeCoroutinesRxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 13FDE177297BCD9100CC01F7 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			productName = KMPNativeCoroutinesRxSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

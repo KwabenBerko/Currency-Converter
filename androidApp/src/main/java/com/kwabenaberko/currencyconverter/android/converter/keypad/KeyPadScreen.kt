@@ -45,7 +45,7 @@ internal fun KeyPadScreen(
     useRedTheme: Boolean,
     state: Amount,
     onBackClick: () -> Unit = {},
-    onAppend: (Char) -> Unit = {},
+    onAppend: (String) -> Unit = {},
     onUndo: () -> Unit = {},
     onDone: (Double) -> Unit = {}
 ) = CurrencyConverterTheme(useRedTheme) {
@@ -111,7 +111,7 @@ internal fun KeyPadScreen(
                             text = key,
                             buttonSize = if (shouldAdjustSize) 58.dp else 68.dp
                         ) {
-                            onAppend(key.first())
+                            onAppend(key)
                         }
                     }
                 }

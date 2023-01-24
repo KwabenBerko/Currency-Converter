@@ -10,21 +10,18 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 
-class KeypadViewModel : KMMViewModel() {
+class KeypadViewModel : BaseViewModel<Amount>(Amount()) {
 
-    private val scope = viewModelScope.coroutineScope
     private val amountEngine = AmountInputEngine()
-    private val _amount = MutableStateFlow(Amount())
-    val amount = _amount.asStateFlow()
 
     init {
         amountEngine.amount
             .onEach { value ->
-                _amount.update { value }
+                setState(value)
             }.launchIn(scope)
     }
 
-    fun add(value: Char) {
+    fun add(value: String) {
         amountEngine.add(value)
     }
 

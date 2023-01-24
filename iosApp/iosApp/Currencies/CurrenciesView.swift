@@ -8,33 +8,53 @@
 
 import Foundation
 import SwiftUI
-import OrderedCollections
+import KMMViewModelSwiftUI
 import shared
 
 struct CurrenciesView: View {
     @EnvironmentObject private var navigator: Navigator
-    @StateObject private var viewModel: CurrenciesViewModel
+    @EnvironmentViewModel private var converterViewModel: ConverterViewModel
+    @StateViewModel private var viewModel: CurrenciesViewModel
+    private var conversionMode: ConversionMode
     
-    init(){
-        _viewModel = StateObject(
+    init(selectedCurrencyCode: String, conversionMode: ConversionMode){
+        self.conversionMode = conversionMode
+        _viewModel = StateViewModel(
             wrappedValue: CurrenciesViewModel(
+                selectedCurrencyCode: selectedCurrencyCode,
                 getCurrencies: Container.shared.getCurrencies
             )
         )
     }
     
+    
     var body: some View {
         CurrenciesContentView(
-            state: viewModel.state,
+            state: viewModel.state as! CurrenciesViewModel.State,
             onBackClick: {
                 navigator.popBackStack()
             },
             onFilterCurrencies: { query in
                 viewModel.filterCurrencies(query: query)
+            },
+            onCurrencyClick: { currency in
+                switch conversionMode {
+                case .firstToSecond:
+                    converterViewModel.convertFirstMoney(currency: currency)
+                    break
+                case .secondToFirst:
+                    converterViewModel.convertSecondMoney(currency: currency)
+                    break
+                default:
+                    break
+                }
+                navigator.popBackStack()
             }
         )
         .toolbar(.hidden)
-        .colorTheme(redColorTheme)
+        .colorTheme(
+            conversionMode == ConversionMode.firstToSecond ? redColorTheme : whiteColorTheme
+        )
     }
 }
 
@@ -45,13 +65,15 @@ private struct CurrenciesContentView: View {
     var state: CurrenciesViewModel.State
     var onBackClick: () -> Void = {}
     var onFilterCurrencies: (String) -> Void = {_ in}
+    var onCurrencyClick: (Currency) -> Void = {_ in }
     
     var body: some View {
         ZStack {
             theme.background.ignoresSafeArea()
             switch state {
-            case .idle:EmptyView()
-            case .content(let groupedCurrencies):
+            case is CurrenciesViewModel.StateIdle:EmptyView()
+            case let content as CurrenciesViewModel.StateContent:
+                
                 VStack {
                     VStack {
                         if isSearchBarVisible {
@@ -83,9 +105,14 @@ private struct CurrenciesContentView: View {
                     .padding(.horizontal, 10)
                     .padding(.vertical, 4)
                     
-                    CurrencyListView(groupedCurrencies: groupedCurrencies)
-                        .padding(.horizontal, 20)
+                    CurrencyListView(
+                        groupedCurrencies: content.currencies,
+                        selectedCurrency: content.selectedCurrency,
+                        onCurrencyClick: onCurrencyClick
+                    )
+                    .padding(.horizontal, 20)
                 }
+            default: EmptyView()
             }
         }
     }
@@ -137,7 +164,7 @@ private struct SearchBarView: View {
                 .background(RoundedRectangle(cornerRadius: 8).fill(theme.secondary))
                 .foregroundColor(theme.onPrimary)
                 .accentColor(theme.onPrimary)
-                .keyboardType(.webSearch)
+                .autocorrectionDisabled(true)
                 .focused($isFocused)
                 .onAppear {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
@@ -161,42 +188,48 @@ private struct SearchBarView: View {
 }
 
 private struct CurrencyListView: View {
-    var groupedCurrencies: OrderedDictionary<Character, [Currency]>
+    var groupedCurrencies: [String: [Currency]]
+    var selectedCurrency: Currency
+    var onCurrencyClick: (Currency) ->  Void
     
     var body: some View {
         ScrollView {
             LazyVStack(pinnedViews: [.sectionHeaders] ) {
-                ForEach(groupedCurrencies.elements, id: \.key){ character, currencies in
+                ForEach(groupedCurrencies.keys.sorted(), id: \.self){ key in
+                    let currencies = groupedCurrencies[key]!
+                    
                     Section(
                         header: VStack {
-                            CharacterHeaderView(character: character)
+                            CharacterHeaderView(header: key)
                             ListDividerView()
                         }
                     ){
                         ForEach(currencies, id: \.code){ currency in
                             CurrencyItemView(
                                 currency: currency,
+                                isSelected: currency == selectedCurrency,
                                 onClick: {
-                                    print("\(currency.name) has been clicked.")
+                                    onCurrencyClick(currency)
                                 }
                             )
                             ListDividerView()
                         }
                     }
                 }
-            }.id(UUID())
-        }.clipped()
+            }
+            .animation(.default, value: groupedCurrencies)
+        }
     }
 }
 
 private struct CharacterHeaderView: View {
-    @Environment(\.colorTheme) var theme
-    var character: Character
+    @Environment(\.colorTheme) private var theme
+    var header: String
     
     var body: some View {
         ZStack(alignment: .leading){
             theme.background
-            Text(String(character))
+            Text(header)
                 .foregroundColor(theme.onPrimary)
                 .font(.labelLarge)
                 .padding(12)
@@ -206,35 +239,39 @@ private struct CharacterHeaderView: View {
 
 let emptyString: String = " "
 private struct CurrencyItemView: View {
-    @Environment(\.colorTheme) var theme
+    @Environment(\.colorTheme) private var theme
     var currency: Currency
+    var isSelected: Bool
     var onClick: () -> Void
     
     var body: some View {
-        ZStack(alignment: .leading) {
-            theme.background
-            HStack {
-                Text(currency.name)
-                    .foregroundColor(theme.onPrimary)
-                    .font(.labelLarge)
-                + Text(emptyString) + Text(emptyString) + Text(currency.code)
-                    .foregroundColor(theme.secondary)
-                    .font(.labelLarge)
-                
-                Spacer()
-                
-                if(1 == 0){
-                    Image(Icons.check)
-                        .font(.system(size: 32))
+        Button(action: onClick){
+            ZStack(alignment: .leading) {
+                theme.background
+                HStack {
+                    Text(currency.name)
                         .foregroundColor(theme.onPrimary)
+                        .font(.labelLarge)
+                    + Text(currency.code)
+                        .foregroundColor(theme.secondary)
+                        .font(.labelLarge)
+                    
+                    Spacer()
+                    
+                    if(isSelected){
+                        Image(Icons.check)
+                            .font(.system(size: 32))
+                            .foregroundColor(theme.onPrimary)
+                    }
                 }
-            }.onTapGesture(perform: onClick)
-        }.padding(12)
+            }
+            .padding(12)
+        }
     }
 }
 
 private struct ListDividerView: View {
-    @Environment(\.colorTheme) var theme
+    @Environment(\.colorTheme) private var theme
     var body: some View {
         Divider().overlay(theme.secondary)
     }

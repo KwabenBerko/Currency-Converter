@@ -8,6 +8,9 @@
 
 import Foundation
 import SwiftUI
+import shared
+import KMMViewModelSwiftUI
+
 
 private let dot = "."
 private let done = "DONE"
@@ -19,22 +22,34 @@ private let keys = [
 ]
 struct KeyPadView: View {
     @EnvironmentObject private var navigator: Navigator
-    @StateObject private var viewModel = KeyPadViewModel()
+    @EnvironmentViewModel private var converterViewModel: ConverterViewModel
+    @StateViewModel private var viewModel = KeypadViewModel()
+    var conversionMode: ConversionMode
     
     var body: some View {
         KeyPadContentView(
-            state: viewModel.state,
+            state: viewModel.state as! Amount,
             onAppend: viewModel.add,
             onUndo: viewModel.pop,
             onBackClick: {
                 navigator.popBackStack()
             },
-            onDoneClick: { _ in
+            onDoneClick: { amount in
+                switch conversionMode {
+                case .firstToSecond:
+                    converterViewModel.convertFirstMoney(amount: amount)
+                case .secondToFirst:
+                    converterViewModel.convertSecondMoney(amount: amount)
+                default:
+                    break
+                }
                 navigator.popBackStack()
             }
         )
         .toolbar(.hidden)
-        .colorTheme(redColorTheme)
+        .colorTheme(
+            conversionMode == ConversionMode.firstToSecond ? redColorTheme : whiteColorTheme
+        )
     }
 }
 
@@ -42,8 +57,8 @@ private struct KeyPadContentView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.colorTheme) var theme
     
-    var state: KeyPadViewModel.State
-    var onAppend: (Character) -> Void = {_ in }
+    var state: Amount
+    var onAppend: (String) -> Void = {_ in }
     var onUndo: () -> Void = {}
     var onBackClick: () -> Void = {}
     var onDoneClick: (Double) -> Void = {_ in }
@@ -54,55 +69,51 @@ private struct KeyPadContentView: View {
         
         return ZStack {
             theme.background.ignoresSafeArea()
-            switch state {
-            case .idle: EmptyView()
-            case .content(let amount, let isValid):
-                VStack {
-                    
-                    TapToDeleteView(onClick: onUndo)
-                    
-                    AmountTextFieldView(
-                        amount: amount,
-                        fontSize: shouldAdjustSize ? 78 : 88
-                    )
-                    
-                    ForEach(keys, id: \.self){ row in
-                        HStack(alignment: .center, spacing: 20) {
-                            ForEach(row, id: \.self) { key in
-                                if key == done {
-                                    DoneKeyButtonView(
-                                        isEnabled: isValid,
-                                        size: shouldAdjustSize ? 58 : 68
-                                    ){
-                                        if(isValid){
-                                            onDoneClick(Double(amount)!)
-                                        }
+            VStack {
+                
+                TapToDeleteView(onClick: onUndo)
+                
+                AmountTextFieldView(
+                    amount: state.text,
+                    fontSize: shouldAdjustSize ? 78 : 88
+                )
+                
+                ForEach(keys, id: \.self){ row in
+                    HStack(alignment: .center, spacing: 20) {
+                        ForEach(row, id: \.self) { key in
+                            if key == done {
+                                DoneKeyButtonView(
+                                    isEnabled: state.isValid,
+                                    size: shouldAdjustSize ? 58 : 68
+                                ){
+                                    if(state.isValid){
+                                        onDoneClick(Double(state.text)!)
                                     }
-                                } else {
-                                    TextKeyButtonView(
-                                        text: key,
-                                        size: shouldAdjustSize ? 58 : 68
-                                    ){
-                                        onAppend(key.first!)
-                                    }
+                                }
+                            } else {
+                                TextKeyButtonView(
+                                    text: key,
+                                    size: shouldAdjustSize ? 58 : 68
+                                ){
+                                    onAppend(key)
                                 }
                             }
                         }
-                        .padding(.vertical, 8)
                     }
-                    
-                    Spacer()
-                                        
-                    Button(action: onBackClick) {
-                        Image(Icons.chevronDown)
-                            .foregroundColor(theme.onPrimary)
-                            .font(.system(size: shouldAdjustSize ? 30 : 40))
-                    }
-                    
-                    Spacer()
+                    .padding(.vertical, 8)
                 }
-                .padding()
+                
+                Spacer()
+                
+                Button(action: onBackClick) {
+                    Image(Icons.chevronDown)
+                        .foregroundColor(theme.onPrimary)
+                        .font(.system(size: shouldAdjustSize ? 30 : 40))
+                }
+                
+                Spacer()
             }
+            .padding()
         }
     }
     
@@ -130,6 +141,7 @@ private struct KeyPadContentView: View {
         var body: some View {
             HStack {
                 Text(amount.isEmpty ? " " : amount)
+                    .lineLimit(1)
                     .font(.appFont(size: fontSize))
                     .foregroundColor(theme.onPrimary)
                     .accentColor(theme.secondary)
@@ -203,14 +215,14 @@ struct KeyPadContentView_Preview: PreviewProvider {
     static var previews: some View {
         Group {
             KeyPadContentView(
-                state: .content(
-                    amount: "2000",
+                state: Amount(
+                    text: "2000",
                     isValid: true
                 )
             )
             KeyPadContentView(
-                state: .content(
-                    amount: "",
+                state: Amount(
+                    text: "",
                     isValid: false
                 )
             )
