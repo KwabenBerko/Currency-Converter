@@ -12,7 +12,7 @@ class AmountInputEngine {
     private val _amount = MutableStateFlow(Amount())
     val amount = _amount.asStateFlow()
 
-    fun add(character: Char) {
+    fun add(character: String) {
         val amount = getAmount()
         val amountText = amount.text
 
@@ -31,7 +31,7 @@ class AmountInputEngine {
             return
         }
 
-        if (character.isDigit() || character.isDot()) {
+        if (character.first().isDigit() || character.isDot()) {
             val shouldPrependZero = amountText.isEmpty() && character.isDot()
             val newAmountText = (if (shouldPrependZero) amountText.plus(ZERO) else amountText)
                 .plus(character)
@@ -70,7 +70,7 @@ class AmountInputEngine {
         return _amount.value
     }
 
-    private fun Char.isDot(): Boolean {
+    private fun String.isDot(): Boolean {
         return this == DOT
     }
 
@@ -79,11 +79,11 @@ class AmountInputEngine {
     }
 
     private fun String.endsWithDot(): Boolean {
-        return this.last() == DOT
+        return this.last().toString() == DOT
     }
 
     private fun String.endsWithZero(): Boolean {
-        return this.last() == ZERO
+        return this.last().toString() == ZERO
     }
 
     private fun String.isValidAmount(): Boolean {
@@ -91,7 +91,7 @@ class AmountInputEngine {
     }
 
     companion object {
-        const val DOT = '.'
-        const val ZERO = '0'
+        const val DOT = "."
+        const val ZERO = "0"
     }
 }

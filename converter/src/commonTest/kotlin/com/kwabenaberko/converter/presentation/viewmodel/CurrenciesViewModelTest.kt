@@ -39,9 +39,9 @@ class CurrenciesViewModelTest {
         val expectedState = State.Content(
             selectedCurrency = GHS,
             currencies = persistentMapOf(
-                'G' to listOf(GHS),
-                'N' to listOf(NGN),
-                'U' to listOf(USD)
+                "G" to listOf(GHS),
+                "N" to listOf(NGN),
+                "U" to listOf(USD)
             )
         )
         val sut = createViewModel(selectedCurrencyCode = GHS.code)
@@ -58,14 +58,14 @@ class CurrenciesViewModelTest {
         val initialExpectedState = State.Content(
             selectedCurrency = GHS,
             currencies = persistentMapOf(
-                'G' to listOf(GHS),
-                'N' to listOf(NGN),
-                'U' to listOf(USD)
+                "G" to listOf(GHS),
+                "N" to listOf(NGN),
+                "U" to listOf(USD)
             )
         )
         val nextExpectedState = initialExpectedState.copy(
             currencies = persistentMapOf(
-                'G' to listOf(GHS),
+                "G" to listOf(GHS),
             )
         )
         val sut = createViewModel(selectedCurrencyCode = GHS.code)

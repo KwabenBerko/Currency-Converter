@@ -35,7 +35,7 @@ internal fun CurrenciesScreen(
     useRedTheme: Boolean,
     state: State,
     onBackClick: () -> Unit = {},
-    onFilterQueryChange: (String) -> Unit = {},
+    onFilterCurrencies: (String) -> Unit = {},
     onCurrencyClick: (Currency) -> Unit = {}
 ) = CurrencyConverterTheme(useRedTheme) {
 
@@ -53,7 +53,7 @@ internal fun CurrenciesScreen(
                 Content(
                     state = state,
                     onBackClick = onBackClick,
-                    onFilterQueryChange = onFilterQueryChange,
+                    onFilterQueryChange = onFilterCurrencies,
                     onCurrencyClick = onCurrencyClick
                 )
             }

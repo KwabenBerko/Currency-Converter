@@ -42,7 +42,7 @@ class CurrenciesViewModel(
 
     private fun handleResult(currencies: List<Currency>) {
         val groupedCurrencies = currencies
-            .groupBy { currency -> currency.name.first() }
+            .groupBy { currency -> currency.name.first().toString() }
             .toPersistentMap()
 
         runIf<Idle> {
@@ -74,7 +74,7 @@ class CurrenciesViewModel(
         object Idle : State()
         data class Content(
             val selectedCurrency: Currency,
-            val currencies: Map<Char, List<Currency>>
+            val currencies: Map<String, List<Currency>>,
         ) : State()
     }
 }
