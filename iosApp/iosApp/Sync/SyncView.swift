@@ -19,7 +19,7 @@ struct SyncView: View {
         SyncContentView(
             state: viewModel.state as! SyncViewModel.State,
             onSyncCompleted: {
-                navigator.navigate(.converter)
+                navigator.stack.append(Destination.converter)
             },
             onRetryClick: viewModel.startSync
         )

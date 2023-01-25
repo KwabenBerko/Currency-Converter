@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 import shared
 import KMMViewModelSwiftUI
+import KMMViewModelCore
 
 
 private let dot = "."
@@ -22,15 +23,23 @@ private let keys = [
 ]
 struct KeyPadView: View {
     @EnvironmentObject private var navigator: Navigator
-    @EnvironmentViewModel private var converterViewModel: ConverterViewModel
+    @ObservedViewModel private var converterViewModel: ConverterViewModel
     @StateViewModel private var viewModel = KeypadViewModel()
-    var conversionMode: ConversionMode
+    private var conversionMode: ConversionMode
+    
+    init(
+        conversionMode: ConversionMode,
+        converterViewModel: ObservableViewModel<ConverterViewModel>.Projection
+    ){
+        self.conversionMode = conversionMode
+        self._converterViewModel = ObservedViewModel(converterViewModel)
+    }
     
     var body: some View {
         KeyPadContentView(
-            state: viewModel.state as! Amount,
-            onAppend: viewModel.add,
-            onUndo: viewModel.pop,
+            state: viewModel.state as! KeypadViewModel.State,
+            onAppend: viewModel.append,
+            onRemoveLast: viewModel.removeLast,
             onBackClick: {
                 navigator.popBackStack()
             },
@@ -57,9 +66,9 @@ private struct KeyPadContentView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.colorTheme) var theme
     
-    var state: Amount
+    var state: KeypadViewModel.State
     var onAppend: (String) -> Void = {_ in }
-    var onUndo: () -> Void = {}
+    var onRemoveLast: () -> Void = {}
     var onBackClick: () -> Void = {}
     var onDoneClick: (Double) -> Void = {_ in }
     
@@ -71,7 +80,7 @@ private struct KeyPadContentView: View {
             theme.background.ignoresSafeArea()
             VStack {
                 
-                TapToDeleteView(onClick: onUndo)
+                TapToDeleteView(onClick: onRemoveLast)
                 
                 AmountTextFieldView(
                     amount: state.text,
@@ -215,13 +224,13 @@ struct KeyPadContentView_Preview: PreviewProvider {
     static var previews: some View {
         Group {
             KeyPadContentView(
-                state: Amount(
+                state: KeypadViewModel.State(
                     text: "2000",
                     isValid: true
                 )
             )
             KeyPadContentView(
-                state: Amount(
+                state: KeypadViewModel.State(
                     text: "",
                     isValid: false
                 )

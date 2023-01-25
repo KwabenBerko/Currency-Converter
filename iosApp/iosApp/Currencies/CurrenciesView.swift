@@ -9,17 +9,23 @@
 import Foundation
 import SwiftUI
 import KMMViewModelSwiftUI
+import KMMViewModelCore
 import shared
 
 struct CurrenciesView: View {
     @EnvironmentObject private var navigator: Navigator
-    @EnvironmentViewModel private var converterViewModel: ConverterViewModel
+    @ObservedViewModel private var converterViewModel: ConverterViewModel
     @StateViewModel private var viewModel: CurrenciesViewModel
     private var conversionMode: ConversionMode
     
-    init(selectedCurrencyCode: String, conversionMode: ConversionMode){
+    init(
+        selectedCurrencyCode: String,
+        conversionMode: ConversionMode,
+        converterViewModel: ObservableViewModel<ConverterViewModel>.Projection
+    ){
         self.conversionMode = conversionMode
-        _viewModel = StateViewModel(
+        self._converterViewModel = ObservedViewModel(converterViewModel)
+        self._viewModel = StateViewModel(
             wrappedValue: CurrenciesViewModel(
                 selectedCurrencyCode: selectedCurrencyCode,
                 getCurrencies: Container.shared.getCurrencies

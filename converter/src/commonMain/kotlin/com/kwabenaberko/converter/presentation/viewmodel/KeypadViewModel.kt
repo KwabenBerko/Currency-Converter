@@ -1,31 +1,85 @@
 package com.kwabenaberko.converter.presentation.viewmodel
 
-import com.kwabenaberko.converter.presentation.Amount
-import com.kwabenaberko.converter.presentation.AmountInputEngine
-import com.rickclephas.kmm.viewmodel.KMMViewModel
-import com.rickclephas.kmm.viewmodel.coroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
+import com.kwabenaberko.converter.presentation.viewmodel.KeypadViewModel.State
 
-class KeypadViewModel : BaseViewModel<Amount>(Amount()) {
+class KeypadViewModel : BaseViewModel<State>(State()) {
+    fun append(character: String) {
+        val amount = getState()
+        val amountText = amount.text
 
-    private val amountEngine = AmountInputEngine()
+        if (
+            character.isDot() &&
+            amountText.containsDot()
+        ) {
+            return
+        }
 
-    init {
-        amountEngine.amount
-            .onEach { value ->
-                setState(value)
-            }.launchIn(scope)
+        if (
+            amountText.containsDot() &&
+            amountText.endsWithZero() &&
+            character == ZERO
+        ) {
+            return
+        }
+
+        if (character.first().isDigit() || character.isDot()) {
+            val shouldPrependZero = amountText.isEmpty() && character.isDot()
+            val newAmountText = (if (shouldPrependZero) amountText.plus(ZERO) else amountText)
+                .plus(character)
+                .trim()
+
+            val newState = State(
+                text = newAmountText,
+                isValid = newAmountText.isValidAmount()
+            )
+
+            setState(newState)
+        }
     }
 
-    fun add(value: String) {
-        amountEngine.add(value)
+    fun removeLast() {
+        val amount = getState()
+        val amountText = amount.text
+        if (amountText.isNotEmpty()) {
+            val newAmountValue = amountText
+                .substring(0, amountText.length - 1)
+                .trim()
+
+            val newState = State(
+                text = newAmountValue,
+                isValid = newAmountValue.isValidAmount()
+            )
+            setState(newState)
+        }
     }
 
-    fun pop() {
-        amountEngine.pop()
+    private fun String.isDot(): Boolean {
+        return this == DOT
     }
+
+    private fun String.containsDot(): Boolean {
+        return this.contains(DOT)
+    }
+
+    private fun String.endsWithDot(): Boolean {
+        return this.last().toString() == DOT
+    }
+
+    private fun String.endsWithZero(): Boolean {
+        return this.last().toString() == ZERO
+    }
+
+    private fun String.isValidAmount(): Boolean {
+        return this.isNotEmpty() && !this.endsWithDot()
+    }
+
+    companion object {
+        const val DOT = "."
+        const val ZERO = "0"
+    }
+
+    data class State(
+        val text: String = "",
+        val isValid: Boolean = false
+    )
 }

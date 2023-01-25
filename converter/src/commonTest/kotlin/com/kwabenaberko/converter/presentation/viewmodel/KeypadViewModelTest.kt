@@ -1,7 +1,7 @@
 package com.kwabenaberko.converter.presentation.viewmodel
 
 import app.cash.turbine.test
-import com.kwabenaberko.converter.presentation.Amount
+import com.kwabenaberko.converter.presentation.viewmodel.KeypadViewModel.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -30,25 +30,102 @@ class KeypadViewModelTest {
     }
 
     @Test
-    fun `should emit Amount state when a character is added`() = runTest {
+    fun `should ignore non digit characters`() = runTest {
         sut.state.test {
-            assertEquals(Amount(), awaitItem())
+            assertEquals(State(), awaitItem())
 
-            sut.add("1")
-            assertEquals(Amount(text = "1", isValid = true), awaitItem())
+            sut.append("A")
+            expectNoEvents()
         }
     }
 
     @Test
-    fun `should emit Amount state when a pop operation occurs`() = runTest {
+    fun `should append digit to amount`() = runTest {
         sut.state.test {
-            assertEquals(Amount(), awaitItem())
+            assertEquals(State(), awaitItem())
 
-            sut.add("1")
-            assertEquals(Amount(text = "1", isValid = true), awaitItem())
+            sut.append("2")
+            assertEquals(State(text = "2", isValid = true), awaitItem())
 
-            sut.pop()
-            assertEquals(Amount(), awaitItem())
+            sut.append(".")
+            assertEquals(State(text = "2.", isValid = false), awaitItem())
+
+            sut.append("0")
+            assertEquals(State(text = "2.0", isValid = true), awaitItem())
+        }
+    }
+
+    @Test
+    fun `should remove last digit entered`() = runTest {
+        sut.state.test {
+            assertEquals(State(), awaitItem())
+
+            sut.append("2")
+            assertEquals(State(text = "2", isValid = true), awaitItem())
+
+            sut.removeLast()
+            assertEquals(State(text = "", isValid = false), awaitItem())
+        }
+    }
+
+    @Test
+    fun `should ignore remove action when amount is already empty`() = runTest {
+        sut.state.test {
+            assertEquals(State(), awaitItem())
+
+            sut.append("2")
+            assertEquals(State(text = "2", isValid = true), awaitItem())
+
+            sut.removeLast()
+            assertEquals(State(text = "", isValid = false), awaitItem())
+
+            sut.removeLast()
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `should prepend 0 if initial value appended is dot`() = runTest {
+        sut.state.test {
+            assertEquals(State(), awaitItem())
+
+            sut.append(".")
+            assertEquals(State(text = "0.", isValid = false), awaitItem())
+        }
+    }
+
+    @Test
+    fun `should ignore dot append when amount already contains a dot symbol`() = runTest {
+        sut.state.test {
+            assertEquals(State(), awaitItem())
+
+            sut.append("2")
+            assertEquals(State(text = "2", isValid = true), awaitItem())
+
+            sut.append(".")
+            assertEquals(State(text = "2.", isValid = false), awaitItem())
+
+            sut.append(".")
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `should ignore append of 0 when trailing character after dot is already zero`() = runTest {
+        sut.state.test {
+            assertEquals(State(), awaitItem())
+
+            sut.append("2")
+            assertEquals(State(text = "2", isValid = true), awaitItem())
+
+            sut.append(".")
+            assertEquals(State(text = "2.", isValid = false), awaitItem())
+
+            sut.append("0")
+            assertEquals(State(text = "2.0", isValid = true), awaitItem())
+
+            sut.append("0")
+            expectNoEvents()
         }
     }
 }
