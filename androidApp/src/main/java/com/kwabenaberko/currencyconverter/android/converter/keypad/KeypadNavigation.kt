@@ -57,8 +57,8 @@ internal fun NavGraphBuilder.keypadScreen(
             useRedTheme = useRedTheme(conversionMode),
             state = state,
             onBackClick = onNavigateBack,
-            onAppend = viewModel::add,
-            onUndo = viewModel::pop,
+            onAppend = viewModel::append,
+            onRemoveLast = viewModel::removeLast,
             onDone = { amount ->
                 when (conversionMode) {
                     ConversionMode.FIRST_TO_SECOND -> {

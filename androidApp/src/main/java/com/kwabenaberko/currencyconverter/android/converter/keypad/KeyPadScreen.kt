@@ -14,13 +14,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -30,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.kwabenaberko.converter.presentation.Amount
+import com.kwabenaberko.converter.presentation.viewmodel.KeypadViewModel.State
 import com.kwabenaberko.currencyconverter.android.R
 import com.kwabenaberko.currencyconverter.android.converter.keypad.components.AmountTextField
 import com.kwabenaberko.currencyconverter.android.converter.keypad.components.DoneKeyButton
@@ -43,15 +40,14 @@ import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
 @Composable
 internal fun KeyPadScreen(
     useRedTheme: Boolean,
-    state: Amount,
+    state: State,
     onBackClick: () -> Unit = {},
     onAppend: (String) -> Unit = {},
-    onUndo: () -> Unit = {},
+    onRemoveLast: () -> Unit = {},
     onDone: (Double) -> Unit = {}
 ) = CurrencyConverterTheme(useRedTheme) {
 
     val colorScheme = MaterialTheme.colorScheme
-    val focusRequester = remember { FocusRequester() }
     val systemUiController = rememberSystemUiController()
     val density = LocalDensity.current
     val configuration = LocalConfiguration.current
@@ -68,13 +64,6 @@ internal fun KeyPadScreen(
         systemUiController.setStatusBarColor(color = colorScheme.primary)
     }
 
-    DisposableEffect(Unit) {
-        focusRequester.requestFocus()
-        onDispose {
-            focusRequester.freeFocus()
-        }
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -83,17 +72,18 @@ internal fun KeyPadScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        TapToDeleteTextButton(onClick = onUndo)
+        TapToDeleteTextButton(onClick = onRemoveLast)
 
         AmountTextField(
             textFieldValue = amount,
-            fontSize = if (shouldAdjustSize) 78.sp else 88.sp,
-            modifier = Modifier.focusRequester(focusRequester)
+            fontSize = if (shouldAdjustSize) 78.sp else 88.sp
         )
 
         KEYS.forEach { row ->
             Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterHorizontally)
             ) {
                 row.forEach { key ->
@@ -145,6 +135,6 @@ private val KEYS = listOf(
 private fun KeyPadScreenContentPreview() {
     KeyPadScreen(
         useRedTheme = true,
-        state = Amount(text = "200", isValid = true)
+        state = State(text = "200", isValid = true)
     )
 }

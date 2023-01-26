@@ -11,40 +11,69 @@ import SwiftUI
 import KMMViewModelSwiftUI
 import shared
 
+enum ConverterDestination: Hashable {
+    case home
+    case keypad(conversionMode: ConversionMode)
+    case currencies(selectedCurrency: Currency, conversionMode: ConversionMode)
+}
+
 struct ConverterView: View {
     @EnvironmentObject private var navigator: Navigator
-    @EnvironmentViewModel private var viewModel: ConverterViewModel
+    @StateViewModel private var viewModel = ConverterViewModel(
+        hasCompletedInitialSync: Container.shared.hasCompletedInitialSync,
+        getDefaultCurrencies: Container.shared.getDefaultCurrencies,
+        convertMoney: Container.shared.convertMoney
+    )
     
     var body: some View {
         ConverterContentView(
             state: viewModel.state as! ConverterViewModel.State,
             onFirstCurrencyClick: { currency in
-                navigator.navigate(
-                    .currencies(
-                        selectedCurrency: currency,
-                        conversionMode: .firstToSecond
-                    )
+                let destination = ConverterDestination.currencies(
+                    selectedCurrency: currency,
+                    conversionMode: .firstToSecond
                 )
+                navigator.stack.append(destination)
             },
             onFirstAmountClick: {
-                navigator.navigate(.keypad(conversionMode: .firstToSecond))
+                let destination = ConverterDestination.keypad(conversionMode: .firstToSecond)
+                navigator.stack.append(destination)
             },
             onSecondCurrencyClick: { currency in
-                navigator.navigate(
-                    .currencies(
-                        selectedCurrency: currency,
-                        conversionMode: .secondToFirst
-                    )
+                let destination = ConverterDestination.currencies(
+                    selectedCurrency: currency,
+                    conversionMode: .secondToFirst
                 )
+                navigator.stack.append(destination)
             },
             onSecondAmountClick: {
-                navigator.navigate(.keypad(conversionMode: .secondToFirst))
+                let destination = ConverterDestination.keypad(
+                    conversionMode:.secondToFirst
+                )
+                navigator.stack.append(destination)
             },
             onSyncRequired: {
-                navigator.navigate(.sync)
+                navigator.stack.append(Destination.sync)
             }
         )
         .toolbar(.hidden)
+        .navigationDestination(for: ConverterDestination.self) { destination in
+            switch destination {
+            case .home: ConverterView()
+            case .currencies(let selectedCurrency, let conversionMode):
+                CurrenciesView(
+                    selectedCurrencyCode: selectedCurrency.code,
+                    conversionMode: conversionMode,
+                    converterViewModel: $viewModel
+                )
+            case .keypad(let conversionMode):
+                KeyPadView(
+                    conversionMode: conversionMode,
+                    converterViewModel: $viewModel
+                )
+                
+            }
+        }
     }
 }
 
@@ -64,7 +93,7 @@ private struct ConverterContentView: View {
         return ZStack {
             redColorTheme.background.ignoresSafeArea()
             switch state {
-            case is ConverterViewModel.StateIdle: EmptyView()
+            case is ConverterViewModel.StateIdle:EmptyView()
             case is ConverterViewModel.StateRequiresSync: EmptyView()
             case let content as ConverterViewModel.StateContent:
                 let firstMoneyItem = content.firstMoneyItem
