@@ -71,7 +71,7 @@ private fun Content(
     var isSearchBarVisible by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-        Column(Modifier.padding(horizontal = 10.dp, vertical = 4.dp).height(68.dp)) {
+        Column(Modifier.padding(horizontal = 10.dp, vertical = 4.dp).height(62.dp)) {
             AnimatedVisibility(
                 modifier = Modifier.fillMaxSize(),
                 visible = isSearchBarVisible,
@@ -85,7 +85,7 @@ private fun Content(
             ) {
                 SearchBar(
                     initialValue = "",
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxSize(),
                     onQueryChange = onFilterQueryChange,
                     onClose = {
                         isSearchBarVisible = false

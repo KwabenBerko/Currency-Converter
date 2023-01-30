@@ -9,7 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -35,11 +35,8 @@ internal fun SearchBar(
     val (query, setQuery) = rememberSaveable { mutableStateOf(initialValue) }
     val focusRequester = remember { FocusRequester() }
 
-    DisposableEffect(Unit) {
+    LaunchedEffect(Unit) {
         focusRequester.requestFocus()
-        onDispose {
-            focusRequester.freeFocus()
-        }
     }
 
     TextField(
@@ -50,6 +47,7 @@ internal fun SearchBar(
         },
         textStyle = MaterialTheme.typography.labelMedium,
         modifier = Modifier.focusRequester(focusRequester).then(modifier),
+        singleLine = true,
         colors = TextFieldDefaults.textFieldColors(
             textColor = MaterialTheme.colorScheme.onPrimary,
             cursorColor = MaterialTheme.colorScheme.onPrimary,

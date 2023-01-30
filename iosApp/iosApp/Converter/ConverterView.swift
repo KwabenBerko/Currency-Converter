@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 import KMMViewModelSwiftUI
+import Combine
 import shared
 
 enum ConverterDestination: Hashable {
@@ -27,7 +28,7 @@ struct ConverterView: View {
     
     var body: some View {
         ConverterContentView(
-            state: viewModel.state as! ConverterViewModel.State,
+            state: viewModel.stateNativeValue,
             onFirstCurrencyClick: { currency in
                 let destination = ConverterDestination.currencies(
                     selectedCurrency: currency,
@@ -53,7 +54,7 @@ struct ConverterView: View {
                 navigator.stack.append(destination)
             },
             onSyncRequired: {
-                navigator.stack.append(Destination.sync)
+                navigator.stack = .init([Destination.sync])
             }
         )
         .toolbar(.hidden)
@@ -88,7 +89,7 @@ private struct ConverterContentView: View {
     
     var body: some View {
         let scale = UIScreen.main.scale
-        let shouldAdjustSize = verticalSizeClass == .regular && scale <= 2.0
+        let shouldAdjustSize = false
         
         return ZStack {
             redColorTheme.background.ignoresSafeArea()
@@ -261,10 +262,10 @@ private struct ConversionDirection: View {
             let icon = conversionMode == ConversionMode.firstToSecond ? Icons.longArrowDown : Icons.longArrowUp
             
             Image(icon)
-                .font(.system(size: 46))
+                .font(.system(size: 52))
                 .foregroundColor(Color.red)
         }
-        .padding(20)
+        .padding(24)
         .background(Circle().fill(whiteColorTheme.background))
         .overlay(
             Circle()

@@ -37,11 +37,11 @@ struct KeyPadView: View {
     
     var body: some View {
         KeyPadContentView(
-            state: viewModel.state as! KeypadViewModel.State,
+            state: viewModel.stateNativeValue,
             onAppend: viewModel.append,
             onRemoveLast: viewModel.removeLast,
             onBackClick: {
-                navigator.popBackStack()
+                navigator.stack.removeLast()
             },
             onDoneClick: { amount in
                 switch conversionMode {
@@ -52,7 +52,7 @@ struct KeyPadView: View {
                 default:
                     break
                 }
-                navigator.popBackStack()
+                navigator.stack.removeLast()
             }
         )
         .toolbar(.hidden)
@@ -74,7 +74,7 @@ private struct KeyPadContentView: View {
     
     var body: some View {
         let scale = UIScreen.main.scale
-        let shouldAdjustSize = verticalSizeClass == .regular && scale <= 2.0
+        let shouldAdjustSize = false
         
         return ZStack {
             theme.background.ignoresSafeArea()
@@ -93,7 +93,7 @@ private struct KeyPadContentView: View {
                             if key == done {
                                 DoneKeyButtonView(
                                     isEnabled: state.isValid,
-                                    size: shouldAdjustSize ? 58 : 68
+                                    size: shouldAdjustSize ? 58 : 78
                                 ){
                                     if(state.isValid){
                                         onDoneClick(Double(state.text)!)
@@ -102,7 +102,7 @@ private struct KeyPadContentView: View {
                             } else {
                                 TextKeyButtonView(
                                     text: key,
-                                    size: shouldAdjustSize ? 58 : 68
+                                    size: shouldAdjustSize ? 58 : 78
                                 ){
                                     onAppend(key)
                                 }

@@ -36,9 +36,9 @@ struct CurrenciesView: View {
     
     var body: some View {
         CurrenciesContentView(
-            state: viewModel.state as! CurrenciesViewModel.State,
+            state: viewModel.stateNativeValue,
             onBackClick: {
-                navigator.popBackStack()
+                navigator.stack.removeLast()
             },
             onFilterCurrencies: { query in
                 viewModel.filterCurrencies(query: query)
@@ -54,7 +54,7 @@ struct CurrenciesView: View {
                 default:
                     break
                 }
-                navigator.popBackStack()
+                navigator.stack.removeLast()
             }
         )
         .toolbar(.hidden)
@@ -107,9 +107,9 @@ private struct CurrenciesContentView: View {
                             )
                         }
                     }
-                    .frame(height: 68)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 4)
+                    .frame(height: 68)
                     
                     CurrencyListView(
                         groupedCurrencies: content.currencies,
@@ -135,7 +135,7 @@ private struct ToolbarView: View {
             Button(action: onBackClick){
                 
                 Image(Icons.longArrowLeft)
-                    .font(.system(size: 32, weight: .light))
+                    .font(.system(size: 36, weight: .light))
                     .foregroundColor(theme.onPrimary)
             }
             
@@ -144,7 +144,7 @@ private struct ToolbarView: View {
             Button(action: onSearchClick){
                 
                 Image(Icons.search)
-                    .font(.system(size: 32, weight: .light))
+                    .font(.system(size: 36, weight: .light))
                     .foregroundColor(theme.secondary)
             }
         }
@@ -255,12 +255,16 @@ private struct CurrencyItemView: View {
             ZStack(alignment: .leading) {
                 theme.background
                 HStack {
-                    Text(currency.name)
-                        .foregroundColor(theme.onPrimary)
-                        .font(.labelLarge)
-                    + Text(currency.code)
-                        .foregroundColor(theme.secondary)
-                        .font(.labelLarge)
+                    (
+                        Text(currency.name)
+                            .foregroundColor(theme.onPrimary)
+                            .font(.labelLarge)
+                        + Text(emptyString + emptyString)
+                        + Text(currency.code)
+                            .foregroundColor(theme.secondary)
+                            .font(.labelLarge)
+                    )
+                    .multilineTextAlignment(.leading)
                     
                     Spacer()
                     
@@ -280,5 +284,11 @@ private struct ListDividerView: View {
     @Environment(\.colorTheme) private var theme
     var body: some View {
         Divider().overlay(theme.secondary)
+    }
+}
+
+struct CurrenciesContentView_Preview: PreviewProvider {
+    static var previews: some View {
+        CurrenciesContentView(state: CurrenciesViewModel.StateIdle())
     }
 }

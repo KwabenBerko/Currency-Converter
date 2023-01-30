@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -26,7 +27,7 @@ internal fun ConversionDirection(
     Box(
         modifier.background(WhiteColorScheme.primary, CircleShape)
             .border(BorderStroke(6.dp, RedColorScheme.primary), CircleShape)
-            .padding(20.dp)
+            .padding(24.dp)
     ) {
         Icon(
             painter = when (mode) {
@@ -38,7 +39,8 @@ internal fun ConversionDirection(
                 }
             },
             contentDescription = null,
-            tint = RedColorScheme.primary
+            tint = RedColorScheme.primary,
+            modifier = Modifier.size(52.dp)
         )
     }
 }
