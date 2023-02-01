@@ -23,10 +23,13 @@ class KeypadViewModel : BaseViewModel<State>(State()) {
         }
 
         if (character.first().isDigit() || character.isDot()) {
-            val shouldPrependZero = amountText.isEmpty() && character.isDot()
-            val newAmountText = (if (shouldPrependZero) amountText.plus(ZERO) else amountText)
-                .plus(character)
-                .trim()
+            val newAmountText = if (amountText == ZERO && character != ZERO) character
+            else {
+                val shouldPrependZero = amountText.isEmpty() && character.isDot()
+                (if (shouldPrependZero) amountText.plus(ZERO) else amountText)
+                    .plus(character)
+                    .trim()
+            }
 
             val newState = State(
                 text = newAmountText,

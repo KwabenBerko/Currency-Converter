@@ -85,7 +85,7 @@ class KeypadViewModelTest {
     }
 
     @Test
-    fun `should prepend 0 if initial value appended is dot`() = runTest {
+    fun `should prepend 0 if initial character appended is dot`() = runTest {
         sut.state.test {
             assertEquals(State(), awaitItem())
 
@@ -126,6 +126,19 @@ class KeypadViewModelTest {
 
             sut.append("0")
             expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `should replace with character if initial value appended is 0`() = runTest {
+        sut.state.test {
+            assertEquals(State(), awaitItem())
+
+            sut.append("0")
+            assertEquals(State(text = "0", isValid = true), awaitItem())
+
+            sut.append("8")
+            assertEquals(State(text = "8", isValid = true), awaitItem())
         }
     }
 }
