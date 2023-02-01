@@ -1,11 +1,5 @@
 import SwiftUI
-import KMMViewModelSwiftUI
-import KMPNativeCoroutinesCombine
 import shared
-
-extension Container {
-    static let shared = ContainerFactory().makeContainer()
-}
 
 enum Destination: Hashable {
     case converter
@@ -13,25 +7,22 @@ enum Destination: Hashable {
 }
 
 final class Navigator: ObservableObject {
-    @Published var stack = NavigationPath()
+    @Published var stack: NavigationPath
     
-    func navigate(_ destination: Destination) {
-        stack.append(destination)
-    }
-    
-    func popBackStack() {
-        stack.removeLast()
+    init(_ stack: NavigationPath) {
+        self.stack = stack
     }
 }
 
 @main
 struct iOSApp: App {
-    @StateObject private var navigator = Navigator()
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    @StateObject private var navigator = Navigator(.init([Destination.converter]))
     
     var body: some Scene {
         WindowGroup {
             NavigationStack(path: $navigator.stack) {
-                ConverterView()
+                EmptyView()
                     .navigationDestination(for: Destination.self){ destination in
                         switch destination {
                         case .converter: ConverterView()
@@ -43,3 +34,4 @@ struct iOSApp: App {
         }
     }
 }
+

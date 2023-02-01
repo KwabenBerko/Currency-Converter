@@ -89,7 +89,7 @@ internal fun KeyPadScreen(
                 row.forEach { key ->
                     if (key == DONE) {
                         DoneKeyButton(
-                            buttonSize = if (shouldAdjustSize) 58.dp else 68.dp,
+                            buttonSize = if (shouldAdjustSize) 58.dp else 78.dp,
                             isEnabled = state.isValid
                         ) {
                             if (state.isValid) {
@@ -99,7 +99,7 @@ internal fun KeyPadScreen(
                     } else {
                         TextKeyButton(
                             text = key,
-                            buttonSize = if (shouldAdjustSize) 58.dp else 68.dp
+                            buttonSize = if (shouldAdjustSize) 58.dp else 78.dp
                         ) {
                             onAppend(key)
                         }

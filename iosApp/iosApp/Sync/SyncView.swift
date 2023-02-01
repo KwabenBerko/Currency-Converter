@@ -17,9 +17,9 @@ struct SyncView: View {
     
     var body: some View {
         SyncContentView(
-            state: viewModel.state as! SyncViewModel.State,
+            state: viewModel.stateNativeValue,
             onSyncCompleted: {
-                navigator.stack.append(Destination.converter)
+                navigator.stack = .init([Destination.converter])
             },
             onRetryClick: viewModel.startSync
         )
@@ -81,5 +81,11 @@ private struct ErrorView: View {
             .accentColor(redColorTheme.primary)
             
         }.padding(.horizontal, 40)
+    }
+}
+
+struct SyncContentView_Preview: PreviewProvider {
+    static var previews: some View {
+        SyncContentView(state: SyncViewModel.StateIdle())
     }
 }
