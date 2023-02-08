@@ -18,9 +18,9 @@ ktlint {
 
 sqldelight {
     sqldelight {
-        databases { // new wrapper
+        databases {
             create("CurrencyConverterDatabase") {
-                packageName.set("com.kwabenaberko") // packageName is now a Property<String>
+                packageName.set("com.kwabenaberko")
             }
             linkSqlite.set(true)
         }

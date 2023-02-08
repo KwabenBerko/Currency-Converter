@@ -10,6 +10,7 @@ import com.kwabenaberko.converter.data.network.dto.CurrencySymbolDto
 import com.kwabenaberko.converter.data.network.dto.ExchangeRatesDto
 import com.kwabenaberko.converter.database.DbCurrency
 import com.kwabenaberko.converter.database.DbCurrencyQueries
+import com.kwabenaberko.converter.database.DbExchangeRate
 import com.kwabenaberko.converter.database.DbExchangeRateQueries
 import com.kwabenaberko.converter.domain.model.Currency
 import com.kwabenaberko.converter.domain.model.DefaultCurrencies
@@ -36,7 +37,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
@@ -56,8 +56,8 @@ class RealCurrencyRepository(
         return currencyQueries
             .selectAllCurrencies(filter = filter?.trim() ?: "")
             .asFlow()
-            .flowOn(backgroundDispatcher)
             .mapToList(backgroundDispatcher)
+            .flowOn(backgroundDispatcher)
             .map { dbCurrencies ->
                 mapDbCurrenciesToDomain(dbCurrencies)
                     .sortedBy { currency -> currency.name }
@@ -69,7 +69,7 @@ class RealCurrencyRepository(
         val baseCodeFlow = settings.getStringFlow(Settings.BASE_CODE, "USD")
         val targetCodeFlow = settings.getStringFlow(Settings.TARGET_CODE, "GHS")
 
-        return combine(baseCodeFlow, targetCodeFlow){ baseCode, targetCode ->
+        return combine(baseCodeFlow, targetCodeFlow) { baseCode, targetCode ->
             val baseCurrency = currencyQueries
                 .selectCurrencyByCode(baseCode)
                 .executeAsOne()
@@ -115,22 +115,20 @@ class RealCurrencyRepository(
                         1.0.div(usdToBaseCodeRate).toPlaces(DECIMAL_PLACES)
                     } else {
                         val usdToTargetCodeRate = usdRates.getValue(targetCode).rate
-                        1.0.div(usdToBaseCodeRate).times(usdToTargetCodeRate).toPlaces(DECIMAL_PLACES)
+                        1.0.div(usdToBaseCodeRate).times(usdToTargetCodeRate)
+                            .toPlaces(DECIMAL_PLACES)
                     }
 
-                    exchangeRateQueries.insert(
-                        baseCode = baseCode,
-                        targetCode = targetCode,
-                        rate = rate
-                    )
+                    val dbExchangeRate = DbExchangeRate(baseCode, targetCode, rate)
+                    exchangeRateQueries.insertOrUpdate(dbExchangeRate)
                 }
 
                 exchangeRateQueries
                     .selectRateForCurrencies(baseCode, targetCode)
                     .asFlow()
-                    .flowOn(backgroundDispatcher)
                     .mapToOne(backgroundDispatcher)
-                    .map { dbExchangeRate ->  dbExchangeRate.rate}
+                    .flowOn(backgroundDispatcher)
+                    .map { dbExchangeRate -> dbExchangeRate.rate }
             }
     }
 
@@ -143,8 +141,7 @@ class RealCurrencyRepository(
     }
 
     override fun hasCompletedInitialSync(): Flow<Boolean> {
-        return settings
-            .getLongOrNullFlow(Settings.CURRENCIES_LAST_SYNC_DATE)
+        return settings.getLongOrNullFlow(Settings.CURRENCIES_LAST_SYNC_DATE)
             .map { lastSyncDate -> lastSyncDate != null }
             .flowOn(backgroundDispatcher)
     }
@@ -172,21 +169,31 @@ class RealCurrencyRepository(
                 val symbols = symbolsResponse.body<Map<String, CurrencySymbolDto>>()
                 val (baseCode, baseCodeRates) = exchangeRatesResponse.body<ExchangeRatesDto>()
 
-                currencyQueries.transaction {
-
-                    currencyQueries.deleteAllCurrencies()
-
-                    currencies.forEach { (_, currency) ->
-                        val symbol = symbols[currency.code]?.symbol ?: currency.code
-                        currencyQueries.insert(
-                            code = currency.code,
-                            name = currency.name,
-                            symbol = symbol
-                        )
+                val dbCurrencies = currencies.map { (_ , currency) ->
+                    val symbol = symbols[currency.code]?.symbol ?: currency.code
+                    DbCurrency(currency.code, currency.name, symbol)
+                }
+                val dbExchangeRates = baseCodeRates.map { (targetCode, rate) ->
+                    DbExchangeRate(baseCode, targetCode, rate)
+                }
+                val staleCurrencyCodes = currencyQueries
+                    .selectAllCurrencies(filter = "")
+                    .executeAsList()
+                    .map { dbCurrency -> dbCurrency.code }
+                    .filter { code ->
+                        code !in dbCurrencies.map { newDbCurrency -> newDbCurrency.code}
                     }
 
-                    baseCodeRates.forEach { (targetCode, rate) ->
-                        exchangeRateQueries.insert(baseCode, targetCode, rate)
+                currencyQueries.transaction {
+
+                    currencyQueries.deleteAllCurrenciesByCode(staleCurrencyCodes)
+
+                    dbCurrencies.forEach { dbCurrency ->
+                        currencyQueries.insertOrUpdate(dbCurrency)
+                    }
+
+                    dbExchangeRates.forEach { dbExchangeRate ->
+                        exchangeRateQueries.insertOrUpdate(dbExchangeRate)
                     }
                 }
 
@@ -209,6 +216,24 @@ class RealCurrencyRepository(
 
     private fun mapDbCurrencyToDomain(dbCurrency: DbCurrency): Currency {
         return Currency(dbCurrency.code, dbCurrency.name, dbCurrency.symbol)
+    }
+
+    private fun DbCurrencyQueries.insertOrUpdate(dbCurrency: DbCurrency) {
+        try {
+            this.insert(dbCurrency)
+        } catch (throwable: Throwable) {
+            val (code, name, symbol) = dbCurrency
+            this.update(name, symbol, code)
+        }
+    }
+
+    private fun DbExchangeRateQueries.insertOrUpdate(dbExchangeRate: DbExchangeRate) {
+        try {
+            this.insert(dbExchangeRate)
+        } catch (throwable: Throwable) {
+            val (baseCode, targetCode, rate) = dbExchangeRate
+            this.update(rate, baseCode, targetCode)
+        }
     }
 
     private companion object {

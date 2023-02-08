@@ -55,7 +55,7 @@ android {
     namespace = "com.kwabenaberko.shared"
     compileSdk = 33
     defaultConfig {
-        minSdk = 22
+        minSdk = 24
         targetSdk = 33
     }
 }
