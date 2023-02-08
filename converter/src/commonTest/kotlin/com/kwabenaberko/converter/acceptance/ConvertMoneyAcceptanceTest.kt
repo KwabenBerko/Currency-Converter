@@ -2,6 +2,8 @@ package com.kwabenaberko.converter.acceptance
 
 import app.cash.turbine.test
 import com.kwabenaberko.converter.TestContainer
+import com.kwabenaberko.converter.database.DbCurrency
+import com.kwabenaberko.converter.database.DbExchangeRate
 import com.kwabenaberko.converter.domain.model.Money
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeCediCurrency
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeCurrency
@@ -30,14 +32,14 @@ class ConvertMoneyAcceptanceTest {
     fun setup() {
         with(container.database.dbCurrencyQueries) {
             listOf(USD, GHS, NGN, GBP, EUR).forEach { currency ->
-                insert(currency.code, currency.name, currency.symbol)
+                insert(DbCurrency(currency.code, currency.name, currency.symbol))
             }
         }
         with(container.database.dbExchangeRateQueries) {
-            insert(USD.code, GHS.code, 10.015024)
-            insert(GHS.code, NGN.code, 42.235564)
-            insert(NGN.code, GBP.code, 0.002041)
-            insert(EUR.code, USD.code, 1.007097)
+            insert(DbExchangeRate(USD.code, GHS.code, 10.015024))
+            insert(DbExchangeRate(GHS.code, NGN.code, 42.235564))
+            insert(DbExchangeRate(NGN.code, GBP.code, 0.002041))
+            insert(DbExchangeRate(EUR.code, USD.code, 1.007097))
         }
     }
 

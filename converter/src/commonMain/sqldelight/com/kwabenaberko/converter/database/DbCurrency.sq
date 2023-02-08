@@ -5,8 +5,14 @@ CREATE TABLE DbCurrency (
 );
 
 insert:
-INSERT INTO DbCurrency(code, name, symbol)
-VALUES (?, ?, ?);
+INSERT OR FAIL INTO DbCurrency(code, name, symbol)
+VALUES ?;
+
+update:
+UPDATE DbCurrency
+SET name = ?,
+    symbol = ?
+WHERE code = ?;
 
 selectCurrencyByCode:
 SELECT * FROM DbCurrency
@@ -18,5 +24,6 @@ WHERE name LIKE ("%" || :filter || "%")
 OR code LIKE ("%" || :filter || "%")
 OR symbol LIKE ("%" || :filter || "%");
 
-deleteAllCurrencies:
-DELETE FROM DbCurrency;
+deleteAllCurrenciesByCode:
+DELETE FROM DbCurrency
+WHERE code IN ?;

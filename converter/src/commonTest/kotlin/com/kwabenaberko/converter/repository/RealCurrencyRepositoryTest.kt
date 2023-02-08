@@ -7,10 +7,13 @@ import com.kwabenaberko.converter.data.Api
 import com.kwabenaberko.converter.data.Settings
 import com.kwabenaberko.converter.data.network.HttpClientFactory
 import com.kwabenaberko.converter.data.repository.RealCurrencyRepository
+import com.kwabenaberko.converter.database.DbCurrency
+import com.kwabenaberko.converter.database.DbExchangeRate
 import com.kwabenaberko.converter.domain.model.DefaultCurrencies
 import com.kwabenaberko.converter.domain.model.SyncStatus
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeCediCurrency
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeDollarCurrency
+import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeEuroCurrency
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeNairaCurrency
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.MapSettings
@@ -18,6 +21,8 @@ import io.kotest.data.forAll
 import io.kotest.data.headers
 import io.kotest.data.row
 import io.kotest.data.table
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -35,7 +40,6 @@ import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -48,20 +52,6 @@ class RealCurrencyRepositoryTest {
     private val sqlDriver = TestSqlDriverFactory().create()
     private val database = CurrencyConverterDatabase(sqlDriver)
 
-    @BeforeTest
-    fun setup(){
-        with(database.dbCurrencyQueries) {
-            insert(USD.code, USD.name, USD.symbol)
-            insert(GHS.code, GHS.name, GHS.symbol)
-            insert(NGN.code, NGN.name, NGN.symbol)
-        }
-
-        with(database.dbExchangeRateQueries) {
-            insert(baseCode = USD.code, targetCode = GHS.code, rate = 10.015024)
-            insert(baseCode = GHS.code, targetCode = NGN.code, rate = 42.235564)
-        }
-    }
-
     @AfterTest
     fun teardown() {
         sqlDriver.close()
@@ -69,17 +59,27 @@ class RealCurrencyRepositoryTest {
 
     @Test
     fun `should return currencies in sorted order`() = runTest {
+        with(database.dbCurrencyQueries) {
+            insert(DbCurrency(USD.code, USD.name, USD.symbol))
+            insert(DbCurrency(GHS.code, GHS.name, GHS.symbol))
+            insert(DbCurrency(NGN.code, NGN.name, NGN.symbol))
+        }
+
         val sut = createCurrencyRepository(
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
         sut.getCurrencies(filter = null).test {
-            assertEquals(listOf(GHS, NGN, USD), awaitItem())
+            awaitItem().shouldContainExactly(listOf(GHS, NGN, USD))
         }
     }
 
     @Test
     fun `should return an empty list if no match is found for filter`() = runTest {
+        with(database.dbCurrencyQueries) {
+            insert(DbCurrency(USD.code, USD.name, USD.symbol))
+        }
+
         val sut = createCurrencyRepository(
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
@@ -91,17 +91,28 @@ class RealCurrencyRepositoryTest {
 
     @Test
     fun `should return currencies in a sorted order if a match is found for filter`() = runTest {
+        with(database.dbCurrencyQueries) {
+            insert(DbCurrency(USD.code, USD.name, USD.symbol))
+            insert(DbCurrency(GHS.code, GHS.name, GHS.symbol))
+            insert(DbCurrency(NGN.code, NGN.name, NGN.symbol))
+        }
+
         val sut = createCurrencyRepository(
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
         sut.getCurrencies(filter = "e").test {
-            assertEquals(listOf(GHS, NGN, USD), awaitItem())
+            awaitItem().shouldContainExactly(listOf(GHS, NGN, USD))
         }
     }
 
     @Test
     fun `should set default currencies`() = runTest {
+        with(database.dbCurrencyQueries) {
+            insert(DbCurrency(GHS.code, GHS.name, GHS.symbol))
+            insert(DbCurrency(NGN.code, NGN.name, NGN.symbol))
+        }
+
         val sut = createCurrencyRepository(
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
@@ -115,6 +126,12 @@ class RealCurrencyRepositoryTest {
     @Test
     fun `should return USD and GHS as default currencies if no default currencies have been set`() =
         runTest {
+            with(database.dbCurrencyQueries) {
+                insert(DbCurrency(USD.code, USD.name, USD.symbol))
+                insert(DbCurrency(GHS.code, GHS.name, GHS.symbol))
+                insert(DbCurrency(NGN.code, NGN.name, NGN.symbol))
+            }
+
             val sut = createCurrencyRepository(
                 backgroundDispatcher = createTestDispatcher(testScheduler)
             )
@@ -126,6 +143,17 @@ class RealCurrencyRepositoryTest {
 
     @Test
     fun `should return rate for base and target codes`() = runTest {
+        with(database.dbCurrencyQueries) {
+            insert(DbCurrency(USD.code, USD.name, USD.symbol))
+            insert(DbCurrency(GHS.code, GHS.name, GHS.symbol))
+            insert(DbCurrency(NGN.code, NGN.name, NGN.symbol))
+        }
+
+        with(database.dbExchangeRateQueries) {
+            insert(DbExchangeRate(USD.code, GHS.code, 10.015024))
+            insert(DbExchangeRate(GHS.code, NGN.code, 42.235564))
+        }
+
         val sut = createCurrencyRepository(
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
@@ -194,6 +222,7 @@ class RealCurrencyRepositoryTest {
                     request.url.encodedPath.contains(Api.CURRENCIES) -> {
                         respond(content = CURRENCIES_JSON, headers = defaultHeaders)
                     }
+
                     else -> respondError(status = HttpStatusCode.NotFound)
                 }
             }
@@ -223,6 +252,7 @@ class RealCurrencyRepositoryTest {
                         request.url.encodedPath.contains(Api.CURRENCIES) -> {
                             respond(content = CURRENCIES_JSON, headers = defaultHeaders)
                         }
+
                         else -> throw IOException("")
                     }
                 }
@@ -251,9 +281,11 @@ class RealCurrencyRepositoryTest {
                     request.url.encodedPath.contains(Api.CURRENCIES) -> {
                         respond(content = CURRENCIES_JSON, headers = defaultHeaders)
                     }
+
                     request.url.encodedPath.contains(Api.EXCHANGE_RATES) -> {
                         respond(content = EXCHANGE_RATES_JSON, headers = defaultHeaders)
                     }
+
                     else -> respondError(status = HttpStatusCode.NotFound)
                 }
             }
@@ -283,9 +315,11 @@ class RealCurrencyRepositoryTest {
                         request.url.encodedPath.contains(Api.CURRENCIES) -> {
                             respond(content = CURRENCIES_JSON, headers = defaultHeaders)
                         }
+
                         request.url.encodedPath.contains(Api.EXCHANGE_RATES) -> {
                             respond(content = EXCHANGE_RATES_JSON, headers = defaultHeaders)
                         }
+
                         else -> throw IOException("")
                     }
                 }
@@ -315,9 +349,11 @@ class RealCurrencyRepositoryTest {
                         request.url.encodedPath.contains(Api.CURRENCIES) -> {
                             respond(content = CURRENCIES_JSON, headers = defaultHeaders)
                         }
+
                         request.url.encodedPath.contains(Api.EXCHANGE_RATES) -> {
                             respond(content = EXCHANGE_RATES_JSON, headers = defaultHeaders)
                         }
+
                         else -> respond(content = CURRENCY_SYMBOLS_JSON, headers = defaultHeaders)
                     }
                 }
@@ -342,15 +378,23 @@ class RealCurrencyRepositoryTest {
     fun `should save currencies and correctly convert rates when sync is successful`() =
         runTest {
 
+            with(database.dbCurrencyQueries) {
+                insert(DbCurrency(USD.code, USD.name, USD.symbol))
+                insert(DbCurrency(GHS.code, GHS.name, GHS.symbol))
+                insert(DbCurrency(NGN.code, NGN.name, NGN.symbol))
+            }
+
             val mockEngine = MockEngine.create {
                 addHandler { request ->
                     when {
                         request.url.encodedPath.contains(Api.CURRENCIES) -> {
                             respond(content = CURRENCIES_JSON, headers = defaultHeaders)
                         }
+
                         request.url.encodedPath.contains(Api.EXCHANGE_RATES) -> {
                             respond(content = EXCHANGE_RATES_JSON, headers = defaultHeaders)
                         }
+
                         else -> respond(content = CURRENCY_SYMBOLS_JSON, headers = defaultHeaders)
                     }
                 }
@@ -363,7 +407,7 @@ class RealCurrencyRepositoryTest {
             sut.sync()
 
             sut.getCurrencies(filter = null).test {
-                assertTrue(awaitItem().containsAll(listOf(USD, GHS)))
+                awaitItem().shouldContainExactlyInAnyOrder(listOf(USD, NGN, GHS))
             }
             sut.getRate(USD.code, GHS.code).test {
                 assertEquals(10.015024, awaitItem())
@@ -375,6 +419,91 @@ class RealCurrencyRepositoryTest {
                 assertEquals(42.235564, awaitItem())
             }
         }
+
+    @Test
+    fun `should update existing records when sync is successful`() = runTest {
+        with(database.dbCurrencyQueries) {
+            insert(DbCurrency(USD.code, "", USD.symbol))
+            insert(DbCurrency(GHS.code, GHS.name, ""))
+            insert(DbCurrency(NGN.code, NGN.name, NGN.symbol))
+        }
+
+        with(database.dbExchangeRateQueries) {
+            insert(DbExchangeRate(USD.code, GHS.code, 0.0))
+        }
+
+        val mockEngine = MockEngine.create {
+            addHandler { request ->
+                when {
+                    request.url.encodedPath.contains(Api.CURRENCIES) -> {
+                        respond(content = CURRENCIES_JSON, headers = defaultHeaders)
+                    }
+
+                    request.url.encodedPath.contains(Api.EXCHANGE_RATES) -> {
+                        respond(content = EXCHANGE_RATES_JSON, headers = defaultHeaders)
+                    }
+
+                    else -> respond(content = CURRENCY_SYMBOLS_JSON, headers = defaultHeaders)
+                }
+            }
+        }
+
+        val sut = createCurrencyRepository(
+            mockEngine = mockEngine,
+            backgroundDispatcher = createTestDispatcher(testScheduler)
+        )
+
+        sut.sync()
+
+        sut.getCurrencies(filter = null).test {
+            awaitItem().shouldContainExactlyInAnyOrder(listOf(USD, GHS, NGN))
+        }
+        sut.getRate(USD.code, GHS.code).test {
+            assertEquals(10.015024, awaitItem())
+        }
+    }
+
+    @Test
+    fun `should delete stale records when sync is successful`() = runTest {
+        with(database.dbCurrencyQueries) {
+            insert(DbCurrency(USD.code, USD.name, USD.symbol))
+            insert(DbCurrency(GHS.code, GHS.name, GHS.symbol))
+            insert(DbCurrency(NGN.code, NGN.name, NGN.symbol))
+            insert(DbCurrency(EUR.code, EUR.name, EUR.symbol))
+        }
+        with(database.dbExchangeRateQueries) {
+            insert(DbExchangeRate(USD.code, EUR.code, 0.0))
+        }
+
+        val mockEngine = MockEngine.create {
+            addHandler { request ->
+                when {
+                    request.url.encodedPath.contains(Api.CURRENCIES) -> {
+                        respond(content = CURRENCIES_JSON, headers = defaultHeaders)
+                    }
+
+                    request.url.encodedPath.contains(Api.EXCHANGE_RATES) -> {
+                        respond(content = EXCHANGE_RATES_JSON, headers = defaultHeaders)
+                    }
+
+                    else -> respond(content = CURRENCY_SYMBOLS_JSON, headers = defaultHeaders)
+                }
+            }
+        }
+        val sut = createCurrencyRepository(
+            mockEngine = mockEngine,
+            backgroundDispatcher = createTestDispatcher(testScheduler)
+        )
+
+        sut.sync()
+
+        sut.getCurrencies(filter = null).test {
+            awaitItem().shouldContainExactlyInAnyOrder(listOf(USD, NGN, GHS))
+        }
+        sut.getRate(USD.code, EUR.code).test {
+            expectNoEvents()
+        }
+    }
 
     @Test
     fun `should return false if there has not been an initial sync`() = runTest {
@@ -432,6 +561,7 @@ class RealCurrencyRepositoryTest {
         val USD = makeDollarCurrency()
         val GHS = makeCediCurrency()
         val NGN = makeNairaCurrency()
+        val EUR = makeEuroCurrency()
 
         //language=JSON
         val CURRENCIES_JSON = """

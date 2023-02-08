@@ -3,16 +3,21 @@ CREATE TABLE DbExchangeRate (
     targetCode TEXT NOT NULL,
     rate REAL NOT NULL,
     PRIMARY KEY(baseCode, targetCode),
-    FOREIGN KEY(baseCode) REFERENCES DbCurrency(code) ON DELETE CASCADE ,
-    FOREIGN KEY(targetCode) REFERENCES DbCurrency(code) ON DELETE CASCADE
+    FOREIGN KEY(baseCode) REFERENCES DbCurrency(code) ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY(targetCode) REFERENCES DbCurrency(code) ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED
 );
 
 CREATE INDEX baseCodeIndex ON DbExchangeRate(baseCode);
 CREATE INDEX targetCodeIndex ON DbExchangeRate(targetCode);
 
 insert:
-INSERT INTO DbExchangeRate(baseCode, targetCode, rate)
-VALUES (?, ?, ?);
+INSERT OR FAIL INTO DbExchangeRate(baseCode, targetCode, rate)
+VALUES ?;
+
+update:
+UPDATE DbExchangeRate
+SET rate = ?
+WHERE baseCode = ? AND targetCode = ?;
 
 isRateAvailable:
 SELECT EXISTS (

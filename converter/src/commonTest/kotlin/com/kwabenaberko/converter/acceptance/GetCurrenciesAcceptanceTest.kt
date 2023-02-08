@@ -2,6 +2,7 @@ package com.kwabenaberko.converter.acceptance
 
 import app.cash.turbine.test
 import com.kwabenaberko.converter.TestContainer
+import com.kwabenaberko.converter.database.DbCurrency
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeCediCurrency
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeDollarCurrency
 import com.kwabenaberko.convertertest.builder.CurrencyFactory.makeNairaCurrency
@@ -29,9 +30,9 @@ class GetCurrenciesAcceptanceTest {
     @Test
     fun `should return all currencies available to the user in a sorted order`() = runTest {
         with(container.database.dbCurrencyQueries) {
-            insert(USD.code, USD.name, USD.symbol)
-            insert(GHS.code, GHS.name, GHS.symbol)
-            insert(NGN.code, NGN.name, NGN.symbol)
+            insert(DbCurrency(USD.code, USD.name, USD.symbol))
+            insert(DbCurrency(GHS.code, GHS.name, GHS.symbol))
+            insert(DbCurrency(NGN.code, NGN.name, NGN.symbol))
         }
 
         sut(null).test {
@@ -42,9 +43,9 @@ class GetCurrenciesAcceptanceTest {
     @Test
     fun `should filter currencies by name in a sorted order`() = runTest {
         with(container.database.dbCurrencyQueries) {
-            insert(USD.code, USD.name, USD.symbol)
-            insert(GHS.code, GHS.name, GHS.symbol)
-            insert(NGN.code, NGN.name, NGN.symbol)
+            insert(DbCurrency(USD.code, USD.name, USD.symbol))
+            insert(DbCurrency(GHS.code, GHS.name, GHS.symbol))
+            insert(DbCurrency(NGN.code, NGN.name, NGN.symbol))
         }
 
         forAll(
