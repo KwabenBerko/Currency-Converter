@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.kwabenaberko.converter.domain.model.Currency
+import com.kwabenaberko.converter.presentation.viewmodel.ConverterViewModel
 import com.kwabenaberko.converter.presentation.viewmodel.ConverterViewModel.State
 import com.kwabenaberko.currencyconverter.android.converter.home.components.ConversionDirection
 import com.kwabenaberko.currencyconverter.android.converter.home.components.ConverterPane
@@ -140,6 +141,6 @@ private fun Content(
 
 @Preview
 @Composable
-private fun ConverterScreenContentPreview() {
-    HomeScreen(state = State.Idle)
+private fun HomeScreenContentPreview() {
+    HomeScreen(state = ConverterViewModel.mockContentState)
 }

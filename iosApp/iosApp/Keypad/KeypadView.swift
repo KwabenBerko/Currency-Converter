@@ -222,20 +222,9 @@ private struct KeyPadContentView: View {
 
 struct KeyPadContentView_Preview: PreviewProvider {
     static var previews: some View {
-        Group {
-            KeyPadContentView(
-                state: KeypadViewModel.State(
-                    text: "2000",
-                    isValid: true
-                )
-            )
-            KeyPadContentView(
-                state: KeypadViewModel.State(
-                    text: "",
-                    isValid: false
-                )
-            )
-        }
+        KeyPadContentView(
+            state: KeypadViewModel.companion.mockState
+        )
     }
 }
 

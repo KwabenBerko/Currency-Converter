@@ -276,7 +276,7 @@ private struct ConversionDirection: View {
 
 struct ConverterContentView_Preview: PreviewProvider {
     static var previews: some View {
-        ConverterContentView(state: ConverterViewModel.StateIdle())
+        ConverterContentView(state: ConverterViewModel.companion.mockContentState)
     }
 }
 

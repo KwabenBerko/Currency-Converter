@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.kwabenaberko.converter.presentation.viewmodel.KeypadViewModel
 import com.kwabenaberko.converter.presentation.viewmodel.KeypadViewModel.State
 import com.kwabenaberko.currencyconverter.android.R
 import com.kwabenaberko.currencyconverter.android.converter.keypad.components.AmountTextField
@@ -135,6 +136,6 @@ private val KEYS = listOf(
 private fun KeyPadScreenContentPreview() {
     KeyPadScreen(
         useRedTheme = true,
-        state = State(text = "200", isValid = true)
+        state = KeypadViewModel.mockState
     )
 }

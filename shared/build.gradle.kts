@@ -1,12 +1,36 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.android.library)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.sqldelight)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.nativeCoroutines)
+}
+
+ktlint {
+    filter {
+        exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/generated/") }
+        exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/kotlin/") }
+    }
+}
+
+sqldelight {
+    databases {
+        create("CurrencyConverterDatabase") {
+            packageName.set("com.kwabenaberko")
+        }
+        linkSqlite.set(true)
+    }
+}
+
+kotlin.sourceSets.all {
+    languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
 }
 
 kotlin {
     android()
-    
     listOf(
         iosX64(),
         iosArm64(),
@@ -14,18 +38,46 @@ kotlin {
     ).forEach {
         it.binaries.framework {
             baseName = "shared"
-            export(projects.converter)
-            export(projects.converterTest)
-            linkerOpts.add("-lsqlite3")
-            freeCompilerArgs = freeCompilerArgs + ("-Xobjc-generics")
         }
     }
 
     sourceSets {
-        val commonMain by getting
-        val commonTest by getting
-        val androidMain by getting
-        val androidTest by getting
+        val commonMain by getting {
+            dependencies {
+                implementation(libs.coroutines.core)
+                implementation(libs.sqldelight.coroutines.extensions)
+                implementation(libs.multiplatformSettings)
+                implementation(libs.multiplatformSettings.coroutines)
+                implementation(libs.bundles.ktor.client)
+                implementation(libs.ktor.serialization)
+                implementation(libs.kotlinx.dateTime)
+                implementation(libs.kotlinx.collections)
+                implementation(libs.kmmViewModel)
+            }
+        }
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation(libs.coroutines.test)
+                implementation(libs.turbine)
+                implementation(libs.kotest.assertions.core)
+                implementation(libs.multiplatformSettings.test)
+                implementation(libs.ktor.client.mock)
+            }
+        }
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.sqldelight.driver.android)
+                implementation(libs.ktor.client.android)
+                implementation(libs.icu4j)
+                implementation(libs.viewModelKtx)
+            }
+        }
+        val androidTest by getting {
+            dependencies {
+                implementation(libs.sqldelight.driver.sqlite)
+            }
+        }
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
@@ -35,8 +87,8 @@ kotlin {
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {
-                api(projects.converter)
-                api(projects.converterTest)
+                implementation(libs.sqldelight.driver.native)
+                implementation(libs.ktor.client.darwin)
             }
         }
         val iosX64Test by getting
@@ -52,10 +104,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.kwabenaberko.shared"
     compileSdk = 33
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = 24
         targetSdk = 33
     }
+    namespace = "com.kwabenaberko.currencyconverter"
 }

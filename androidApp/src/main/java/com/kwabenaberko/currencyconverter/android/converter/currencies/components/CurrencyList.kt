@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kwabenaberko.converter.domain.model.Currency
-import com.kwabenaberko.convertertest.builder.CurrencyFactory
 import com.kwabenaberko.currencyconverter.android.theme.CurrencyConverterTheme
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -62,11 +61,13 @@ internal fun CurrencyList(
 @Composable
 internal fun CurrencyListPreview() {
     CurrencyConverterTheme {
-        val ghs = CurrencyFactory.makeCediCurrency()
+        val ghs = Currency("GHS", name = "Ghanaian Cedi", symbol = "GH₵")
+        val usd = Currency("USD", name = "United States Dollar", symbol = "$")
+        val ngn = Currency("NGN", name = "Nigerian Naira", symbol = "₦")
         val groupedCurrencies = mapOf(
             "G" to listOf(ghs),
-            "N" to listOf(CurrencyFactory.makeNairaCurrency()),
-            "U" to listOf(CurrencyFactory.makeDollarCurrency())
+            "N" to listOf(ngn),
+            "U" to listOf(usd)
         )
         CurrencyList(
             groupedCurrencies = groupedCurrencies,
