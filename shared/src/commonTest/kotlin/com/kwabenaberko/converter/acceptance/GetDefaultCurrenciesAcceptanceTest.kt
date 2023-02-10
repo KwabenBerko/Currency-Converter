@@ -2,16 +2,16 @@ package com.kwabenaberko.converter.acceptance
 
 import app.cash.turbine.test
 import com.kwabenaberko.converter.TestContainer
-import com.kwabenaberko.converter.database.DbCurrency
-import com.kwabenaberko.converter.database.DbExchangeRate
-import com.kwabenaberko.converter.domain.model.Currency
-import com.kwabenaberko.converter.domain.model.DefaultCurrencies
-import com.kwabenaberko.converter.domain.model.Money
 import com.kwabenaberko.converter.builder.CurrencyFactory.makeCediCurrency
 import com.kwabenaberko.converter.builder.CurrencyFactory.makeDollarCurrency
 import com.kwabenaberko.converter.builder.CurrencyFactory.makeEuroCurrency
 import com.kwabenaberko.converter.builder.CurrencyFactory.makeNairaCurrency
 import com.kwabenaberko.converter.builder.CurrencyFactory.makePoundsCurrency
+import com.kwabenaberko.converter.database.DbCurrency
+import com.kwabenaberko.converter.database.DbExchangeRate
+import com.kwabenaberko.converter.domain.model.Currency
+import com.kwabenaberko.converter.domain.model.DefaultCurrencies
+import com.kwabenaberko.converter.domain.model.Money
 import io.kotest.data.forAll
 import io.kotest.data.headers
 import io.kotest.data.row
@@ -73,11 +73,12 @@ class GetDefaultCurrenciesAcceptanceTest {
             )
         ) { baseCurrency: Currency, targetCurrency: Currency ->
 
-            convertMoney(Money(currency = baseCurrency, amount = 0.0), targetCurrency)
+            val result = convertMoney(Money(currency = baseCurrency, amount = 0.0), targetCurrency)
                 .flatMapConcat { sut() }
-                .test {
-                    assertEquals(DefaultCurrencies(baseCurrency, targetCurrency), awaitItem())
-                }
+
+            result.test {
+                assertEquals(DefaultCurrencies(baseCurrency, targetCurrency), awaitItem())
+            }
         }
     }
 

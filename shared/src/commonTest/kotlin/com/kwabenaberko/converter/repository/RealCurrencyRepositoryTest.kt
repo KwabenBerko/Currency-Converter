@@ -3,6 +3,10 @@ package com.kwabenaberko.converter.repository
 import app.cash.turbine.test
 import com.kwabenaberko.CurrencyConverterDatabase
 import com.kwabenaberko.converter.TestSqlDriverFactory
+import com.kwabenaberko.converter.builder.CurrencyFactory.makeCediCurrency
+import com.kwabenaberko.converter.builder.CurrencyFactory.makeDollarCurrency
+import com.kwabenaberko.converter.builder.CurrencyFactory.makeEuroCurrency
+import com.kwabenaberko.converter.builder.CurrencyFactory.makeNairaCurrency
 import com.kwabenaberko.converter.data.Api
 import com.kwabenaberko.converter.data.Settings
 import com.kwabenaberko.converter.data.network.HttpClientFactory
@@ -11,10 +15,6 @@ import com.kwabenaberko.converter.database.DbCurrency
 import com.kwabenaberko.converter.database.DbExchangeRate
 import com.kwabenaberko.converter.domain.model.DefaultCurrencies
 import com.kwabenaberko.converter.domain.model.SyncStatus
-import com.kwabenaberko.converter.builder.CurrencyFactory.makeCediCurrency
-import com.kwabenaberko.converter.builder.CurrencyFactory.makeDollarCurrency
-import com.kwabenaberko.converter.builder.CurrencyFactory.makeEuroCurrency
-import com.kwabenaberko.converter.builder.CurrencyFactory.makeNairaCurrency
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.MapSettings
 import io.kotest.data.forAll
@@ -64,12 +64,13 @@ class RealCurrencyRepositoryTest {
             insert(DbCurrency(GHS.code, GHS.name, GHS.symbol))
             insert(DbCurrency(NGN.code, NGN.name, NGN.symbol))
         }
-
         val sut = createCurrencyRepository(
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
-        sut.getCurrencies(filter = null).test {
+        val result = sut.getCurrencies(filter = null)
+
+        result.test {
             awaitItem().shouldContainExactly(listOf(GHS, NGN, USD))
         }
     }
@@ -79,12 +80,13 @@ class RealCurrencyRepositoryTest {
         with(database.dbCurrencyQueries) {
             insert(DbCurrency(USD.code, USD.name, USD.symbol))
         }
-
         val sut = createCurrencyRepository(
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
-        sut.getCurrencies(filter = "abcde").test {
+        val result = sut.getCurrencies(filter = "abcde")
+
+        result.test {
             assertEquals(emptyList(), awaitItem())
         }
     }
@@ -96,12 +98,13 @@ class RealCurrencyRepositoryTest {
             insert(DbCurrency(GHS.code, GHS.name, GHS.symbol))
             insert(DbCurrency(NGN.code, NGN.name, NGN.symbol))
         }
-
         val sut = createCurrencyRepository(
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
-        sut.getCurrencies(filter = "e").test {
+        val result = sut.getCurrencies(filter = "e")
+
+        result.test {
             awaitItem().shouldContainExactly(listOf(GHS, NGN, USD))
         }
     }
@@ -112,13 +115,14 @@ class RealCurrencyRepositoryTest {
             insert(DbCurrency(GHS.code, GHS.name, GHS.symbol))
             insert(DbCurrency(NGN.code, NGN.name, NGN.symbol))
         }
-
         val sut = createCurrencyRepository(
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
 
         sut.updateDefaultCurrencies(GHS.code, NGN.code)
-        sut.getDefaultCurrencies().test {
+        val result = sut.getDefaultCurrencies()
+
+        result.test {
             assertEquals(DefaultCurrencies(GHS, NGN), awaitItem())
         }
     }
@@ -131,12 +135,13 @@ class RealCurrencyRepositoryTest {
                 insert(DbCurrency(GHS.code, GHS.name, GHS.symbol))
                 insert(DbCurrency(NGN.code, NGN.name, NGN.symbol))
             }
-
             val sut = createCurrencyRepository(
                 backgroundDispatcher = createTestDispatcher(testScheduler)
             )
 
-            sut.getDefaultCurrencies().test {
+            val result = sut.getDefaultCurrencies()
+
+            result.test {
                 assertEquals(DefaultCurrencies(USD, GHS), awaitItem())
             }
         }
@@ -148,12 +153,10 @@ class RealCurrencyRepositoryTest {
             insert(DbCurrency(GHS.code, GHS.name, GHS.symbol))
             insert(DbCurrency(NGN.code, NGN.name, NGN.symbol))
         }
-
         with(database.dbExchangeRateQueries) {
             insert(DbExchangeRate(USD.code, GHS.code, 10.015024))
             insert(DbExchangeRate(GHS.code, NGN.code, 42.235564))
         }
-
         val sut = createCurrencyRepository(
             backgroundDispatcher = createTestDispatcher(testScheduler)
         )
@@ -165,7 +168,8 @@ class RealCurrencyRepositoryTest {
                 row(GHS.code, NGN.code, 42.235564)
             ),
         ) { baseCode, targetCode, expectedRate ->
-            sut.getRate(baseCode, targetCode).test {
+            val result = sut.getRate(baseCode, targetCode)
+            result.test {
                 assertEquals(expectedRate, awaitItem())
             }
         }
@@ -447,7 +451,6 @@ class RealCurrencyRepositoryTest {
                 }
             }
         }
-
         val sut = createCurrencyRepository(
             mockEngine = mockEngine,
             backgroundDispatcher = createTestDispatcher(testScheduler)

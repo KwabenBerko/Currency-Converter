@@ -3,11 +3,11 @@ package com.kwabenaberko.converter.acceptance
 import app.cash.turbine.test
 import app.cash.turbine.testIn
 import com.kwabenaberko.converter.TestContainer
-import com.kwabenaberko.converter.data.Api
-import com.kwabenaberko.converter.domain.model.SyncStatus
 import com.kwabenaberko.converter.builder.CurrencyFactory.makeCediCurrency
 import com.kwabenaberko.converter.builder.CurrencyFactory.makeDollarCurrency
 import com.kwabenaberko.converter.builder.CurrencyFactory.makeNairaCurrency
+import com.kwabenaberko.converter.data.Api
+import com.kwabenaberko.converter.domain.model.SyncStatus
 import io.kotest.data.forAll
 import io.kotest.data.headers
 import io.kotest.data.row
@@ -72,10 +72,13 @@ class SyncAcceptanceTest {
                 row(NGN.code, GHS.code, 0.023677),
             )
         ) { baseCode, targetCode, rate ->
-            getRate(baseCode, targetCode).test {
+            val getRateResult = getRate(baseCode, targetCode)
+            val initialSyncCompletedResult = hasCompletedInitialSync()
+
+            getRateResult.test {
                 assertEquals(rate, awaitItem())
             }
-            hasCompletedInitialSync().test {
+            initialSyncCompletedResult.test {
                 assertTrue(awaitItem())
             }
         }
@@ -88,9 +91,11 @@ class SyncAcceptanceTest {
                     request.url.encodedPath.contains(Api.CURRENCIES) -> {
                         respond(content = CURRENCIES_JSON, headers = defaultHeaders)
                     }
+
                     request.url.encodedPath.contains(Api.EXCHANGE_RATES) -> {
                         respond(content = EXCHANGE_RATES_JSON, headers = defaultHeaders)
                     }
+
                     else -> respond(content = CURRENCY_SYMBOLS_JSON, headers = defaultHeaders)
                 }
             }

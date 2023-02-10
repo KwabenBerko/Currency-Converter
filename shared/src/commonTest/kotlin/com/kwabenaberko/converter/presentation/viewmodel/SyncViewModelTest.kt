@@ -16,9 +16,7 @@ import kotlin.test.assertEquals
 
 @ExperimentalCoroutinesApi
 class SyncViewModelTest {
-    private val sync = FakeSync().apply {
-        this.result = false
-    }
+    private val sync = FakeSync()
 
     @BeforeTest
     fun setup() {
@@ -32,6 +30,7 @@ class SyncViewModelTest {
 
     @Test
     fun `should emit SyncError state when sync is not successful`() = runTest {
+        sync.result = false
         val sut = createViewModel()
 
         sut.state.test {
