@@ -1,12 +1,12 @@
 package com.kwabenaberko.converter.usecase
 
 import app.cash.turbine.test
-import com.kwabenaberko.converter.domain.model.Money
-import com.kwabenaberko.converter.domain.usecase.RealConvertMoney
 import com.kwabenaberko.converter.builder.CurrencyFactory.makeCediCurrency
 import com.kwabenaberko.converter.builder.CurrencyFactory.makeDollarCurrency
 import com.kwabenaberko.converter.builder.CurrencyFactory.makeNairaCurrency
 import com.kwabenaberko.converter.builder.CurrencyFactory.makePoundsCurrency
+import com.kwabenaberko.converter.domain.model.Money
+import com.kwabenaberko.converter.domain.usecase.RealConvertMoney
 import com.kwabenaberko.converter.testdouble.FakeGetRate
 import com.kwabenaberko.converter.testdouble.FakeUpdateDefaultCurrencies
 import io.kotest.data.forAll
@@ -45,10 +45,12 @@ class ConvertMoneyTest {
                 currency = targetCurrency, amount = expectedAmount
             )
 
-            convertMoney(
+            val result = convertMoney(
                 money = Money(currency = baseCurrency, amount = amount),
                 targetCurrency = targetCurrency
-            ).test {
+            )
+
+            result.test {
                 assertEquals(expectedMoney, awaitItem())
                 cancelAndIgnoreRemainingEvents()
             }
@@ -66,10 +68,12 @@ class ConvertMoneyTest {
             updateDefaultCurrencies = updateDefaultCurrencies
         )
 
-        convertMoney(
+        val result = convertMoney(
             money = Money(currency = GHS, amount = 0.0),
             targetCurrency = NGN
-        ).test {
+        )
+
+        result.test {
             assertEquals(1, updateDefaultCurrencies.invocations.size)
             assertEquals(Pair(GHS.code, NGN.code), updateDefaultCurrencies.invocations.first())
             cancelAndIgnoreRemainingEvents()
