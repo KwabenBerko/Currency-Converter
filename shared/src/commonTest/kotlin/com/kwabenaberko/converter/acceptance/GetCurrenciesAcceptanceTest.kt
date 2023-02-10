@@ -2,10 +2,10 @@ package com.kwabenaberko.converter.acceptance
 
 import app.cash.turbine.test
 import com.kwabenaberko.converter.TestContainer
-import com.kwabenaberko.converter.database.DbCurrency
 import com.kwabenaberko.converter.builder.CurrencyFactory.makeCediCurrency
 import com.kwabenaberko.converter.builder.CurrencyFactory.makeDollarCurrency
 import com.kwabenaberko.converter.builder.CurrencyFactory.makeNairaCurrency
+import com.kwabenaberko.converter.database.DbCurrency
 import io.kotest.data.forAll
 import io.kotest.data.headers
 import io.kotest.data.row
@@ -35,7 +35,9 @@ class GetCurrenciesAcceptanceTest {
             insert(DbCurrency(NGN.code, NGN.name, NGN.symbol))
         }
 
-        sut(null).test {
+        val result = sut(null)
+
+        result.test {
             assertEquals(SORTED_CURRENCIES, awaitItem())
         }
     }
@@ -60,7 +62,9 @@ class GetCurrenciesAcceptanceTest {
             )
         ) { filter, filteredCurrencies ->
 
-            sut(filter).test {
+            val result = sut(filter)
+
+            result.test {
                 assertEquals(filteredCurrencies, awaitItem())
             }
         }
