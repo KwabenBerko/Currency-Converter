@@ -289,6 +289,6 @@ private struct ListDividerView: View {
 
 struct CurrenciesContentView_Preview: PreviewProvider {
     static var previews: some View {
-        CurrenciesContentView(state: CurrenciesViewModel.StateIdle())
+        CurrenciesContentView(state: CurrenciesViewModel.companion.mockContentState)
     }
 }

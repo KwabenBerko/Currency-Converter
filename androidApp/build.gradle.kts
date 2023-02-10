@@ -43,8 +43,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.converter)
-    implementation(projects.converterTest)
+    implementation(projects.shared)
     implementation(libs.compose.material)
     implementation(libs.activityCompose)
     implementation(libs.compose.ui.preview)
@@ -58,7 +57,6 @@ dependencies {
     implementation(libs.bundles.lifecycle)
     implementation(libs.kotlinx.collections)
     debugImplementation(libs.compose.ui.tooling)
-    testImplementation(projects.converterTest)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.junit)
     testImplementation(libs.turbine)

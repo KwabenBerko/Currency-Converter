@@ -17,6 +17,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Currency_Converter"
 include(":androidApp")
-include(":converter")
-include(":converterTest")
 include(":shared")
