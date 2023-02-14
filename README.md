@@ -2,6 +2,12 @@
 
 An Offline-First Currency Converter Built With Kotlin Multiplatform Mobile
 
+
+| Android                                        | iOS                                        |
+|------------------------------------------------|--------------------------------------------|
+| <img src="art/android_demo.gif" height="540"/> | <img src="art/ios_demo.gif" height="540"/> |
+
+
 ## Acceptance Criteria
 
 #### Scenario: Sync currencies
