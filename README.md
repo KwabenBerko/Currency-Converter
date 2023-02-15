@@ -7,6 +7,10 @@ An Offline-First Currency Converter Built With Kotlin Multiplatform Mobile
 |------------------------------------------------|--------------------------------------------|
 | <img src="art/android_demo.gif" height="540"/> | <img src="art/ios_demo.gif" height="540"/> |
 
+The UI design for this project was inspired by a design created
+by [Oleg Frolov](https://dribbble.com/Volorf). You can find the original
+design [here](https://dribbble.com/shots/3667983-Currency-converter).
+
 
 ## Acceptance Criteria
 
