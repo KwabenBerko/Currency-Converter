@@ -11,8 +11,8 @@ import com.kwabenaberko.converter.domain.usecase.GetDefaultCurrencies
 import com.kwabenaberko.converter.domain.usecase.GetRate
 import com.kwabenaberko.converter.domain.usecase.GetSyncStatus
 import com.kwabenaberko.converter.domain.usecase.HasCompletedInitialSync
-import com.kwabenaberko.converter.domain.usecase.RealConvertMoney
 import com.kwabenaberko.converter.domain.usecase.Sync
+import com.kwabenaberko.converter.domain.usecase.implementation.RealConvertMoney
 import com.russhwolf.settings.ObservableSettings
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
