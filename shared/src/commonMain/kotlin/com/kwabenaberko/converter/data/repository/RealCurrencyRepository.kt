@@ -96,12 +96,7 @@ class RealCurrencyRepository(
     }
 
     override fun getRate(baseCode: String, targetCode: String): Flow<Double> {
-        val isRateAvailableFlow = exchangeRateQueries
-            .isRateAvailable(baseCode, targetCode)
-            .asFlow()
-            .mapToOne(backgroundDispatcher)
-
-        return isRateAvailableFlow
+        return isRateAvailable(baseCode, targetCode)
             .take(1)
             .flatMapLatest { isRateAvailable ->
                 if (!isRateAvailable) {
@@ -208,6 +203,13 @@ class RealCurrencyRepository(
             settings.putString(Settings.CURRENCIES_SYNC_STATUS, SyncStatus.Error.name)
             return false
         }
+    }
+
+    private fun isRateAvailable(baseCode: String, targetCode: String): Flow<Boolean> {
+        return exchangeRateQueries
+            .isRateAvailable(baseCode, targetCode)
+            .asFlow()
+            .mapToOne(backgroundDispatcher)
     }
 
     private fun mapDbCurrenciesToDomain(dbCurrencies: List<DbCurrency>): List<Currency> {
