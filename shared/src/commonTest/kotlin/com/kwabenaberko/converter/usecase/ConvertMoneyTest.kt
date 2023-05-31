@@ -6,7 +6,7 @@ import com.kwabenaberko.converter.builder.CurrencyFactory.makeDollarCurrency
 import com.kwabenaberko.converter.builder.CurrencyFactory.makeNairaCurrency
 import com.kwabenaberko.converter.builder.CurrencyFactory.makePoundsCurrency
 import com.kwabenaberko.converter.domain.model.Money
-import com.kwabenaberko.converter.domain.usecase.RealConvertMoney
+import com.kwabenaberko.converter.domain.usecase.implementation.RealConvertMoney
 import com.kwabenaberko.converter.testdouble.FakeGetRate
 import com.kwabenaberko.converter.testdouble.FakeUpdateDefaultCurrencies
 import io.kotest.data.forAll
