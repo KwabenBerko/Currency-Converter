@@ -45,6 +45,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
+        let container = Container.shared
+        
         for cancellable in cancellables {
             cancellable.cancel()
         }

@@ -1,5 +1,5 @@
 [versions]
-androidGradlePlugin = "8.0.0-alpha11"
+androidGradlePlugin = "8.0.2"
 activityCompose = "1.6.1"
 navigationCompose = "2.5.3"
 viewModelCompose = "2.6.0-alpha04"
