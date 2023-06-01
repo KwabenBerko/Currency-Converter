@@ -30,7 +30,14 @@ kotlin.sourceSets.all {
 }
 
 kotlin {
-    android()
+    android {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "1.8"
+            }
+        }
+    }
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -104,11 +111,10 @@ kotlin {
 }
 
 android {
-    compileSdk = 33
+    namespace = "com.kwabenaberko.currencyconverter"
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    compileSdk = 33
     defaultConfig {
         minSdk = 24
-        targetSdk = 33
     }
-    namespace = "com.kwabenaberko.currencyconverter"
 }

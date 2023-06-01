@@ -96,21 +96,13 @@ class RealCurrencyRepository(
     }
 
     override fun getRate(baseCode: String, targetCode: String): Flow<Double> {
-        val isRateAvailableFlow = exchangeRateQueries
-            .isRateAvailable(baseCode, targetCode)
-            .asFlow()
-            .mapToOne(backgroundDispatcher)
-
-        return isRateAvailableFlow
+        return isRateAvailable(baseCode, targetCode)
             .take(1)
             .flatMapLatest { isRateAvailable ->
                 if (!isRateAvailable) {
-                    val usdRates = exchangeRateQueries
-                        .selectRatesForCurrency(USD_RATE)
-                        .executeAsList()
-                        .associateBy { dbExchangeRate -> dbExchangeRate.targetCode }
-
+                    val usdRates = getUsdRates()
                     val usdToBaseCodeRate = usdRates.getValue(baseCode).rate
+
                     val rate = if (targetCode.equals(USD_RATE, ignoreCase = true)) {
                         1.0.div(usdToBaseCodeRate).toPlaces(DECIMAL_PLACES)
                     } else {
@@ -208,6 +200,20 @@ class RealCurrencyRepository(
             settings.putString(Settings.CURRENCIES_SYNC_STATUS, SyncStatus.Error.name)
             return false
         }
+    }
+
+    private fun isRateAvailable(baseCode: String, targetCode: String): Flow<Boolean> {
+        return exchangeRateQueries
+            .isRateAvailable(baseCode, targetCode)
+            .asFlow()
+            .mapToOne(backgroundDispatcher)
+    }
+
+    private fun getUsdRates(): Map<String, DbExchangeRate> {
+        return exchangeRateQueries
+            .selectRatesForCurrency(USD_RATE)
+            .executeAsList()
+            .associateBy { dbExchangeRate -> dbExchangeRate.targetCode }
     }
 
     private fun mapDbCurrenciesToDomain(dbCurrencies: List<DbCurrency>): List<Currency> {

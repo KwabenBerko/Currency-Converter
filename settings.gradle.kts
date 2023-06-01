@@ -1,5 +1,8 @@
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+rootProject.name = "Currency_Converter"
+include(":androidApp")
+include(":shared")
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 pluginManagement {
     repositories {
         google()
@@ -14,7 +17,3 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-
-rootProject.name = "Currency_Converter"
-include(":androidApp")
-include(":shared")

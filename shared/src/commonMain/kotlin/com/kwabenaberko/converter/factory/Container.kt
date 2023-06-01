@@ -11,12 +11,19 @@ import com.kwabenaberko.converter.domain.usecase.GetDefaultCurrencies
 import com.kwabenaberko.converter.domain.usecase.GetRate
 import com.kwabenaberko.converter.domain.usecase.GetSyncStatus
 import com.kwabenaberko.converter.domain.usecase.HasCompletedInitialSync
-import com.kwabenaberko.converter.domain.usecase.RealConvertMoney
 import com.kwabenaberko.converter.domain.usecase.Sync
+import com.kwabenaberko.converter.domain.usecase.implementation.RealConvertMoney
 import com.russhwolf.settings.ObservableSettings
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 open class Container internal constructor(
     private val httpClientEngine: HttpClientEngine,
