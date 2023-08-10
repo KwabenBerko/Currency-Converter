@@ -1,6 +1,6 @@
 ## Currency Converter ![](https://github.com/KwabenBerko/Currency-Converter/actions/workflows/master.yml/badge.svg)
 
-An Offline-First Currency Converter Built With Kotlin Multiplatform Mobile. The main aim of this project was to help improve my knowledge in Kotlin Multiplatform(A framework for sharing code across both IOS and Android), ATDD(Acceptance Test Driven Development) and Clean Architecture.
+An Offline-First Currency Converter Built With Kotlin Multiplatform. The main aim of this project was to help improve my knowledge in Kotlin Multiplatform(A framework for sharing code across both IOS and Android), ATDD(Acceptance Test Driven Development) and Clean Architecture.
 
 
 | Android                                        | iOS                                        |
